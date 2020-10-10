@@ -5,7 +5,7 @@
 # [string] @version     : Version of the game in {major}.{minor}.{revision} format
 [meta]
 name        = "Seedlings"
-author      = "Fall2020 Group 6"
+author      = "Fall2020 Group 3"
 description = "Learn programming from first principles!"
 version     = "0.1.0"
 
