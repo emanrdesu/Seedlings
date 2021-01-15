@@ -69,6 +69,14 @@ function TestScene3:update()
     command.value = self.nextNote[command.value];
   end
   
+  if inputManager:isPressed('leftshoulder') then
+    self.commandManager.timePerLine = self.commandManager.timePerLine - 0.1
+  end
+  
+  if inputManager:isPressed('rightshoulder') then
+    self.commandManager.timePerLine = self.commandManager.timePerLine + 0.1
+  end
+  
   if inputManager:isPressed('b') then
     return TestScene2()
   end
@@ -82,6 +90,7 @@ function TestScene3:update()
 end
 
 function TestScene3:drawTopScreen()
+  love.graphics.print('Time Between Notes: '..tostring(self.commandManager.timePerLine), 150, 10)
   if self.commandManager.isRunning then
     love.graphics.print('running...', 100, 100)
   end

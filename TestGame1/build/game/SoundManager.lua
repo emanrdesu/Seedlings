@@ -43,7 +43,7 @@ function SoundManager:play(sourceName)
   end
   
   local counter = 0
-  while(counter < 300 and (not src:isPlaying())) do 
+  while(counter < 500 and (not src:isPlaying())) do 
     src:play() 
     counter = counter + 1
   end

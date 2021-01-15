@@ -10,6 +10,12 @@ function love.load(arg)
   
   -- Instantiate inputManager object
   inputManager = InputManager()
+  
+  -- Instantiate fontManager object
+  fontManager = FontManager()
+  
+  -- Instantiate the soundManager object
+  sm = SoundManager()
 end
 
 function love.update()
@@ -17,9 +23,14 @@ function love.update()
   inputManager:update()
   -- Update the gameManager
 	gameManager:update()
+  -- Update the fontManager
+  fontManager:update()
 end
 
 function love.draw(screen)
+  -- Reset font
+  fontManager:setFont('default')
+  
   -- Draw to the screens
   if screen == "top" or screen == nil then
     gameManager:drawTopScreen()
@@ -27,4 +38,7 @@ function love.draw(screen)
   if screen == "bottom" then
     gameManager:drawBottomScreen()
   end
+  
+  -- This is needed to avoid issues with fonts disappearing 
+  fontManager:fix()
 end
