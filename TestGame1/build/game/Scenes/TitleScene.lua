@@ -48,7 +48,11 @@ function TitleScene:update()
   end
   
   if self.waitUntilCanStart < 0 and inputManager:isPressed('start')  then
-    return TestScene1()
+    if saveManager:getValue('read_intro') == 1 then
+      return TestScene1()
+    else
+      return IntroductionScene()
+    end
   else
     return self
   end

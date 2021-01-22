@@ -16,9 +16,13 @@ function love.load(arg)
   
   -- Instantiate the soundManager object
   sm = SoundManager()
+  
+  -- Instantiate the saveManager object
+  saveManager = SaveManager()
+  saveManager:loadData()
 end
 
-function love.update()
+function love.update()  
   -- Update the inputManager
   inputManager:update()
   -- Update the gameManager
@@ -41,4 +45,9 @@ function love.draw(screen)
   
   -- This is needed to avoid issues with fonts disappearing 
   fontManager:fix()
+end
+
+function love.quit()
+  saveManager:saveData()
+  love.event.quit()
 end

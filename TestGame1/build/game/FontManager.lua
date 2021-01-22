@@ -31,8 +31,8 @@ function FontManager:getWidth(text)
   return love.graphics.getFont():getWidth(text)
 end
 
-function FontManager:getHeight(text)
-  return love.graphics.getFont():getHeight(text)
+function FontManager:getHeight()
+  return love.graphics.getFont():getHeight()
 end
 
 function FontManager:update()

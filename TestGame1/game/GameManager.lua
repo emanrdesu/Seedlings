@@ -10,6 +10,10 @@ function GameManager:update()
     love.event.quit()
   end
 
+  if inputManager:isDown('dpup') and inputManager:isDown('select') then
+    saveManager:clearData()
+  end
+
   self.currentScene = self.currentScene:update()
 end
 

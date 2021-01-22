@@ -2,12 +2,17 @@ GameManager = Object:extend()
 
 function GameManager:new()
   self.currentScene = TitleScene()
+  -- self.currentScene = IntroductionScene()
 end
 
 function GameManager:update()    
   -- Debug quitting
   if inputManager:isDown('start') and inputManager:isDown('select') then
     love.event.quit()
+  end
+
+  if inputManager:isDown('dpup') and inputManager:isDown('select') then
+    saveManager:clearData()
   end
 
   self.currentScene = self.currentScene:update()
