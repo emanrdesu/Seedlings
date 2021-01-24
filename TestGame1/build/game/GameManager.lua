@@ -2,7 +2,6 @@ GameManager = Object:extend()
 
 function GameManager:new()
   self.currentScene = TitleScene()
-  -- self.currentScene = IntroductionScene()
 end
 
 function GameManager:update()    
@@ -20,7 +19,6 @@ end
 
 function GameManager:drawTopScreen()
   local dt = love.timer.getDelta()
-  
   self.currentScene:drawTopScreen()
   
   fontManager:setFont('default')

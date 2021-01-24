@@ -20,6 +20,9 @@ function love.load(arg)
   -- Instantiate the saveManager object
   saveManager = SaveManager()
   saveManager:loadData()
+  
+  -- Instantiate draw object
+  draw = Draw()
 end
 
 function love.update()  
@@ -34,7 +37,7 @@ end
 function love.draw(screen)
   -- Reset font
   fontManager:setFont('default')
-  
+
   -- Draw to the screens
   if screen == "top" or screen == nil then
     gameManager:drawTopScreen()
