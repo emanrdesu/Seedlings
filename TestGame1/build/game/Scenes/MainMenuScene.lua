@@ -1,19 +1,18 @@
 MainMenuScene = Scene:extend()
 
 function MainMenuScene:new()
-  self.timeLeft = 2
+  self.sceneList = ArrayList()
+  self.sceneList:add({name="TestScene1", ref=TestScene1()})
+  self.sceneList:add({name="TestScene2", ref=TestScene2()})
+  self.sceneList:add({name="TestScene3", ref=TestScene3()})
+  self.sceneList:add({name="Title Screen", ref = TitleScene()})
+  self.scenesPerScreen = 3
+  self.currentPage = 0
+  
 end
 
 function MainMenuScene:update()
-  local dt = love.timer.getDelta()
-  self.timeLeft = self.timeLeft - dt;
   
-  if self.timeLeft < 0 then
-    love.event.quit()
-    return self
-  else 
-    return self
-  end
 end
 
 function MainMenuScene:drawTopScreen()

@@ -19,7 +19,6 @@ end
 
 function GameManager:drawTopScreen()
   local dt = love.timer.getDelta()
-  
   self.currentScene:drawTopScreen()
   
   fontManager:setFont('default')
