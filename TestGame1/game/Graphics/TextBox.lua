@@ -1,6 +1,6 @@
 TextBox = Object:extend()
 
-function TextBox:new(xx, yy, ww, font, align, spacing, text) 
+--[[function TextBox:new(xx, yy, ww, font, align, spacing, text, color) 
   self.x = xx
   self.y = yy
   self.width = ww
@@ -9,6 +9,19 @@ function TextBox:new(xx, yy, ww, font, align, spacing, text)
   self.text = text or ''
   self.align = align or 'left'
   self.lineList = nil
+  self.color = color or Color(1,1,1)
+end--]]
+
+function TextBox:new(args)
+  self.x = args.x or 0
+  self.y = args.y or 0
+  self.width = args.width or 0
+  self.spacing = args.spacing or 0
+  self.font = args.font or 'default'
+  self.text = args.text or ''
+  self.align = args.align or 'left'
+  self.lineList = nil
+  self.color = args.color or Color(1,1,1)
 end
 
 function TextBox:setText(text)
@@ -98,16 +111,29 @@ function TextBox:draw()
   local fontHeight = fontManager:getHeight()
   
   for i = 0, self.lineList:getSize() - 1, 1 do
+    fontManager:setFont(self.font)
+    local xx = 0
+    local yy = self.y + (fontHeight + self.spacing) * i
     if self.align == 'left' then 
-      love.graphics.print(self.lineList:get(i), self.x, self.y + (fontHeight + self.spacing) * i)
+      xx = self.x
+      yy = self.y + (fontHeight + self.spacing) * i
     elseif self.align == 'right' then
       local textLength = fontManager:getWidth(self.lineList:get(i))
       local start = self.x + self.width - textLength
-      love.graphics.print(self.lineList:get(i), start, self.y + (fontHeight + self.spacing) * i)
+      xx = start
+      yy = self.y + (fontHeight + self.spacing) * i
     elseif self.align == 'center' then
       local textLength = fontManager:getWidth(self.lineList:get(i))
       local start = math.floor(0.5 + self.x + (self.width - textLength) / 2.0)
-      love.graphics.print(self.lineList:get(i), start, self.y + (fontHeight + self.spacing) * i)
+      xx = start
     end
+    --love.graphics.print(self.lineList:get(i), xx, yy)
+    draw:print({
+      text = self.lineList:get(i),
+      x = xx,
+      y = yy,
+      font = self.font,
+      color = self.color
+    })
   end
 end
