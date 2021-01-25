@@ -81,6 +81,17 @@ function InputManager:new()
   self.touchMove = nil
   self.lastTouch = nil
   
+  self.keyMap = {}
+  self.keyMap['up'] = 'dpup'
+  self.keyMap['left'] = 'dpleft'
+  self.keyMap['down'] = 'dpdown'
+  self.keyMap['right'] = 'dpright'
+  self.keyMap['f'] = 'start'
+  self.keyMap['r'] = 'back'
+  self.keyMap['w'] = 'x'
+  self.keyMap['a'] = 'y'
+  self.keyMap['s'] = 'b'
+  self.keyMap['d'] = 'a'
 end
 
 function InputManager:update()
@@ -170,4 +181,26 @@ end
 
 function love.touchmoved( id, x, y, dx, dy, pressure )
   inputManager:addTouchMove(Touch(id,x,y,dx,dy,pressure,"move"))
+end
+
+function love.keypressed(key)
+  if inputManager.keyMap[key] == nil then return end
+  inputManager:addPress(inputManager.keyMap[key])
+end
+
+function love.keyreleased(key)
+  if inputManager.keyMap[key] == nil then return end
+  inputManager:addRelease(inputManager.keyMap[key])
+end
+
+function love.mousepressed(x, y, button, istouch, presses)
+  inputManager:addTouchPress(Touch(0,x,y,0,0,1,"press"))
+end
+
+function love.mousereleased(x, y, button, istouch, presses)
+  inputManager:addTouchPress(Touch(0,x,y,0,0,1,"release"))
+end
+
+function love.mousemoved(x, y, dx, dy, istouch)
+  inputManager:addTouchPress(Touch(0,x,y,dx,dy,1,"move"))
 end

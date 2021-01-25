@@ -3,19 +3,31 @@ IntroductionScene = Object:extend()
 function IntroductionScene:new()
   self.textboxList = ArrayList()
   
-  local tb1 = TextBox(30, 30, 200)
-  tb1:setAlign('center')
-  tb1:setText("Welcome to Seedlings!\n This is a game designed to teach programming concepts")
+  local tb1 = TextBox({
+    x = 30, 
+    y = 30, 
+    width = 200,
+    align = 'center',
+    text = "Welcome to Seedlings!\n This is a game designed to teach programming concepts"
+  })
   self.textboxList:add(tb1)
   
-  local tb2 = TextBox(30, 30, 200)
-  tb2:setAlign('center')
-  tb2:setText("Textbox 2\n yaaaay")
+  local tb2 = TextBox({
+    x = 30, 
+    y = 30, 
+    width = 200,
+    align = 'center',
+    text = "Textbox 2\n yaaaay"
+  })
   self.textboxList:add(tb2)
   
-  local tb3 = TextBox(30, 30, 200)
-  tb3:setAlign('center')
-  tb3:setText("Third and final textbox! Hitting 'a' after this should then bring you to the main menu!")
+  local tb3 = TextBox({
+    x = 30, 
+    y = 30, 
+    width = 200,
+    align = 'center',
+    text = "Third and final textbox! Hitting 'a' after this should then bring you to the main menu!"
+  })
   self.textboxList:add(tb3)
   
   self.index = 0
@@ -26,7 +38,7 @@ function IntroductionScene:update()
     self.index = self.index + 1
     if self.index >= self.textboxList:getSize() then 
       saveManager:setValue('read_intro', 1)
-      return TestScene1() 
+      return MainMenuScene() 
     end
   end
   

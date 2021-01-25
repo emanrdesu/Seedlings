@@ -2,6 +2,8 @@ GameManager = Object:extend()
 
 function GameManager:new()
   self.currentScene = TitleScene()
+  self.topBG = love.graphics.newImage('Assets/Images/grassB1.png')
+  self.bottomBG = love.graphics.newImage('Assets/Images/grassB2.png')
 end
 
 function GameManager:update()    
@@ -19,6 +21,7 @@ end
 
 function GameManager:drawTopScreen()
   local dt = love.timer.getDelta()
+  love.graphics.draw(self.topBG, 0, 0)
   self.currentScene:drawTopScreen()
   
   fontManager:setFont('default')
@@ -26,5 +29,6 @@ function GameManager:drawTopScreen()
 end
 
 function GameManager:drawBottomScreen()
+  love.graphics.draw(self.bottomBG, 0, 0)
   self.currentScene:drawBottomScreen()
 end
