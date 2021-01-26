@@ -3,7 +3,7 @@ VarTutFriendScene = Scene:extend()
 function VarTutFriendScene:new()
 
     self.topBG = love.graphics.newImage('Assets/Images/woodbackground.png')
-    self.bottomBG = love.graphics.newImage('Assets/Images/botbkg1.png')
+    self.bottomBG = love.graphics.newImage('Assets/Images/BotBG_layout_LHeavy_blue.png')
     self.friendImage = love.graphics.newImage('Assets/Images/boyblue.png')
     self.whiteCircle = love.graphics.newImage('Assets/Images/whiteCircle.png')
     self.arrow = love.graphics.newImage('Assets/Images/blueArrow.png')
