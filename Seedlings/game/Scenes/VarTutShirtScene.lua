@@ -1,5 +1,3 @@
---require 'Scenes/TestScene4'
-
 VarTutShirtScene = Scene:extend()
 
 function VarTutShirtScene:new()
