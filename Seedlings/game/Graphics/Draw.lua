@@ -254,6 +254,26 @@ function Draw:rectangle(args)
   self:reset()
 end
 
+function Draw:brectangle(args)
+  local x, y, width, height, rx, ry, segments, color, borderColor, borderWidth =
+    args.x or 0,
+    args.y or 0,
+    args.width or 0,
+    args.height or 0,
+    args.rx or 0,
+    args.ry or 0,
+    args.segments or 0,
+    args.color or Color(1,1,1),
+    args.borderColor or Color(1,1,1),
+    args.borderWidth or 0
+    
+  love.graphics.setColor(borderColor.r, borderColor.g, borderColor.b, borderColor.alpha)
+  love.graphics.rectangle('fill', x, y, width, height, rx, ry, segments)
+  love.graphics.setColor(color.r, color.g, color.b, color.alpha)
+  love.graphics.rectangle('fill', x + borderWidth, y + borderWidth, width - 2 * borderWidth, height - 2 * borderWidth, rx, ry, segments)
+  self:reset()
+end
+
 function Draw:draw(args)
   local drawable, x, y, r, sx, sy, ox, oy, kx, ky =
     args.drawable or nil,
