@@ -242,15 +242,34 @@ function VarTutShirtScene:drawBottomScreen()
   end
 
   if self.selectingVariables then
-    fontManager:setFont('18px_italic')
-    love.graphics.print('Select the correct "name" from the list \nwhich matches the value')
-
+    --fontManager:setFont('18px_italic')
+    --love.graphics.print('Select the correct "name" from the list \nwhich matches the value')
+    draw:print({
+        text = 'Select the correct "name" from the list \nwhich matches the value',
+        color = Color.BLACK,
+        font = '18px_italic',
+      })
+    
     fontManager:setFont('18px_bold')
     for i,v in ipairs(self.correctValues) do
       if i == 1 then
-        love.graphics.print('is ' .. v, 210, 70)
+        --love.graphics.print('is ' .. v, 210, 70)
+        draw:print({
+            text = 'is ' .. v,
+            x = 210,
+            y = 70,
+            color = Color.BLACK,
+            font = '18px_bold',
+            })
       elseif i == 2 then
-        love.graphics.print('is ' ..  v, 210, 180)
+        --love.graphics.print('is ' ..  v, 210, 180)
+        draw:print({
+            text = 'is ' .. v,
+            x = 210,
+            y = 180,
+            color = Color.BLACK,
+            font = '18px_bold',
+            })
       end
       
       if self.selected == 1 then
@@ -261,16 +280,37 @@ function VarTutShirtScene:drawBottomScreen()
     end
 
     love.graphics.rectangle('fill', 20, 50, 120,  40)
-    love.graphics.print('NAMES', 35, 53)
+    --love.graphics.print('NAMES', 35, 53)
+    draw:print({
+            text = 'NAMES',
+            x = 35,
+            y = 53,
+            color = Color.BLACK,
+            font = '18px_bold',
+            })
     love.graphics.rectangle('line', 20, 90, 120, 40)
     love.graphics.rectangle('line', 20, 130, 120, 40)
 
     for i,v in ipairs(self.correctVariables) do
       if i == 1 then
-        love.graphics.print(v, 25, 93)
+        --love.graphics.print(v, 25, 93)
+        draw:print({
+            text = v,
+            x = 25,
+            y = 93,
+            color = Color.BLACK,
+            font = '18px_bold',
+            })
       end
       if i == 2  then
-        love.graphics.print(v,  25, 133)
+        draw:print({
+            text = v,
+            x = 25,
+            y = 133,
+            color = Color.BLACK,
+            font = '18px_bold',
+            })
+        --love.graphics.print(v,  25, 133)
       end
     end
 

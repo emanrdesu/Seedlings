@@ -9,6 +9,8 @@ function MainMenuScene:new()
   self.sceneList:add({name="TestScene4", ref = TestScene4(), lock = 0})
   self.sceneList:add({name="Lock 1", ref = TitleScene(), lock = 1})
   self.sceneList:add({name='VarMinigameIntro', ref = VarMinigameIntro(), lock = 0})
+  self.sceneList:add({name='VarMinigameBackpack', ref = VarMinigameBackpack(), lock = 0})
+  self.sceneList:add({name='MultiVarMusicIntro', ref = MultiVarMusicIntro(), lock = 0})
   
   self.scenesPerScreen = 3
   self.currentPage = 0

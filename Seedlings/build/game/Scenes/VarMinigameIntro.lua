@@ -128,6 +128,10 @@ function VarMinigameIntro:update()
         self.sequencesMatching = true
     end
 
+    if self.sequencesMatching and inputManager:isPressed('start') then
+        return VarMinigameBackpack()
+    end
+
     return self
 end
 

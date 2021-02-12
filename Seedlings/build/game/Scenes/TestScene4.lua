@@ -123,13 +123,25 @@ function TestScene4:drawBottomScreen()
     if self.objectSelector[i] == true then
       fontManager:setFont('18px_bold')
       local object = self.gameObjects[i]
-      love.graphics.print(object:toString(), 10, 55 * i)
+      --love.graphics.print(object:toString(), 10, 55 * i)
+      draw:print({
+            text = object:toString(),
+            x = 10,
+            y = 55 * i,
+            color = Color.BLACK,
+            font = '18px_bold',
+            })
     end
   end
   
   if self.objectSelector[1] and self.objectSelector[2] and self.objectSelector[3] then
     fontManager:setFont('18px_italic')
-    love.graphics.print('Press START to continue (make sure you \nremember all the things!)')
+    --love.graphics.print('Press START to continue (make sure you \nremember all the things!)')
+    draw:print({
+            text = 'Press START to continue (make sure you \nremember all the things!)',
+            color = Color.BLACK,
+            font = '18px_italic',
+            })
   end
     
 end
