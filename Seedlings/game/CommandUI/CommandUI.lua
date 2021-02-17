@@ -32,17 +32,6 @@ function CommandUI:new()
   self.uiStack = Queue()
   self.uiStack:addLast(CommandLister(this))
   self.buttonList = ArrayList()
-  self.buttonList:add(
-    Button({
-      hitbox = {shape = 'circle', x = 300, y = 50, r = 15},
-      drawNormal = function()
-        draw:circle({mode = 'fill', x = 300, y = 50, radius = 15, segments = 10, color = Color.RED})
-      end,
-      drawHovered = function()
-        draw:circle({mode = 'fill', x = 300, y = 50, radius = 15, segments = 10, color = Color.BLUE})
-      end
-    })
-  );
 end
 
 function CommandUI:update()
