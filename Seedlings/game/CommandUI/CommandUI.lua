@@ -34,10 +34,13 @@ function CommandUI:new()
 end
 
 function CommandUI:update()
-  
+  -- Get top of the stack and call its update function
+  local top = self.uiStack:peekLast()
+  top:update()
 end
 
 function CommandUI:drawBottomScreen()
+  -- Draw background and buttons on right
   draw:rectangle({
     x = 0,
     y = 0,
@@ -45,4 +48,10 @@ function CommandUI:drawBottomScreen()
     width = Constants.BOTTOM_SCREEN_WIDTH,
     height = Constants.BOTTOM_SCREEN_HEIGHT,
   })
+
+  -- TODO: Draw buttons
+  
+  -- Draw what is on the top of the stack
+  local top = self.uiStack:peekLast()
+  top:drawBottomScreen()
 end
