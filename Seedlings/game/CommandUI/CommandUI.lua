@@ -31,12 +31,31 @@ function CommandUI:new()
   self.commandManager = CommandManager()
   self.uiStack = Queue()
   self.uiStack:addLast(CommandLister(this))
+  self.buttonList = ArrayList()
+  self.buttonList:add(
+    Button({
+      hitbox = {shape = 'circle', x = 300, y = 50, r = 15},
+      drawNormal = function()
+        draw:circle({mode = 'fill', x = 300, y = 50, radius = 15, segments = 10, color = Color.RED})
+      end,
+      drawHovered = function()
+        draw:circle({mode = 'fill', x = 300, y = 50, radius = 15, segments = 10, color = Color.BLUE})
+      end
+    })
+  );
 end
 
 function CommandUI:update()
   -- Get top of the stack and call its update function
   local top = self.uiStack:peekLast()
   top:update()
+  
+  -- Update buttons if stack is only size 1
+  if self.uiStack:getSize() <= 1 then
+    for i = 0, self.buttonList:getSize() - 1, 1 do
+      self.buttonList:get(i):update()
+    end
+  end
 end
 
 function CommandUI:drawBottomScreen()
@@ -50,7 +69,10 @@ function CommandUI:drawBottomScreen()
   })
 
   -- TODO: Draw buttons
-  
+  for i = 0, self.buttonList:getSize() - 1, 1 do
+    self.buttonList:get(i):draw()
+  end
+    
   -- Draw what is on the top of the stack
   local top = self.uiStack:peekLast()
   top:drawBottomScreen()

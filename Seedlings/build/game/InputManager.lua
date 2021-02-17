@@ -92,6 +92,9 @@ function InputManager:new()
   self.keyMap['a'] = 'y'
   self.keyMap['s'] = 'b'
   self.keyMap['d'] = 'a'
+  
+  self.mdx = (Constants.TOP_SCREEN_WIDTH - Constants.BOTTOM_SCREEN_WIDTH)/2
+  self.mdy = 20 + Constants.TOP_SCREEN_HEIGHT
 end
 
 function InputManager:update()
@@ -172,15 +175,15 @@ function love.gamepadreleased( joystick, button )
 end
 
 function love.touchpressed( id, x, y, dx, dy, pressure )
-  inputManager:addTouchPress(Touch(id,x,y,dx,dy,pressure,"press"))
+  inputManager:addTouchPress(Touch(id,x,y,dx,dy,pressure,Touch.PRESS))
 end
 
 function love.touchreleased( id, x, y, dx, dy, pressure )
-  inputManager:addTouchRelease(Touch(id,x,y,dx,dy,pressure,"release"))
+  inputManager:addTouchPress(Touch(id,x,y,dx,dy,pressure,Touch.RELEASE))
 end
 
 function love.touchmoved( id, x, y, dx, dy, pressure )
-  inputManager:addTouchMove(Touch(id,x,y,dx,dy,pressure,"move"))
+  inputManager:addTouchPress(Touch(id,x,y,dx,dy,pressure,Touch.MOVE))
 end
 
 function love.keypressed(key)
@@ -194,13 +197,13 @@ function love.keyreleased(key)
 end
 
 function love.mousepressed(x, y, button, istouch, presses)
-  inputManager:addTouchPress(Touch(0,x,y,0,0,1,"press"))
+  inputManager:addTouchPress(Touch(0,x - inputManager.mdx,y - inputManager.mdy,0,0,1,Touch.PRESS))
 end
 
 function love.mousereleased(x, y, button, istouch, presses)
-  inputManager:addTouchPress(Touch(0,x,y,0,0,1,"release"))
+  inputManager:addTouchPress(Touch(0,x - inputManager.mdx,y - inputManager.mdy,0,0,1,Touch.RELEASE))
 end
 
 function love.mousemoved(x, y, dx, dy, istouch)
-  inputManager:addTouchPress(Touch(0,x,y,dx,dy,1,"move"))
+  inputManager:addTouchPress(Touch(0,x - inputManager.mdx,y - inputManager.mdy,dx,dy,1,Touch.MOVE))
 end
