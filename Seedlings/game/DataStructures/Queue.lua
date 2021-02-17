@@ -6,12 +6,12 @@ function Queue:new()
   self.ar = {}
 end
 
-function Queue:size()
+function Queue:getSize()
   return self.r - self.l + 1
 end
 
 function Queue:isEmpty()
-  if self:size() == 0 then
+  if self:getSize() == 0 then
     return true
   else
     return false
