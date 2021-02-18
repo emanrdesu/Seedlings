@@ -2,14 +2,14 @@ MainMenuScene = Scene:extend()
 
 function MainMenuScene:new()
   self.sceneList = ArrayList()
-  self.sceneList:add({name="TestScene1", ref=TestScene1(), lock = 0})
-  self.sceneList:add({name="TestScene2", ref=TestScene2(), lock = 0})
-  self.sceneList:add({name="TestScene3", ref=TestScene3(), lock = 0})
-  self.sceneList:add({name="Title Screen", ref = TitleScene(), lock = 0})
-  self.sceneList:add({name="TestScene4", ref = TestScene4(), lock = 0})
-  self.sceneList:add({name="Lock 1", ref = TitleScene(), lock = 1})
-  self.sceneList:add({name='VarMinigameIntro', ref = VarMinigameIntro(), lock = 0})
-  self.sceneList:add({name='Command Test', ref = CTS(), lock = 0})
+  self.sceneList:add({name="TestScene1", ref=TestScene1, lock = 0})
+  self.sceneList:add({name="TestScene2", ref=TestScene2, lock = 0})
+  self.sceneList:add({name="TestScene3", ref=TestScene3, lock = 0})
+  self.sceneList:add({name="Title Screen", ref = TitleScene, lock = 0})
+  self.sceneList:add({name="TestScene4", ref = TestScene4, lock = 0})
+  self.sceneList:add({name="Lock 1", ref = TitleScene, lock = 1})
+  self.sceneList:add({name='VarMinigameIntro', ref = VarMinigameIntro, lock = 0})
+  self.sceneList:add({name='Command Test', ref = CTS, lock = 0})
   
   self.scenesPerScreen = 3
   self.currentPage = 0
@@ -39,7 +39,7 @@ function MainMenuScene:update()
   
   if inputManager:isPressed('a') then
     local scene = self.sceneList:get(self.scenesPerScreen * self.currentPage + self.currentIndex)
-    if scene.lock <= self.currentProgress then return scene.ref end
+    if scene.lock <= self.currentProgress then return scene.ref() end
   end
   
   return self
