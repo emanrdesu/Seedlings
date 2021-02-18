@@ -27,10 +27,11 @@ CommandSelector ->  (will be passed a reference to this object to reference the 
 --]]
 
 function CommandUI:new()
+  self.commandLister = CommandLister(self)
   self.availableCommands = ArrayList()
   self.commandManager = CommandManager()
   self.uiStack = Queue()
-  self.uiStack:addLast(CommandLister(this))
+  self.uiStack:addLast(self.commandLister)
   self.buttonList = ArrayList()
   
   -- Create buttons
@@ -59,7 +60,10 @@ function CommandUI:new()
     Button({
       hitbox = {shape = 'rectangle', x = x, y = y1, width = width, height = height},
       drawNormal = getDrawNormal(x, y1, width, height, "ADD"),
-      drawHovered = getDrawHovered(x, y1, width, height, "ADD")
+      drawHovered = getDrawHovered(x, y1, width, height, "ADD"),
+      onClick = function()
+        self.commandManager:addCommand(SetValTo('x', '5'))
+      end
     })
   )
 
@@ -79,7 +83,16 @@ function CommandUI:new()
     Button({
       hitbox = {shape = 'rectangle', x = x, y = y3, width = width, height = height},
       drawNormal = getDrawNormal(x, y3, width, height, "DEL"),
-      drawHovered = getDrawHovered(x, y3, width, height, "DEL")
+      drawHovered = getDrawHovered(x, y3, width, height, "DEL"),
+      onClick = function()
+        if self.commandManager.commandList:getSize() > 0 then
+          self.commandManager:removeCommand(self.commandLister.selectedIndex)
+          if self.commandLister.selectedIndex >= self.commandManager.commandList:getSize() then
+            self.commandLister.selectedIndex = self.commandManager.commandList:getSize() - 1
+          end
+          if self.commandLister.selectedIndex < 0 then self.commandLister.selectedIndex = 0 end
+        end
+      end
     })
   )
   
