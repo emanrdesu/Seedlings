@@ -62,7 +62,7 @@ function CommandUI:new()
       drawNormal = getDrawNormal(x, y1, width, height, "ADD"),
       drawHovered = getDrawHovered(x, y1, width, height, "ADD"),
       onClick = function()
-        self.commandManager:addCommand(SetValTo('x', '5'))
+        self.commandManager:addCommand(SetValTo2('x', '5'))
       end
     })
   )
@@ -73,7 +73,13 @@ function CommandUI:new()
     Button({
       hitbox = {shape = 'rectangle', x = x, y = y2, width = width, height = height},
       drawNormal = getDrawNormal(x, y2, width, height, "EDIT"),
-      drawHovered = getDrawHovered(x, y2, width, height, "EDIT")
+      drawHovered = getDrawHovered(x, y2, width, height, "EDIT"),
+      onClick = function()
+        if self.commandManager.commandList:getSize() > 0 then
+          local cmd = self.commandManager.commandList:get(self.commandLister.selectedIndex)
+          self.uiStack:addLast(CommandEditor(self, cmd))
+        end
+      end
     })
   )
   

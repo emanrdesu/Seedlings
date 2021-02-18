@@ -72,3 +72,11 @@ function love.quit()
   saveManager:saveData()
   love.event.quit()
 end
+
+function love.textinput()
+  
+end
+
+function love.textedited()
+  
+end
