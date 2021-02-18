@@ -34,7 +34,7 @@ end
 
 function SetValTo2:getParamList()
   local paramList = ArrayList()
-  paramList:add({userString = 'variable'..' '..tostring(self.params.variable), codeString = 'variable'})
-  paramList:add({userString = 'value'..' '..tostring(self.params.value), codeString = 'value'})
+  paramList:add({userString = 'variable'..': '..tostring(self.params.variable), codeString = 'variable'})
+  paramList:add({userString = 'value'..': '..tostring(self.params.value), codeString = 'value'})
   return paramList
 end
