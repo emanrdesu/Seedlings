@@ -23,6 +23,7 @@ function love.load(arg)
   
   -- Instantiate draw object
   draw = Draw()
+  
 end
 
 function love.update()  
@@ -62,13 +63,23 @@ end
 function love.focus(f)
   if f then
     -- Focus
+    -- Say we aren't reading input anymore
+    inputManager:setReadingInput(false)
   else
     -- Losing focus. Quit the game
-    love.event.quit()
+    if not inputManager:isReadingInput() then love.event.quit() end
   end
 end
 
 function love.quit()
   saveManager:saveData()
   love.event.quit()
+end
+
+function love.textinput(text)
+
+end
+
+function love.textedited()
+  
 end

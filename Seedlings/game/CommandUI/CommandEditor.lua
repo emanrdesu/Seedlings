@@ -59,13 +59,12 @@ function CommandEditor:new(uiRef, commandRef)
         draw:rectangle({x=x,y=y,width=width,height=height,color=Color.BLUE})
       end,
       onClick = function()
+        inputManager:setReadingInput(true)
         love.keyboard.setTextInput({isPassword=false, hint=''})
       end
     })
     self.buttonList:add(btn)
   end
-  
-  
 end
 
 function CommandEditor:update()

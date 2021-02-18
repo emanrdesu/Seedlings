@@ -43,6 +43,14 @@ function InputManager:getLastTouch()
   return self.lastTouch
 end
 
+function InputManager:isReadingInput()
+  return self.readingTextInput
+end
+
+function InputManager:setReadingInput(b)
+  self.readingTextInput = b
+end
+
 
 -- Constructor and backend stuff down here
 
@@ -58,6 +66,8 @@ function InputManager:new()
   self.lastTouch = nil
   self.touchOrigin = nil
   self.hasPress = false
+  
+  self.readingTextInput = false
   
   self.keyMap = {}
   self.keyMap['up'] = 'dpup'
