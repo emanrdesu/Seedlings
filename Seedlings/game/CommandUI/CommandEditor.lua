@@ -61,6 +61,7 @@ function CommandEditor:new(uiRef, commandRef)
       onClick = function()
         inputManager:setReadingInput(true)
         love.keyboard.setTextInput({isPassword=false, hint=''})
+        -- Set a receiver in the inputManager (the command and which param we are editing. The love.textinput(text) function will then look at the inputManager and set the value if needed
       end
     })
     self.buttonList:add(btn)
