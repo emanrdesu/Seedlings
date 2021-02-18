@@ -54,7 +54,7 @@ end
 function InputManager:setTextInput(hint)
   self:setReadingInput(true)
   if __PLAYING_ON_PC then
-    
+    love.keyboard.setTextInput(true)
   else
     love.keyboard.setTextInput({isPassword=false, hint=(hint or '')})
   end
@@ -62,6 +62,14 @@ end
 
 function InputManager:disableTextInput()
   self:setReadingInput(false)
+  if __PLAYING_ON_PC then
+    love.keyboard.setTextInput(false)
+  end
+end
+
+function InputManager:setReceiver(command, paramName)
+  self.command = command
+  self.paramName = paramName
 end
 
 
@@ -79,6 +87,9 @@ function InputManager:new()
   self.lastTouch = nil
   self.touchOrigin = nil
   self.hasPress = false
+  
+  self.command = nil
+  self.paramName = nil
   
   self.readingTextInput = false
   
@@ -199,4 +210,15 @@ end
 function love.mousemoved(x, y, dx, dy, istouch)
   if not inputManager.hasPress then return end
   inputManager:addTouch(Touch(0,x - inputManager.mdx,y - inputManager.mdy,dx,dy,1,Touch.MOVE))
+end
+
+
+function love.textinput(text)
+  if inputManager.command ~= nil and text ~= nil and text ~= '' then
+    inputManager.command:setParameter(inputManager.paramName, text)
+  end
+end
+
+function love.textedited()
+  
 end

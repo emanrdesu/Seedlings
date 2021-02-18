@@ -59,8 +59,9 @@ function CommandEditor:new(uiRef, commandRef)
         draw:rectangle({x=x,y=y,width=width,height=height,color=Color.BLUE})
       end,
       onClick = function()
-        inputManager:setTextInput()
         -- Set a receiver in the inputManager (the command and which param we are editing. The love.textinput(text) function will then look at the inputManager and set the value if needed
+        inputManager:setReceiver(self.commandRef, paramList:get(i).codeString)
+        inputManager:setTextInput()
       end
     })
     self.buttonList:add(btn)
