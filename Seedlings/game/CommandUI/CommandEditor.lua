@@ -59,8 +59,7 @@ function CommandEditor:new(uiRef, commandRef)
         draw:rectangle({x=x,y=y,width=width,height=height,color=Color.BLUE})
       end,
       onClick = function()
-        inputManager:setReadingInput(true)
-        love.keyboard.setTextInput({isPassword=false, hint=''})
+        inputManager:setTextInput()
         -- Set a receiver in the inputManager (the command and which param we are editing. The love.textinput(text) function will then look at the inputManager and set the value if needed
       end
     })

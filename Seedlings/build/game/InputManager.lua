@@ -51,6 +51,19 @@ function InputManager:setReadingInput(b)
   self.readingTextInput = b
 end
 
+function InputManager:setTextInput(hint)
+  self:setReadingInput(true)
+  if __PLAYING_ON_PC then
+    
+  else
+    love.keyboard.setTextInput({isPassword=false, hint=(hint or '')})
+  end
+end
+
+function InputManager:disableTextInput()
+  self:setReadingInput(false)
+end
+
 
 -- Constructor and backend stuff down here
 

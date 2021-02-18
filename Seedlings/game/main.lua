@@ -24,6 +24,7 @@ function love.load(arg)
   -- Instantiate draw object
   draw = Draw()
   
+  __PLAYING_ON_PC = false
 end
 
 function love.update()  
@@ -45,6 +46,7 @@ function love.draw(screen)
   end
   if screen == "bottom" or screen == nil then
     if screen == nil then
+      __PLAYING_ON_PC = true
       local sx = (Constants.TOP_SCREEN_WIDTH - Constants.BOTTOM_SCREEN_WIDTH)/2
       local sy = 20 + Constants.TOP_SCREEN_HEIGHT
       love.graphics.translate(sx, sy)
