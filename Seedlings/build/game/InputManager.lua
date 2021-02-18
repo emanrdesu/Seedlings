@@ -147,6 +147,11 @@ function love.touchreleased( id, x, y, dx, dy, pressure )
 end
 
 function love.touchmoved( id, x, y, dx, dy, pressure )
+  local lt = inputManager:getLastTouch()
+  if lt ~= nil then
+    dx = x - lt.x
+    dy = y - lt.y
+  end
   inputManager:addTouch(Touch(id,x,y,dx,dy,pressure,Touch.MOVE))
 end
 
