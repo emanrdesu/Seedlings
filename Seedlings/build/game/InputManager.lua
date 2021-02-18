@@ -57,6 +57,7 @@ function InputManager:new()
 
   self.lastTouch = nil
   self.touchOrigin = nil
+  self.hasPress = false
   
   self.keyMap = {}
   self.keyMap['up'] = 'dpup'
@@ -82,6 +83,7 @@ function InputManager:update()
   self.touchPress = nil
   self.touchRelease = nil
   self.touchMove = nil
+  self.lastTouch = nil
   
   -- Clear the press queue
   while not self.pressQueue:isEmpty() do
@@ -103,6 +105,10 @@ function InputManager:update()
     
     if touch.eventType == Touch.PRESS then
       self.touchOrigin = touch
+      self.hasPress = true
+    end
+    if touch.eventType == Touch.RELEASE then
+      self.hasPress = false
     end
   end
 end
@@ -163,5 +169,6 @@ function love.mousereleased(x, y, button, istouch, presses)
 end
 
 function love.mousemoved(x, y, dx, dy, istouch)
+  if not inputManager.hasPress then return end
   inputManager:addTouch(Touch(0,x - inputManager.mdx,y - inputManager.mdy,dx,dy,1,Touch.MOVE))
 end
