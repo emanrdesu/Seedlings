@@ -12,6 +12,12 @@ function Color:withAlpha(newAlpha)
   return Color(self.r, self.g, self.b, newAlpha)
 end
 
+-- Function to convert 0-255 values
+function Color:byte(r, g, b, alpha)
+  local a = alpha or 255.0
+  return Color(r/255.0, g/255.0, b/255.0, a/255.0)
+end
+
 -- Constants have to go below constructor
 Color.RED = Color(1,0,0)
 Color.BLUE = Color(0,0,1)

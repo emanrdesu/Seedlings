@@ -32,6 +32,68 @@ function CommandUI:new()
   self.uiStack = Queue()
   self.uiStack:addLast(CommandLister(this))
   self.buttonList = ArrayList()
+  
+  -- Create buttons
+  local width = 62
+  local height = 53
+  local x = 250;
+  local deltaHeight = 3
+  
+  function getDrawNormal(x, y, w, h, text)
+    return function()
+      draw:rectangle({x=x, y=y, width=w, height=h, color = Color.LIGHT_GRAY})
+      draw:print({x=x, y=y, text = text, color = Color.BLACK, font = '18px'})
+    end
+  end
+  
+  function getDrawHovered(x, y, w, h, text)
+    return function()
+      draw:rectangle({x=x, y=y, width=w, height=h, color = Color:byte(178, 178, 178)})
+      draw:print({x=x, y=y, text = text, color = Color.BLACK, font = '18px'})
+    end
+  end
+  
+  -- ADD button
+  local y1 = 3
+  self.buttonList:add(
+    Button({
+      hitbox = {shape = 'rectangle', x = x, y = y1, width = width, height = height},
+      drawNormal = getDrawNormal(x, y1, width, height, "ADD"),
+      drawHovered = getDrawHovered(x, y1, width, height, "ADD")
+    })
+  )
+
+  -- EDIT button
+  local y2 = y1 + height + deltaHeight
+  self.buttonList:add(
+    Button({
+      hitbox = {shape = 'rectangle', x = x, y = y2, width = width, height = height},
+      drawNormal = getDrawNormal(x, y2, width, height, "EDIT"),
+      drawHovered = getDrawHovered(x, y2, width, height, "EDIT")
+    })
+  )
+  
+  -- Del button
+  local y3 = y2 + height + deltaHeight
+  self.buttonList:add(
+    Button({
+      hitbox = {shape = 'rectangle', x = x, y = y3, width = width, height = height},
+      drawNormal = getDrawNormal(x, y3, width, height, "DEL"),
+      drawHovered = getDrawHovered(x, y3, width, height, "DEL")
+    })
+  )
+  
+  -- Run button
+  local runHeight = height + 13
+  local y4 = y3 + height + deltaHeight
+  self.buttonList:add(
+    Button({
+      hitbox = {shape = 'rectangle', x = x, y = y4, width = width, height = runHeight},
+      drawNormal = getDrawNormal(x, y4, width, runHeight, "RUN"),
+      drawHovered = getDrawHovered(x, y4, width, runHeight, "RUN")
+    })
+  )
+  
 end
 
 function CommandUI:update()
