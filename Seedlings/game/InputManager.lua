@@ -94,6 +94,7 @@ function InputManager:new()
   self.editorRef = nil
   
   self.readingTextInput = false
+  self.pcString = ''
   
   self.keyMap = {}
   self.keyMap['up'] = 'dpup'
@@ -192,6 +193,21 @@ function love.touchmoved( id, x, y, dx, dy, pressure )
 end
 
 function love.keypressed(key)
+  if key == 'return' and __PLAYING_ON_PC then 
+    if inputManager.command ~= nil and inputManager.pcString ~= '' then
+      inputManager.command:setParameter(inputManager.paramName, inputManager.pcString)
+      inputManager.editorRef:refresh()
+      inputManager.pcString = ''
+    end
+    inputManager:disableTextInput() 
+  end
+  if key == 'backspace' and __PLAYING_ON_PC then
+    -- substring
+    if string.len(inputManager.pcString) > 0 then
+      inputManager.pcString = string.sub(inputManager.pcString, 1, string.len(inputManager.pcString) - 1)
+    end
+  end
+  
   if inputManager.keyMap[key] == nil then return end
   inputManager:addPress(inputManager.keyMap[key])
 end
@@ -216,6 +232,13 @@ end
 
 
 function love.textinput(text)
+  if __PLAYING_ON_PC then
+    if inputManager:isReadingInput() then
+      inputManager.pcString = inputManager.pcString..text
+    end
+    return
+  end
+  
   if inputManager.command ~= nil and text ~= nil and text ~= '' then
     inputManager.command:setParameter(inputManager.paramName, text)
     inputManager.editorRef:refresh()
