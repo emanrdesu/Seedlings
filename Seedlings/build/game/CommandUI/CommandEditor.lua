@@ -92,10 +92,16 @@ function CommandEditor:refresh()
         draw:print({x=x+10,y=y,color=Color.BLACK,font='18px',text=param.userString})
       end,
       onClick = function()
-        -- Set a receiver in the inputManager (the command and which param we are editing)
-        inputManager:setReceiver(self.commandRef, paramList:get(i).codeString, self)
-        -- Set up a text input for this command. The inputManager will handle giving the string over to the command
-        inputManager:setTextInput()
+        -- Check if there is an 'option list' AKA a list of options for this command
+        if paramList:get(i).optionList ~= nil then
+          -- Add the optionList to the stack. It will refresh when it changes the object
+          self.uiRef.uiStack:addLast(CommandOptionList(self.uiRef, self, self.commandRef, paramList:get(i)))
+        else
+          -- Set a receiver in the inputManager (the command and which param we are editing)
+          inputManager:setReceiver(self.commandRef, paramList:get(i).codeString, self)
+          -- Set up a text input for this command. The inputManager will handle giving the string over to the command
+          inputManager:setTextInput()
+        end
       end
     })
     self.buttonList:add(btn)
