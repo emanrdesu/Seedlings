@@ -2,7 +2,7 @@ CommandSelector = Object:extend()
 
 function CommandSelector:new(uiRef, commandRef, commandIndex, editorRef)
   -- If the commandRef is nil, then this is inserting something at the index
-  -- otherwise, it is modifying the command
+  -- otherwise, it is modifying the command at this index
   
   self.uiRef = uiRef
   self.commandRef = commandRef
@@ -82,13 +82,14 @@ function CommandSelector:new(uiRef, commandRef, commandIndex, editorRef)
       end,
       onClick = function()
         if self.commandRef == nil then
-          -- Insert this command at this index
+          -- Insert this command at this index then increment the index afterwards if we did not add the 1st command
           self.uiRef.commandManager:insertCommand(1 + self.commandIndex, self.uiRef.availableCommands:get(self.selectedIndex)()) 
           if self.uiRef.commandManager.commandList:getSize() > 1 then self.uiRef.commandLister.selectedIndex = self.uiRef.commandLister.selectedIndex + 1 end
         else
           -- Modify the current command
           local newCommand = self.uiRef.availableCommands:get(self.selectedIndex)()
           self.uiRef.commandManager:replaceCommand(self.commandIndex, newCommand)
+          -- Set the command reference and then refresh the editor
           self.editorRef.commandRef = newCommand
           self.editorRef:refresh()
         end
@@ -99,6 +100,7 @@ function CommandSelector:new(uiRef, commandRef, commandIndex, editorRef)
   
   
   -- Create the values for the list of available commands
+  -- Unlike the lister, here the height per command is the effective height
   self.cmdListWidth = self.width - xwidth - 50
   self.heightPerCommand = 40
   
@@ -107,6 +109,7 @@ function CommandSelector:new(uiRef, commandRef, commandIndex, editorRef)
   self.offsetY = 0
   self.minOffsetY = 0
   
+  -- Create a hitbox so that this can scroll as well
   self.buttonHitbox = Button({
     hitbox = {shape = 'rectangle', x = self.startX, y = self.startY, width = self.cmdListWidth, height = self.height}
   })

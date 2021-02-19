@@ -41,6 +41,7 @@ function CommandEditor:new(uiRef, commandRef)
       })
     end,
     onClick = function()
+      -- Pull this editor off the stack on exit
       self.uiRef.uiStack:pollLast()
     end
   })
@@ -91,8 +92,9 @@ function CommandEditor:refresh()
         draw:print({x=x+10,y=y,color=Color.BLACK,font='18px',text=param.userString})
       end,
       onClick = function()
-        -- Set a receiver in the inputManager (the command and which param we are editing. The love.textinput(text) function will then look at the inputManager and set the value if needed
+        -- Set a receiver in the inputManager (the command and which param we are editing)
         inputManager:setReceiver(self.commandRef, paramList:get(i).codeString, self)
+        -- Set up a text input for this command. The inputManager will handle giving the string over to the command
         inputManager:setTextInput()
       end
     })
@@ -101,6 +103,7 @@ function CommandEditor:refresh()
 end
 
 function CommandEditor:update()
+  -- Update buttons
   for i = 0, self.buttonList:getSize() - 1, 1 do
     self.buttonList:get(i):update()
   end

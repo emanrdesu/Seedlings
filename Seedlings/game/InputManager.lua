@@ -51,6 +51,7 @@ function InputManager:setReadingInput(b)
   self.readingTextInput = b
 end
 
+-- Start reading in text input
 function InputManager:setTextInput(hint)
   self:setReadingInput(true)
   if __PLAYING_ON_PC then
@@ -60,6 +61,7 @@ function InputManager:setTextInput(hint)
   end
 end
 
+-- Disable the text input
 function InputManager:disableTextInput()
   self:setReadingInput(false)
   if __PLAYING_ON_PC then
@@ -67,6 +69,7 @@ function InputManager:disableTextInput()
   end
 end
 
+-- Set a receiver for the text input. Currently only used for editing commands
 function InputManager:setReceiver(command, paramName, editorRef)
   self.command = command
   self.paramName = paramName
@@ -193,6 +196,7 @@ function love.touchmoved( id, x, y, dx, dy, pressure )
 end
 
 function love.keypressed(key)
+  -- If hitting enter, process the string that was entered
   if key == 'return' and __PLAYING_ON_PC then 
     if inputManager.command ~= nil and inputManager.pcString ~= '' then
       inputManager.command:setParameter(inputManager.paramName, inputManager.pcString)
@@ -201,6 +205,7 @@ function love.keypressed(key)
     end
     inputManager:disableTextInput() 
   end
+  -- If hitting backspace, delete the last character from the string
   if key == 'backspace' and __PLAYING_ON_PC then
     -- substring
     if string.len(inputManager.pcString) > 0 then
@@ -232,6 +237,7 @@ end
 
 
 function love.textinput(text)
+  -- If playing on PC, then append the character to the current string
   if __PLAYING_ON_PC then
     if inputManager:isReadingInput() then
       inputManager.pcString = inputManager.pcString..text
@@ -239,7 +245,9 @@ function love.textinput(text)
     return
   end
   
+  -- If not playing on pc, process the whole string
   if inputManager.command ~= nil and text ~= nil and text ~= '' then
+    -- Set the parameter for the command and refresh the editor
     inputManager.command:setParameter(inputManager.paramName, text)
     inputManager.editorRef:refresh()
   end

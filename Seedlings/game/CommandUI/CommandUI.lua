@@ -27,6 +27,7 @@ CommandSelector ->  (will be passed a reference to this object to reference the 
 --]]
 
 function CommandUI:new()
+  -- Initialize stuff. Have the command lister on the top of the stack
   self.commandLister = CommandLister(self)
   self.availableCommands = ArrayList()
   self.commandManager = CommandManager()
@@ -40,6 +41,7 @@ function CommandUI:new()
   local x = 250;
   local deltaHeight = 3
   
+  -- Functions for drawing buttons
   function getDrawNormal(x, y, w, h, text)
     return function()
       draw:rectangle({x=x, y=y, width=w, height=h, color = Color.LIGHT_GRAY})
@@ -62,8 +64,8 @@ function CommandUI:new()
       drawNormal = getDrawNormal(x, y1, width, height, "ADD"),
       drawHovered = getDrawHovered(x, y1, width, height, "ADD"),
       onClick = function()
+        -- Add the command selector to the top of the stack
         self.uiStack:addLast(CommandSelector(self, nil, self.commandLister.selectedIndex), nil)
-        -- self.commandManager:addCommand(SetValTo2('x', '5'))
       end
     })
   )
@@ -76,6 +78,7 @@ function CommandUI:new()
       drawNormal = getDrawNormal(x, y2, width, height, "EDIT"),
       drawHovered = getDrawHovered(x, y2, width, height, "EDIT"),
       onClick = function()
+        -- Add a command editor to the top of the stack for the selected command
         if self.commandManager.commandList:getSize() > 0 then
           local cmd = self.commandManager.commandList:get(self.commandLister.selectedIndex)
           self.uiStack:addLast(CommandEditor(self, cmd))
@@ -92,6 +95,8 @@ function CommandUI:new()
       drawNormal = getDrawNormal(x, y3, width, height, "DEL"),
       drawHovered = getDrawHovered(x, y3, width, height, "DEL"),
       onClick = function()
+        -- If there are commands, delete the selected one
+        -- Then update the current selected index
         if self.commandManager.commandList:getSize() > 0 then
           self.commandManager:removeCommand(self.commandLister.selectedIndex)
           if self.commandLister.selectedIndex >= self.commandManager.commandList:getSize() then
@@ -104,6 +109,7 @@ function CommandUI:new()
   )
   
   -- Run button
+  -- TODO: Implement the run button onClick
   local runHeight = height + 13
   local y4 = y3 + height + deltaHeight
   self.buttonList:add(
@@ -139,7 +145,7 @@ function CommandUI:drawBottomScreen()
     height = Constants.BOTTOM_SCREEN_HEIGHT,
   })
 
-  -- TODO: Draw buttons
+  --Draw buttons
   for i = 0, self.buttonList:getSize() - 1, 1 do
     self.buttonList:get(i):draw()
   end
@@ -149,7 +155,7 @@ function CommandUI:drawBottomScreen()
   top:drawBottomScreen()
 end
 
-
+-- Add an available command for this manager
 function CommandUI:addAvailableCommand(cmd)
   self.availableCommands:add(cmd)
 end

@@ -33,6 +33,7 @@ end
 
 function GameManager:drawBottomScreen()
   love.graphics.draw(self.bottomBG, 0, 0)
+  -- If playing on PC and reading input, draw a blank screen with the current text. Otherwise draw scene normally
   if not(__PLAYING_ON_PC and inputManager:isReadingInput()) then
     self.currentScene:drawBottomScreen()
   else 

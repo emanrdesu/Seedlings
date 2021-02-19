@@ -24,6 +24,7 @@ function love.load(arg)
   -- Instantiate draw object
   draw = Draw()
   
+  -- Have a variable that is whether or not the game is playing on PC
   __PLAYING_ON_PC = false
 end
 
@@ -68,7 +69,7 @@ function love.focus(f)
     -- Say we aren't reading input anymore
     inputManager:setReadingInput(false)
   else
-    -- Losing focus. Quit the game
+    -- Losing focus. Quit the game if this focus wasn't from brining up text input
     if not inputManager:isReadingInput() then love.event.quit() end
   end
 end

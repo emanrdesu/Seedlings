@@ -3,19 +3,24 @@ CommandLister = Object:extend()
 function CommandLister:new(uiRef)
   self.uiRef = uiRef
   
+  -- variables for this listing box
   self.startX = 10
   self.startY = 0
   self.width = 230
   self.height = 240
   
+  -- Height per command, and border width
+  -- Commands are drawn with their borders overlapping, so the effective height is (height - borderWidth)
   self.heightPerCommand = 22
   self.commandBorderWidth = 2
   
   self.selectedIndex = 0
   
+  -- The commands will scroll if there are too many. The offset is the current 'scroll'
   self.offsetY = 0
   self.minOffsetY = 0
   
+  -- Create an invisible button that functions as the hitbox for the scrolling
   self.buttonHitbox = Button({
     hitbox = {shape = 'rectangle', x = self.startX, y = self.startY, width = self.width, height = self.height}
   })
@@ -46,6 +51,7 @@ function CommandLister:update()
       local y = self.startY + (i * (self.heightPerCommand - self.commandBorderWidth)) + self.offsetY
       local xi = lt.x > x and lt.x < x + self.width
       local yi = lt.y > y and lt.y < y + self.heightPerCommand
+      -- Update selected index if any commands got clicked
       if xi and yi then self.selectedIndex = i end
     end
   end
