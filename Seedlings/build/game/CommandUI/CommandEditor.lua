@@ -11,7 +11,7 @@ function CommandEditor:new(uiRef, commandRef)
   
   self.buttonList = ArrayList()
   
-  -- Create the X button
+  -- Create the Exit button
   local xwidth = 30
   local xheight = 30
   local buttonX = self.startX + self.width - xwidth
@@ -41,15 +41,15 @@ function CommandEditor:new(uiRef, commandRef)
       })
     end,
     onClick = function()
+      -- Pull this editor off the stack on exit
       self.uiRef.uiStack:pollLast()
     end
   })
   self.buttonList:add(self.exitButton)
   
-  -- Create the button for changing this command out for another one
-  
   
   -- Create the buttons for the params for this command
+  -- The refresh command creates all the buttons for the command. It's called refresh because it needs to be called after the command changes
   self:refresh()
 end
 
@@ -70,7 +70,8 @@ function CommandEditor:refresh()
       draw:print({x=cx+10,y=cy,color=Color.BLACK,font='18px',text='Type: '..self.commandRef.COMMAND_NAME})
     end,
     onClick = function()
-      self.uiRef.uiStack:addLast(CommandSelector(self.uiRef, self.commandRef, self.uiRef.commandLister.selectedIndex))
+      -- Add a command selector onto the stack and pass it the stuff it needs
+      self.uiRef.uiStack:addLast(CommandSelector(self.uiRef, self.commandRef, self.uiRef.commandLister.selectedIndex, self))
     end
   })
   self.buttonList:add(cmdButton)
@@ -91,8 +92,9 @@ function CommandEditor:refresh()
         draw:print({x=x+10,y=y,color=Color.BLACK,font='18px',text=param.userString})
       end,
       onClick = function()
-        -- Set a receiver in the inputManager (the command and which param we are editing. The love.textinput(text) function will then look at the inputManager and set the value if needed
+        -- Set a receiver in the inputManager (the command and which param we are editing)
         inputManager:setReceiver(self.commandRef, paramList:get(i).codeString, self)
+        -- Set up a text input for this command. The inputManager will handle giving the string over to the command
         inputManager:setTextInput()
       end
     })
@@ -101,6 +103,7 @@ function CommandEditor:refresh()
 end
 
 function CommandEditor:update()
+  -- Update buttons
   for i = 0, self.buttonList:getSize() - 1, 1 do
     self.buttonList:get(i):update()
   end

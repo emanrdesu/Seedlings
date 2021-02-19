@@ -51,6 +51,7 @@ function InputManager:setReadingInput(b)
   self.readingTextInput = b
 end
 
+-- Start reading in text input
 function InputManager:setTextInput(hint)
   self:setReadingInput(true)
   if __PLAYING_ON_PC then
@@ -60,6 +61,7 @@ function InputManager:setTextInput(hint)
   end
 end
 
+-- Disable the text input
 function InputManager:disableTextInput()
   self:setReadingInput(false)
   if __PLAYING_ON_PC then
@@ -67,6 +69,7 @@ function InputManager:disableTextInput()
   end
 end
 
+-- Set a receiver for the text input. Currently only used for editing commands
 function InputManager:setReceiver(command, paramName, editorRef)
   self.command = command
   self.paramName = paramName
@@ -94,6 +97,7 @@ function InputManager:new()
   self.editorRef = nil
   
   self.readingTextInput = false
+  self.pcString = ''
   
   self.keyMap = {}
   self.keyMap['up'] = 'dpup'
@@ -192,6 +196,23 @@ function love.touchmoved( id, x, y, dx, dy, pressure )
 end
 
 function love.keypressed(key)
+  -- If hitting enter, process the string that was entered
+  if key == 'return' and __PLAYING_ON_PC then 
+    if inputManager.command ~= nil and inputManager.pcString ~= '' then
+      inputManager.command:setParameter(inputManager.paramName, inputManager.pcString)
+      inputManager.editorRef:refresh()
+      inputManager.pcString = ''
+    end
+    inputManager:disableTextInput() 
+  end
+  -- If hitting backspace, delete the last character from the string
+  if key == 'backspace' and __PLAYING_ON_PC then
+    -- substring
+    if string.len(inputManager.pcString) > 0 then
+      inputManager.pcString = string.sub(inputManager.pcString, 1, string.len(inputManager.pcString) - 1)
+    end
+  end
+  
   if inputManager.keyMap[key] == nil then return end
   inputManager:addPress(inputManager.keyMap[key])
 end
@@ -216,7 +237,17 @@ end
 
 
 function love.textinput(text)
+  -- If playing on PC, then append the character to the current string
+  if __PLAYING_ON_PC then
+    if inputManager:isReadingInput() then
+      inputManager.pcString = inputManager.pcString..text
+    end
+    return
+  end
+  
+  -- If not playing on pc, process the whole string
   if inputManager.command ~= nil and text ~= nil and text ~= '' then
+    -- Set the parameter for the command and refresh the editor
     inputManager.command:setParameter(inputManager.paramName, text)
     inputManager.editorRef:refresh()
   end

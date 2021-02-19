@@ -8,6 +8,10 @@ function CommandManager:new()
   self.codeCoroutine = nil
 end
 
+function CommandManager:setTimePerLine(val)
+  self.timePerLine = val
+end
+
 function CommandManager:update()
   -- If not running the code, exit the update function
   if not self.isRunning then return end
@@ -62,14 +66,18 @@ function CommandManager:start()
       end
     end
   end
-  
+    
   sandbox.__coroutine = coroutine
   local codeFunction = loadstring(codeString)
-  setfenv(codeFunction, sandbox)
-  self.codeCoroutine = coroutine.create(function()
-      codeFunction()
-    end)
-  
+  -- Check if string doesn't compile error
+  if codeFunction == nil then
+      self.codeCoroutine = coroutine.create(function() end)
+  else
+    setfenv(codeFunction, sandbox)
+    self.codeCoroutine = coroutine.create(function()
+        codeFunction()
+      end)
+  end
   --[[
   local functions = ArrayList()
   for i = 0, self.commandList:getSize() - 1, 1 do

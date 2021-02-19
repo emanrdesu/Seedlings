@@ -15,8 +15,11 @@ function GameManager:update()
   if inputManager:isDown('dpup') and inputManager:isDown('select') then
     saveManager:clearData()
   end
-
-  self.currentScene = self.currentScene:update()
+  
+  -- If playing on the PC and getting input, don't update the scene
+  if not(__PLAYING_ON_PC and inputManager:isReadingInput()) then
+      self.currentScene = self.currentScene:update()
+  end
 end
 
 function GameManager:drawTopScreen()
@@ -30,5 +33,11 @@ end
 
 function GameManager:drawBottomScreen()
   love.graphics.draw(self.bottomBG, 0, 0)
-  self.currentScene:drawBottomScreen()
+  -- If playing on PC and reading input, draw a blank screen with the current text. Otherwise draw scene normally
+  if not(__PLAYING_ON_PC and inputManager:isReadingInput()) then
+    self.currentScene:drawBottomScreen()
+  else 
+    draw:rectangle({x=0,y=0,width=Constants.BOTTOM_SCREEN_WIDTH, height = Constants.BOTTOM_SCREEN_HEIGHT, color = Color.WHITE})
+    draw:print({x = 10, y = 120, color = Color.BLACK, font = 'default', text = inputManager.pcString})
+  end
 end
