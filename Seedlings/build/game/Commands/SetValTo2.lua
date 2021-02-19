@@ -4,8 +4,8 @@ SetValTo2.COMMAND_NAME = 'Set variable'
 function SetValTo2:new(var, value)
   -- Params is the set of things that the user can modify for this command
   self.params = {
-    variable = var,
-    value = value,
+    variable = var or 'variable',
+    value = value or 'value',
   }
   -- paramList stores a list of params with 2 values: userString is what will appear in the UI when modifying it
   -- codeString is the name of the variable in the params table above
@@ -34,7 +34,7 @@ end
 
 function SetValTo2:getParamList()
   local paramList = ArrayList()
-  paramList:add({userString = 'variable'..' '..tostring(self.params.variable), codeString = 'variable'})
-  paramList:add({userString = 'value'..' '..tostring(self.params.value), codeString = 'value'})
+  paramList:add({userString = 'variable'..': '..tostring(self.params.variable), codeString = 'variable'})
+  paramList:add({userString = 'value'..': '..tostring(self.params.value), codeString = 'value'})
   return paramList
 end

@@ -50,6 +50,14 @@ function CommandEditor:new(uiRef, commandRef)
   
   
   -- Create the buttons for the params for this command
+  self:refresh()
+end
+
+function CommandEditor:refresh()
+  -- Refreshes the buttons
+  self.buttonList:clear()
+  self.buttonList:add(self.exitButton)
+    -- Create the buttons for the params for this command
   local paramStartY = self.startY + 50
   local paramList = self.commandRef:getParamList()
   for i = 0, paramList:getSize() - 1, 1 do
@@ -66,7 +74,7 @@ function CommandEditor:new(uiRef, commandRef)
       end,
       onClick = function()
         -- Set a receiver in the inputManager (the command and which param we are editing. The love.textinput(text) function will then look at the inputManager and set the value if needed
-        inputManager:setReceiver(self.commandRef, paramList:get(i).codeString)
+        inputManager:setReceiver(self.commandRef, paramList:get(i).codeString, self)
         inputManager:setTextInput()
       end
     })

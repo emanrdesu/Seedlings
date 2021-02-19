@@ -67,9 +67,10 @@ function InputManager:disableTextInput()
   end
 end
 
-function InputManager:setReceiver(command, paramName)
+function InputManager:setReceiver(command, paramName, editorRef)
   self.command = command
   self.paramName = paramName
+  self.editorRef = editorRef
 end
 
 
@@ -90,6 +91,7 @@ function InputManager:new()
   
   self.command = nil
   self.paramName = nil
+  self.editorRef = nil
   
   self.readingTextInput = false
   
@@ -216,6 +218,7 @@ end
 function love.textinput(text)
   if inputManager.command ~= nil and text ~= nil and text ~= '' then
     inputManager.command:setParameter(inputManager.paramName, text)
+    inputManager.editorRef:refresh()
   end
 end
 

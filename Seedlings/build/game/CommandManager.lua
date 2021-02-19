@@ -40,6 +40,10 @@ function CommandManager:removeCommand(idx)
   self.commandList:remove(idx)
 end
 
+function CommandManager:replaceCommand(idx, command)
+  self.commandList:set(idx, command)
+end
+
 function CommandManager:start()
   self.isRunning = true
   self.timeSinceLastCommand = 0
