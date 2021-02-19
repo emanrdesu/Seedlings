@@ -8,6 +8,10 @@ function CommandManager:new()
   self.codeCoroutine = nil
 end
 
+function CommandManager:setTimePerLine(val)
+  self.timePerLine = val
+end
+
 function CommandManager:update()
   -- If not running the code, exit the update function
   if not self.isRunning then return end

@@ -35,6 +35,8 @@ function CommandUI:new()
   self.uiStack:addLast(self.commandLister)
   self.buttonList = ArrayList()
   
+  self.onRun = function() end
+  
   -- Create buttons
   local width = 62
   local height = 53
@@ -116,7 +118,8 @@ function CommandUI:new()
     Button({
       hitbox = {shape = 'rectangle', x = x, y = y4, width = width, height = runHeight},
       drawNormal = getDrawNormal(x, y4, width, runHeight, "RUN"),
-      drawHovered = getDrawHovered(x, y4, width, runHeight, "RUN")
+      drawHovered = getDrawHovered(x, y4, width, runHeight, "RUN"),
+      onClick = function() self:execute() end
     })
   )
   
@@ -158,4 +161,12 @@ end
 -- Add an available command for this manager
 function CommandUI:addAvailableCommand(cmd)
   self.availableCommands:add(cmd)
+end
+
+function CommandUI:execute()
+  self.onRun()
+end
+
+function CommandUI:setOnRun(func)
+  self.onRun = func
 end
