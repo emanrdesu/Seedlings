@@ -62,7 +62,7 @@ function CommandUI:new()
       drawNormal = getDrawNormal(x, y1, width, height, "ADD"),
       drawHovered = getDrawHovered(x, y1, width, height, "ADD"),
       onClick = function()
-        self.uiStack:addLast(CommandSelector(self, nil, self.commandLister.selectedIndex))
+        self.uiStack:addLast(CommandSelector(self, nil, self.commandLister.selectedIndex), nil)
         -- self.commandManager:addCommand(SetValTo2('x', '5'))
       end
     })

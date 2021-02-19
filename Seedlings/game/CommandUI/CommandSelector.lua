@@ -1,12 +1,13 @@
 CommandSelector = Object:extend()
 
-function CommandSelector:new(uiRef, commandRef, commandIndex)
+function CommandSelector:new(uiRef, commandRef, commandIndex, editorRef)
   -- If the commandRef is nil, then this is inserting something at the index
   -- otherwise, it is modifying the command
   
   self.uiRef = uiRef
   self.commandRef = commandRef
   self.commandIndex = commandIndex
+  self.editorRef = editorRef
   
   self.startX = 0
   self.startY = 0
@@ -82,11 +83,14 @@ function CommandSelector:new(uiRef, commandRef, commandIndex)
       onClick = function()
         if self.commandRef == nil then
           -- Insert this command at this index
-          print(tostring(self.commandIndex))
           self.uiRef.commandManager:insertCommand(1 + self.commandIndex, self.uiRef.availableCommands:get(self.selectedIndex)()) 
+          if self.uiRef.commandManager.commandList:getSize() > 1 then self.uiRef.commandLister.selectedIndex = self.uiRef.commandLister.selectedIndex + 1 end
         else
           -- Modify the current command
-          self.uiRef.commandManager:replaceCommand(self.commandIndex, self.uiRef.availableCommands:get(self.selectedIndex)())
+          local newCommand = self.uiRef.availableCommands:get(self.selectedIndex)()
+          self.uiRef.commandManager:replaceCommand(self.commandIndex, newCommand)
+          self.editorRef.commandRef = newCommand
+          self.editorRef:refresh()
         end
         self.uiRef.uiStack:pollLast()
       end,
