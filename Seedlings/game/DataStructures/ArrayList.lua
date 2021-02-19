@@ -75,6 +75,10 @@ function ArrayList:get(v)
   return self:get0Indexed(v)
 end
 
+function ArrayList:set(index, v)
+  self.ar[index] = v
+end
+
 function ArrayList:traverse()
   local res = {}
   local idx = 1

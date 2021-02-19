@@ -62,7 +62,8 @@ function CommandUI:new()
       drawNormal = getDrawNormal(x, y1, width, height, "ADD"),
       drawHovered = getDrawHovered(x, y1, width, height, "ADD"),
       onClick = function()
-        self.commandManager:addCommand(SetValTo2('x', '5'))
+        self.uiStack:addLast(CommandSelector(self, nil, self.commandLister.selectedIndex))
+        -- self.commandManager:addCommand(SetValTo2('x', '5'))
       end
     })
   )
@@ -146,4 +147,9 @@ function CommandUI:drawBottomScreen()
   -- Draw what is on the top of the stack
   local top = self.uiStack:peekLast()
   top:drawBottomScreen()
+end
+
+
+function CommandUI:addAvailableCommand(cmd)
+  self.availableCommands:add(cmd)
 end
