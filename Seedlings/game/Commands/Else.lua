@@ -1,7 +1,7 @@
-AppleMoveRight = Command:extend()
-AppleMoveRight.COMMAND_NAME = 'Move Right'
+Else = Command:extend()
+Else.COMMAND_NAME = 'Else'
 
-function AppleMoveRight:new(args)
+function Else:new(args)
   -- Params is the set of things that the user can modify for this command
   self.params = {}
   
@@ -13,20 +13,20 @@ function AppleMoveRight:new(args)
 end
 
 -- What the user sees in the command list
-function AppleMoveRight:toUserString()
-  local s = "move right"
+function Else:toUserString()
+  local s = 'else'
   return s
 end
 
 -- Translate to valid lua code
-function AppleMoveRight:toLuaStringList()  
+function Else:toLuaStringList()  
   local list = ArrayList()
-  list:add('position = "right"; ')
+  list:add(' else ')
   list:add(Command.YIELD)
   return list
 end
 
 -- Param list as shown above
-function AppleMoveRight:getParamList()
+function Else:getParamList()
   return self.paramList
 end

@@ -22,7 +22,7 @@ function Template:toUserString()
 end
 
 -- Translate to valid lua code
-function SetValTo2:toLuaStringList()  
+function Template:toLuaStringList()  
   local list = ArrayList()
   list:add('curPosition = '..tostring(self.params.position).."; ")
   list:add(Command.YIELD)
@@ -30,6 +30,6 @@ function SetValTo2:toLuaStringList()
 end
 
 -- Param list as shown above
-function SetValTo2:getParamList()
-  return paramList
+function Template:getParamList()
+  return self.paramList
 end
