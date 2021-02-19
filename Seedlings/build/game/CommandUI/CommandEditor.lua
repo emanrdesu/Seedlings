@@ -50,39 +50,36 @@ function CommandEditor:new(uiRef, commandRef)
   
   
   -- Create the buttons for the params for this command
-  local paramStartY = self.startY + 50
-  local paramList = self.commandRef:getParamList()
-  for i = 0, paramList:getSize() - 1, 1 do
-    local width = 150
-    local height = 30
-    local x = self.startX
-    local y = paramStartY + i * (height + 5)
-    local param = paramList:get(i)
-    local btn = Button({
-      hitbox = {shape = 'rectangle', x = x, y = y, width = width, height = height},
-      drawNormal = function()
-        draw:rectangle({x=x,y=y,width=width,height=height,color=Color.LIGHT_GRAY})
-        draw:print({x=x+10,y=y,color=Color.BLACK,font='18px',text=param.userString})
-      end,
-      onClick = function()
-        -- Set a receiver in the inputManager (the command and which param we are editing. The love.textinput(text) function will then look at the inputManager and set the value if needed
-        inputManager:setReceiver(self.commandRef, paramList:get(i).codeString, self)
-        inputManager:setTextInput()
-      end
-    })
-    self.buttonList:add(btn)
-  end
+  self:refresh()
 end
 
 function CommandEditor:refresh()
   -- Refreshes the buttons
   self.buttonList:clear()
   self.buttonList:add(self.exitButton)
-    -- Create the buttons for the params for this command
+  
+  -- Create the button for the command type
+  local cx = self.startX + 10
+  local cy = self.startY + 10
+  local cw = 200
+  local ch = 30
+  local cmdButton = Button({
+    hitbox = {shape = 'rectangle', x = cx, y = cy, width = cw, height = ch},
+    drawNormal = function()
+      draw:rectangle({x=cx,y=cy,width=cw,height=ch,color=Color.LIGHT_GRAY})
+      draw:print({x=cx+10,y=cy,color=Color.BLACK,font='18px',text='Type: '..self.commandRef.COMMAND_NAME})
+    end,
+    onClick = function()
+      self.uiRef.uiStack:addLast(CommandSelector(self.uiRef, self.commandRef, self.uiRef.commandLister.selectedIndex))
+    end
+  })
+  self.buttonList:add(cmdButton)
+  
+  -- Create the buttons for the params for this command
   local paramStartY = self.startY + 50
   local paramList = self.commandRef:getParamList()
   for i = 0, paramList:getSize() - 1, 1 do
-    local width = 150
+    local width = 190
     local height = 30
     local x = self.startX
     local y = paramStartY + i * (height + 5)

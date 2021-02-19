@@ -82,10 +82,11 @@ function CommandSelector:new(uiRef, commandRef, commandIndex)
       onClick = function()
         if self.commandRef == nil then
           -- Insert this command at this index
-          self.uiRef.commandManager:insertCommand(self.commandIndex, self.uiRef.availableCommands:get(self.selectedIndex)()) 
+          print(tostring(self.commandIndex))
+          self.uiRef.commandManager:insertCommand(1 + self.commandIndex, self.uiRef.availableCommands:get(self.selectedIndex)()) 
         else
           -- Modify the current command
-          self.uiRef.commandManager:set(self.commandIndex, self.uiRef.availableCommands:get(self.selectedIndex)())
+          self.uiRef.commandManager:replaceCommand(self.commandIndex, self.uiRef.availableCommands:get(self.selectedIndex)())
         end
         self.uiRef.uiStack:pollLast()
       end,
