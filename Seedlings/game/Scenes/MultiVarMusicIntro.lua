@@ -95,6 +95,10 @@ function MultiVarMusicIntro:update()
   
     if inputManager:isPressed('start') then
       self.commandManager:start()
+      
+      if self.sequencesMatching then
+        return MultiVarMelodyMaker()
+      end
     end
     
     if inputManager:isPressed('select') then
