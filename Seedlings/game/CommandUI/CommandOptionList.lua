@@ -152,7 +152,7 @@ function CommandOptionList:drawBottomScreen()
   end  
   
   -- Draw options
-  for i = 0, self.uiRef.availableCommands:getSize() - 1, 1 do
+  for i = 0, self.paramTable.optionList:getSize() - 1, 1 do
     local x = self.startX
     local y = self.startY + (i * self.heightPerOption) + self.offsetY
     draw:brectangle({
