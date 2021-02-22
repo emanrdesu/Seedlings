@@ -2,7 +2,7 @@ VarTutShirtScene = Scene:extend()
 
 function VarTutShirtScene:new()
   self.topBG = love.graphics.newImage('Assets/Images/woodbackground.png')
-  self.bottomBG = love.graphics.newImage('Assets/Images/botbkg1.png')
+  self.bottomBG = love.graphics.newImage('Assets/Images/BotBG_layout_LHeavy_blue.png')
   self.shirtImage = love.graphics.newImage('Assets/Images/BlueShirt6_Transparent.png')
   self.whiteCircle = love.graphics.newImage('Assets/Images/whiteCircle.png')
   self.arrow = love.graphics.newImage('Assets/Images/blueArrow.png')
@@ -183,7 +183,7 @@ function VarTutShirtScene:drawBottomScreen()
   
   if self.selectingValues then
     fontManager:setFont('18px_italic')
-    love.graphics.print('Select the correct VALUE from the list \nfor each "thing"')
+    love.graphics.print('Select the correct VALUE from the list \nfor each "thing"',  7, 5)
     
     fontManager:setFont('18px_bold')
     for i,v in ipairs(self.correctVariables) do
@@ -200,17 +200,17 @@ function VarTutShirtScene:drawBottomScreen()
       end
     end
     
-    love.graphics.rectangle('fill', 200, 50, 100,  40)
-    love.graphics.print('VALUES', 217, 53)
-    love.graphics.rectangle('line', 200, 90, 100, 40)
-    love.graphics.rectangle('line', 200, 130, 100, 40)
+    love.graphics.rectangle('fill', 200, 80, 100, 30)
+    love.graphics.print('VALUES', 217, 83)
+   --love.graphics.rectangle('line', 200, 90, 100, 40)
+    --love.graphics.rectangle('line', 200, 130, 100, 40)
     
     for i,v in ipairs(self.correctValues) do
       if i == 1 then
-        love.graphics.print(v, 210, 93)
+        love.graphics.print(v, 210, 113)
       end
       if i == 2  then
-        love.graphics.print(v,  210, 133)
+        love.graphics.print(v,  210, 153)
       end
     end
     
@@ -218,9 +218,9 @@ function VarTutShirtScene:drawBottomScreen()
     if self.shirtColorSelected or self.shirtNumberSelected then
       for i,v in ipairs(self.correctValues) do
         if self.selectedBot == 1 then
-          love.graphics.draw(self.arrow, 130, 93, 0, 0.75, 0.75) 
+          love.graphics.draw(self.arrow, 130, 113, 0, 0.75, 0.75) 
         elseif self.selectedBot == 2 then
-          love.graphics.draw(self.arrow, 130, 127, 0, 0.75, 0.75)
+          love.graphics.draw(self.arrow, 130, 150, 0, 0.75, 0.75)
         end
       end
     end
@@ -242,15 +242,36 @@ function VarTutShirtScene:drawBottomScreen()
   end
 
   if self.selectingVariables then
-    fontManager:setFont('18px_italic')
-    love.graphics.print('Select the correct "name" from the list \nwhich matches the value')
-
+    --fontManager:setFont('18px_italic')
+    --love.graphics.print('Select the correct "name" from the list \nwhich matches the value')
+    draw:print({
+        text = 'Select the correct "name" from the list \nwhich matches the value',
+        x = 7,
+        y = 5,
+        color = Color.BLACK,
+        font = '18px_italic',
+      })
+    
     fontManager:setFont('18px_bold')
     for i,v in ipairs(self.correctValues) do
       if i == 1 then
-        love.graphics.print('is ' .. v, 210, 70)
+        --love.graphics.print('is ' .. v, 210, 70)
+        draw:print({
+            text = 'is ' .. v,
+            x = 210,
+            y = 70,
+            color = Color.BLACK,
+            font = '18px_bold',
+            })
       elseif i == 2 then
-        love.graphics.print('is ' ..  v, 210, 180)
+        --love.graphics.print('is ' ..  v, 210, 180)
+        draw:print({
+            text = 'is ' .. v,
+            x = 210,
+            y = 180,
+            color = Color.BLACK,
+            font = '18px_bold',
+            })
       end
       
       if self.selected == 1 then
@@ -260,26 +281,47 @@ function VarTutShirtScene:drawBottomScreen()
       end
     end
 
-    love.graphics.rectangle('fill', 20, 50, 120,  40)
-    love.graphics.print('NAMES', 35, 53)
-    love.graphics.rectangle('line', 20, 90, 120, 40)
-    love.graphics.rectangle('line', 20, 130, 120, 40)
+    love.graphics.rectangle('fill', 20, 80, 120, 30)
+    --love.graphics.print('NAMES', 35, 53)
+    draw:print({
+            text = 'NAMES',
+            x = 35,
+            y = 83,
+            color = Color.BLACK,
+            font = '18px_bold',
+            })
+   -- love.graphics.rectangle('line', 20, 90, 120, 40)
+   -- love.graphics.rectangle('line', 20, 130, 120, 40)
 
     for i,v in ipairs(self.correctVariables) do
       if i == 1 then
-        love.graphics.print(v, 25, 93)
+        --love.graphics.print(v, 25, 93)
+        draw:print({
+            text = v,
+            x = 25,
+            y = 113,
+            color = Color.BLACK,
+            font = '18px_bold',
+            })
       end
       if i == 2  then
-        love.graphics.print(v,  25, 133)
+        draw:print({
+            text = v,
+            x = 25,
+            y = 153,
+            color = Color.BLACK,
+            font = '18px_bold',
+            })
+        --love.graphics.print(v,  25, 133)
       end
     end
 
     if self.colorValueSelected or self.numberValueSelected then
       for i,v in ipairs(self.correctValues) do
         if self.selectedBot == 1 then
-          love.graphics.draw(self.arrow, 140, 93, 0, -0.75, 0.75) 
+          love.graphics.draw(self.arrow, 140, 113, 0, -0.75, 0.75) 
         elseif self.selectedBot == 2 then
-          love.graphics.draw(self.arrow, 140, 127, 0, -0.75, 0.75)
+          love.graphics.draw(self.arrow, 140, 150, 0, -0.75, 0.75)
         end
       end
     end
