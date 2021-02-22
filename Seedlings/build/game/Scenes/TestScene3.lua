@@ -17,6 +17,7 @@ function TestScene3:new()
   self.commandManager:addCommand(SetNoteTo('secondNote', 'B'))
   self.commandManager:addCommand(SetNoteTo('thirdNote', 'C'))
   self.commandManager:addCommand(SetNoteTo('fourthNote', 'B'))
+  self.commandManager:addCommand(SetChordTo('chordNote1', 'A', 'chordNote2', 'C', 'chordNote3', 'E'))
   self.commandManager:addCommand(SetNoteTo('fifthNote', 'A'))
 
   self.nextNote = {}
@@ -62,11 +63,19 @@ function TestScene3:update()
   if inputManager:isPressed('dpleft') then
     local command = self.commandManager.commandList:get(self.selected)
     command.value = self.prevNote[command.value];
+    command.value1 = self.prevNote[command.value1];
+    command.value2 = self.prevNote[command.value2];
+    command.value3 = self.prevNote[command.value3];
   end
   
   if inputManager:isPressed('dpright') then
     local command = self.commandManager.commandList:get(self.selected)
     command.value = self.nextNote[command.value];
+    command.value1 = self.nextNote[command.value1];
+    
+    --if not commang.value2 == nil and 
+    command.value2 = self.nextNote[command.value2];
+    command.value3 = self.nextNote[command.value3];
   end
   
   if inputManager:isPressed('leftshoulder') then
