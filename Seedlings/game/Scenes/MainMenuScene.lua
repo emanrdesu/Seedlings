@@ -13,6 +13,7 @@ function MainMenuScene:new()
   self.sceneList:add({name='VarMinigameBackpack', ref = VarMinigameBackpack(), lock = 0})
   self.sceneList:add({name='MultiVarMusicIntro', ref = MultiVarMusicIntro(), lock = 0})
   self.sceneList:add({name='MultiVarMelodyMaker', ref = MultiVarMelodyMaker(), lock = 0})
+  self.sceneList:add({name='Command Test', ref = CTS(), lock = 0})
   
   self.scenesPerScreen = 3
   self.currentPage = 0

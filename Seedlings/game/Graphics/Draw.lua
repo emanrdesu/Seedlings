@@ -4,6 +4,10 @@ function Draw:new()
   
 end
 
+function Draw:reset()
+  love.graphics.setColor(1,1,1)
+end
+
 -- 0 degrees is positive X axis, going clockwise
 -- draw:arc({mode='line', arctype='open', x=200, y=50, radius = 50, fromAngle = 0, toAngle = 3*math.pi/2.0, segments = 20, color = Color.BLUE, lineWidth=4})
 function Draw:arc(args)
@@ -71,7 +75,7 @@ function Draw:arc(args)
     
   end
   
-  love.graphics.reset()
+  self:reset()
 end
 
 -- draw:circle({mode='fill', x=200,y=150, radius=30, color=Color(0.5,0.2,0.9)})
@@ -92,7 +96,7 @@ function Draw:circle(args)
   else
     love.graphics.circle(mode, x, y, radius, segments)
   end
-  love.graphics.reset()
+  self:reset()
 end
 
 
@@ -170,7 +174,7 @@ function Draw:ellipse(args)
     
   end
   love.graphics.polygon(mode, points)
-  love.graphics.reset()
+  self:reset()
 end
   
 
@@ -196,7 +200,7 @@ function Draw:line(args)
     end
   end
   -- love.graphics.line(points)
-  love.graphics.reset()
+  self:reset()
 end
 
 -- draw:points({points={10,10,20,20,30,30},pointSize=4,color=Color.RED})
@@ -212,7 +216,7 @@ function Draw:points(args)
     love.graphics.circle('fill', points[i], points[i+1], pointSize / 2)
   end
   
-  love.graphics.reset()
+  self:reset()
 end
 
 
@@ -227,7 +231,7 @@ function Draw:polygon(args)
   love.graphics.setLineWidth(lineWidth)
   love.graphics.setColor(color.r, color.g, color.b, color.alpha)
   love.graphics.polygon(mode, points)
-  love.graphics.reset()
+  self:reset()
 end
 
 -- draw:rectangle({mode='line', x=10, y=10, width=30, height=30, color=Color.BLUE, lineWidth=5})
@@ -247,7 +251,27 @@ function Draw:rectangle(args)
   love.graphics.setLineWidth(lineWidth)
   love.graphics.setColor(color.r, color.g, color.b, color.alpha)
   love.graphics.rectangle(mode, x, y, width, height, rx, ry, segments)
-  love.graphics.reset()
+  self:reset()
+end
+
+function Draw:brectangle(args)
+  local x, y, width, height, rx, ry, segments, color, borderColor, borderWidth =
+    args.x or 0,
+    args.y or 0,
+    args.width or 0,
+    args.height or 0,
+    args.rx or 0,
+    args.ry or 0,
+    args.segments or 0,
+    args.color or Color(1,1,1),
+    args.borderColor or Color(1,1,1),
+    args.borderWidth or 0
+    
+  love.graphics.setColor(borderColor.r, borderColor.g, borderColor.b, borderColor.alpha)
+  love.graphics.rectangle('fill', x, y, width, height, rx, ry, segments)
+  love.graphics.setColor(color.r, color.g, color.b, color.alpha)
+  love.graphics.rectangle('fill', x + borderWidth, y + borderWidth, width - 2 * borderWidth, height - 2 * borderWidth, rx, ry, segments)
+  self:reset()
 end
 
 function Draw:draw(args)
@@ -284,5 +308,5 @@ function Draw:print(args)
   fontManager:setFont(font)
   love.graphics.print(coloredtext, x, y, r, sc, sy, ox, oy)
   
-  love.graphics.reset()
+  self:reset()
 end

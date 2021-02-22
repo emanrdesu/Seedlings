@@ -30,32 +30,13 @@ function InputManager:isReleased(button)
   end
 end
 
-function InputManager:hasTouchPress()
-  return self.touchPress ~= nil
-end
-
-function InputManager:hasTouchRelease()
-  return self.touchRelease ~= nil
-end
-
-function InputManager:hasTouchMove()
-  return self.touchMove ~= nil
-end
-
-function InputManager:isTouchDown()
+function InputManager:hasTouch()
   return self.lastTouch ~= nil
 end
 
-function InputManager:getTouchPress()
-  return self.touchPress
-end
-
-function InputManager:getTouchMove()
-  return self.touchMove
-end
-
-function InputManager:getTouchRelease()
-  return self.touchRelease
+function InputManager:getWhereTouchStarted()
+  if self.lastTouch == nil then return nil end
+  return self.touchOrigin
 end
 
 function InputManager:getLastTouch()
@@ -68,18 +49,15 @@ end
 function InputManager:new()
   self.pressQueue = Queue()
   self.releaseQueue = Queue()
-  self.touchPressQueue = Queue()
-  self.touchReleaseQueue = Queue()
-  self.touchMoveQueue = Queue()
+  self.touchQueue = Queue()
   
   self.isHeldDownMap = {}
   self.isPressedMap = {}
   self.isReleasedMap = {}
-  
-  self.touchPress = nil
-  self.touchRelease = nil
-  self.touchMove = nil
+
   self.lastTouch = nil
+  self.touchOrigin = nil
+  self.hasPress = false
   
   self.keyMap = {}
   self.keyMap['up'] = 'dpup'
@@ -92,6 +70,9 @@ function InputManager:new()
   self.keyMap['a'] = 'y'
   self.keyMap['s'] = 'b'
   self.keyMap['d'] = 'a'
+  
+  self.mdx = (Constants.TOP_SCREEN_WIDTH - Constants.BOTTOM_SCREEN_WIDTH)/2
+  self.mdy = 20 + Constants.TOP_SCREEN_HEIGHT
 end
 
 function InputManager:update()
@@ -102,6 +83,7 @@ function InputManager:update()
   self.touchPress = nil
   self.touchRelease = nil
   self.touchMove = nil
+  self.lastTouch = nil
   
   -- Clear the press queue
   while not self.pressQueue:isEmpty() do
@@ -117,24 +99,18 @@ function InputManager:update()
     self.isHeldDownMap[button] = false
   end
   
-  while not self.touchPressQueue:isEmpty() do
-    local touch = self.touchPressQueue:poll()
-    self.touchPress = touch
+  while not self.touchQueue:isEmpty() do
+    local touch = self.touchQueue:poll()
     self.lastTouch = touch
+    
+    if touch.eventType == Touch.PRESS then
+      self.touchOrigin = touch
+      self.hasPress = true
+    end
+    if touch.eventType == Touch.RELEASE then
+      self.hasPress = false
+    end
   end
-  
-  while not self.touchReleaseQueue:isEmpty() do
-    local touch = self.touchReleaseQueue:poll()
-    self.touchRelease = touch
-    self.lastTouch = nil
-  end
-  
-  while not self.touchMoveQueue:isEmpty() do
-    local touch = self.touchMoveQueue:poll()
-    self.touchMove = touch
-    self.lastTouch = touch
-  end
-  
 end
 
 
@@ -148,18 +124,9 @@ function InputManager:addRelease(button)
   self.releaseQueue:add(button)
 end
 
-function InputManager:addTouchPress(touch)
-  self.touchPressQueue:add(touch)
+function InputManager:addTouch(touch)
+  self.touchQueue:add(touch)
 end
-
-function InputManager:addTouchRelease(touch)
-  self.touchReleaseQueue:add(touch)
-end
-
-function InputManager:addTouchMove(touch)
-  self.touchMoveQueue:add(touch)
-end
-
 
 -- Love functions down here
 
@@ -172,15 +139,15 @@ function love.gamepadreleased( joystick, button )
 end
 
 function love.touchpressed( id, x, y, dx, dy, pressure )
-  inputManager:addTouchPress(Touch(id,x,y,dx,dy,pressure,"press"))
+  inputManager:addTouch(Touch(id,x,y,dx,dy,pressure,Touch.PRESS))
 end
 
 function love.touchreleased( id, x, y, dx, dy, pressure )
-  inputManager:addTouchRelease(Touch(id,x,y,dx,dy,pressure,"release"))
+  inputManager:addTouch(Touch(id,x,y,dx,dy,pressure,Touch.RELEASE))
 end
 
 function love.touchmoved( id, x, y, dx, dy, pressure )
-  inputManager:addTouchMove(Touch(id,x,y,dx,dy,pressure,"move"))
+  inputManager:addTouch(Touch(id,x,y,dx,dy,pressure,Touch.MOVE))
 end
 
 function love.keypressed(key)
@@ -194,13 +161,14 @@ function love.keyreleased(key)
 end
 
 function love.mousepressed(x, y, button, istouch, presses)
-  inputManager:addTouchPress(Touch(0,x,y,0,0,1,"press"))
+  inputManager:addTouch(Touch(0,x - inputManager.mdx,y - inputManager.mdy,0,0,1,Touch.PRESS))
 end
 
 function love.mousereleased(x, y, button, istouch, presses)
-  inputManager:addTouchPress(Touch(0,x,y,0,0,1,"release"))
+  inputManager:addTouch(Touch(0,x - inputManager.mdx,y - inputManager.mdy,0,0,1,Touch.RELEASE))
 end
 
 function love.mousemoved(x, y, dx, dy, istouch)
-  inputManager:addTouchPress(Touch(0,x,y,dx,dy,1,"move"))
+  if not inputManager.hasPress then return end
+  inputManager:addTouch(Touch(0,x - inputManager.mdx,y - inputManager.mdy,dx,dy,1,Touch.MOVE))
 end

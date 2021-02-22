@@ -1,4 +1,7 @@
 Touch = Object:extend()
+Touch.PRESS = "press"
+Touch.MOVE = "move"
+Touch.RELEASE = "release"
 
 function Touch:new(id, x, y, dx, dy, pressure, eventType)
   self.id = id

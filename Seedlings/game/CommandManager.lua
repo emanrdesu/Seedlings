@@ -46,20 +46,27 @@ function CommandManager:start()
   
   -- Create the coroutine from the user's code
   
-  --[[
+  
   local codeString = ""
   for i = 0, self.commandList:getSize() - 1, 1 do
-    codeString = codeString..self.commandList:get(i):toLuaString()
+    local list = self.commandList:get(i):toLuaStringList()
+    for j = 0, list:getSize() - 1, 1 do
+      if list:get(j) == Command.YIELD then
+        codeString = codeString.." __coroutine.yield(); "
+      else
+        codeString = codeString..list:get(j).." "
+      end
+    end
   end
   
+  sandbox.__coroutine = coroutine
   local codeFunction = loadstring(codeString)
   setfenv(codeFunction, sandbox)
   self.codeCoroutine = coroutine.create(function()
-      setfenv(codeFunction, sandbox)
       codeFunction()
     end)
-  --]]
   
+  --[[
   local functions = ArrayList()
   for i = 0, self.commandList:getSize() - 1, 1 do
     local list = self.commandList:get(i):toLuaStringList()
@@ -79,6 +86,7 @@ function CommandManager:start()
         functions:get(i)()
       end
     end)
+  ]]--
   
 end
 
