@@ -14,14 +14,14 @@ function TitleScene:new()
     state = "FALLING",
     stopY = 0.25 * Constants.TOP_SCREEN_HEIGHT,
     stopX = 0.25 * Constants.TOP_SCREEN_WIDTH,
-    img = love.graphics.newImage('Assets/Images/apple.png')
+    img = love.graphics.newImage('Assets/Images/Objects/apple.png')
   }
   self.titleAlpha = 0
   self.titleDAlpha = 0.5
   
   self.waitUntilCanStart = 1.5
-  self.topBG = love.graphics.newImage('Assets/Images/grassB1.png')
-  self.bottomBG = love.graphics.newImage('Assets/Images/grassB2.png')
+  self.topBG = love.graphics.newImage('Assets/Images/Panels/top/grassB1.png')
+  self.bottomBG = love.graphics.newImage('Assets/Images/Panels/bottom/grassB2.png')
 end
 
 function TitleScene:update()
