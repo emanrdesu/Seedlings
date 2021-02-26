@@ -23,6 +23,9 @@ function love.load(arg)
   
   -- Instantiate draw object
   draw = Draw()
+  
+  -- Have a variable that is whether or not the game is playing on PC
+  __PLAYING_ON_PC = false
 end
 
 function love.update()  
@@ -44,6 +47,7 @@ function love.draw(screen)
   end
   if screen == "bottom" or screen == nil then
     if screen == nil then
+      __PLAYING_ON_PC = true
       local sx = (Constants.TOP_SCREEN_WIDTH - Constants.BOTTOM_SCREEN_WIDTH)/2
       local sy = 20 + Constants.TOP_SCREEN_HEIGHT
       love.graphics.translate(sx, sy)
@@ -62,9 +66,11 @@ end
 function love.focus(f)
   if f then
     -- Focus
+    -- Say we aren't reading input anymore
+    inputManager:setReadingInput(false)
   else
-    -- Losing focus. Quit the game
-    love.event.quit()
+    -- Losing focus. Quit the game if this focus wasn't from brining up text input
+    if not inputManager:isReadingInput() then love.event.quit() end
   end
 end
 

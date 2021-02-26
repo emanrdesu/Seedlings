@@ -86,8 +86,8 @@ function Button:pointInside(x, y)
     if dx*dx + dy*dy <= self.hitbox.r * self.hitbox.r then return true end
   end
   if self.hitbox.shape == 'rectangle' then
-    local xi = x >= self.hitbox.x and x <= self.hitbox.x + self.hitbox.width
-    local yi = y >= self.hitbox.y and y <= self.hitbox.y + self.hitbox.width
+    local xi = x > self.hitbox.x and x < self.hitbox.x + self.hitbox.width
+    local yi = y > self.hitbox.y and y < self.hitbox.y + self.hitbox.height
     return xi and yi
   end
   return false

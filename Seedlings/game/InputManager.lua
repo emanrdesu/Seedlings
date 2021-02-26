@@ -43,6 +43,39 @@ function InputManager:getLastTouch()
   return self.lastTouch
 end
 
+function InputManager:isReadingInput()
+  return self.readingTextInput
+end
+
+function InputManager:setReadingInput(b)
+  self.readingTextInput = b
+end
+
+-- Start reading in text input
+function InputManager:setTextInput(hint)
+  self:setReadingInput(true)
+  if __PLAYING_ON_PC then
+    love.keyboard.setTextInput(true)
+  else
+    love.keyboard.setTextInput({isPassword=false, hint=(hint or '')})
+  end
+end
+
+-- Disable the text input
+function InputManager:disableTextInput()
+  self:setReadingInput(false)
+  if __PLAYING_ON_PC then
+    love.keyboard.setTextInput(false)
+  end
+end
+
+-- Set a receiver for the text input. Currently only used for editing commands
+function InputManager:setReceiver(command, paramName, editorRef)
+  self.command = command
+  self.paramName = paramName
+  self.editorRef = editorRef
+end
+
 
 -- Constructor and backend stuff down here
 
@@ -58,6 +91,13 @@ function InputManager:new()
   self.lastTouch = nil
   self.touchOrigin = nil
   self.hasPress = false
+  
+  self.command = nil
+  self.paramName = nil
+  self.editorRef = nil
+  
+  self.readingTextInput = false
+  self.pcString = ''
   
   self.keyMap = {}
   self.keyMap['up'] = 'dpup'
@@ -147,10 +187,32 @@ function love.touchreleased( id, x, y, dx, dy, pressure )
 end
 
 function love.touchmoved( id, x, y, dx, dy, pressure )
+  local lt = inputManager:getLastTouch()
+  if lt ~= nil then
+    dx = x - lt.x
+    dy = y - lt.y
+  end
   inputManager:addTouch(Touch(id,x,y,dx,dy,pressure,Touch.MOVE))
 end
 
 function love.keypressed(key)
+  -- If hitting enter, process the string that was entered
+  if key == 'return' and __PLAYING_ON_PC then 
+    if inputManager.command ~= nil and inputManager.pcString ~= '' then
+      inputManager.command:setParameter(inputManager.paramName, inputManager.pcString)
+      inputManager.editorRef:refresh()
+      inputManager.pcString = ''
+    end
+    inputManager:disableTextInput() 
+  end
+  -- If hitting backspace, delete the last character from the string
+  if key == 'backspace' and __PLAYING_ON_PC then
+    -- substring
+    if string.len(inputManager.pcString) > 0 then
+      inputManager.pcString = string.sub(inputManager.pcString, 1, string.len(inputManager.pcString) - 1)
+    end
+  end
+  
   if inputManager.keyMap[key] == nil then return end
   inputManager:addPress(inputManager.keyMap[key])
 end
@@ -171,4 +233,26 @@ end
 function love.mousemoved(x, y, dx, dy, istouch)
   if not inputManager.hasPress then return end
   inputManager:addTouch(Touch(0,x - inputManager.mdx,y - inputManager.mdy,dx,dy,1,Touch.MOVE))
+end
+
+
+function love.textinput(text)
+  -- If playing on PC, then append the character to the current string
+  if __PLAYING_ON_PC then
+    if inputManager:isReadingInput() then
+      inputManager.pcString = inputManager.pcString..text
+    end
+    return
+  end
+  
+  -- If not playing on pc, process the whole string
+  if inputManager.command ~= nil and text ~= nil and text ~= '' then
+    -- Set the parameter for the command and refresh the editor
+    inputManager.command:setParameter(inputManager.paramName, text)
+    inputManager.editorRef:refresh()
+  end
+end
+
+function love.textedited()
+  
 end
