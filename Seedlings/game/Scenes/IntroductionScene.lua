@@ -2,31 +2,38 @@ IntroductionScene = Object:extend()
 
 function IntroductionScene:new()
   self.textboxList = ArrayList()
+
+  self.width = 200
+  self.x = (Constants.TOP_SCREEN_WIDTH - 200) / 2.0
+  self.y = 50
   
   local tb1 = TextBox({
-    x = 30, 
-    y = 30, 
-    width = 200,
+    x = self.x, 
+    y = self.y,
+    width = self.width,
     align = 'center',
-    text = "Welcome to Seedlings!\n This is a game designed to teach programming concepts"
+    text = "Welcome to Seedlings!\n This is a game designed to teach programming concepts",
+    color = Color.BLACK
   })
   self.textboxList:add(tb1)
   
   local tb2 = TextBox({
-    x = 30, 
-    y = 30, 
-    width = 200,
+    x = self.x, 
+    y = self.y,
+    width = self.width,
     align = 'center',
-    text = "Textbox 2\n yaaaay"
+    text = "Textbox 2\n yaaaay",
+    color = Color.BLACK
   })
   self.textboxList:add(tb2)
   
   local tb3 = TextBox({
-    x = 30, 
-    y = 30, 
-    width = 200,
+    x = self.x, 
+    y = self.y,
+    width = self.width,
     align = 'center',
-    text = "Third and final textbox! Hitting 'a' after this should then bring you to the main menu!"
+    text = "Third and final textbox! Hitting 'a' after this should then bring you to the main menu!",
+    color = Color.BLACK
   })
   self.textboxList:add(tb3)
   
@@ -51,7 +58,27 @@ function IntroductionScene:update()
 end
 
 function IntroductionScene:drawTopScreen()
+  local extra = 40;
+  draw:brectangle({
+    x = self.x - extra, 
+    y = 15,
+    width = self.width + 2*extra,
+    height = 200,
+    color = Color.SAND,
+    borderColor = Color.BLACK,
+    borderWidth = 3,
+  })
   self.textboxList:get(self.index):draw()
+  
+  -- draw page number thing
+  local text = tostring(1 + self.index)..' / '..tostring(self.textboxList:getSize())
+  draw:print({
+    x = 180,
+    y = 180,
+    color = Color.BLACK,
+    font = '18px',
+    text = text,
+  })
 end
 
 function IntroductionScene:drawBottomScreen()
