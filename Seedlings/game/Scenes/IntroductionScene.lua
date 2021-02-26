@@ -56,4 +56,15 @@ end
 
 function IntroductionScene:drawBottomScreen()
 
+  function btn(x, y, text, text2)
+    local rad = 15
+    draw:rectangle({x=x-20, y=y-20, width=90, height = 40, color = Color.GREEN:withAlpha(0.15)})
+    draw:circle({x=x, y=y, radius = rad, color = Color.GRAY})
+    draw:print({x = x - 5, y = y - 12, color = Color.BLACK, text = text, font = 'default'})
+    draw:print({x = x + 2 * rad - 5, y = y - 12, color = Color.BLACK, text = text2, font = 'default'})
+  end
+  
+  btn(30, 200, 'B', 'Back')
+  btn(240, 200, 'A', 'Next')
+
 end
