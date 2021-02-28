@@ -166,7 +166,7 @@ function VarTutFriendScene:drawTopScreen()
   fontManager:setFont('36px')
   love.graphics.print('Choose the correct one!', 0, 20)
   fontManager:setFont('18px_italic')
-  love.graphics.print('Now can you remember all of the "things" \nfor your friends Backpack?', 55, 80)
+  love.graphics.print('Now can you remember all of the "things" \nfor your Friend?', 55, 80)
 
 end
 
@@ -177,34 +177,34 @@ function VarTutFriendScene:drawBottomScreen()
   
   if self.selectingValues then
     fontManager:setFont('18px_italic')
-    love.graphics.print('Select the correct VALUE from the list \nfor each "thing"')
+    love.graphics.print('Select the correct VALUE from the list \nfor each "thing"', 7, 5)
     
     fontManager:setFont('18px_bold')
     for i,v in ipairs(self.correctVariables) do
       if i == 1 then
-        love.graphics.print(v ..  ' is', 20, 70)
+        love.graphics.print(v ..  ' is', 20, 80)
       elseif i == 2 then
         love.graphics.print(v .. ' is', 20, 180)
       end
       
       if self.selected == 1 then
-        love.graphics.print('*', 10, 70)
+        love.graphics.print('*', 10, 80)
       elseif self.selected == 2 then
         love.graphics.print('*', 10, 180)
       end
     end
     
-    love.graphics.rectangle('fill', 200, 50, 100,  40)
-    love.graphics.print('VALUES', 217, 53)
-    love.graphics.rectangle('line', 200, 90, 100, 40)
-    love.graphics.rectangle('line', 200, 130, 100, 40)
+    love.graphics.rectangle('fill', 200, 80, 100, 30)
+    love.graphics.print('VALUES', 217, 83)
+    --love.graphics.rectangle('line', 200, 90, 100, 40)
+    --love.graphics.rectangle('line', 200, 130, 100, 40)
     
     for i,v in ipairs(self.correctValues) do
       if i == 1 then
-        love.graphics.print(v, 210, 93)
+        love.graphics.print(v, 210, 113)
       end
       if i == 2  then
-        love.graphics.print(tostring(v),  210, 133)
+        love.graphics.print(tostring(v),  210, 153)
       end
     end
     
@@ -212,9 +212,9 @@ function VarTutFriendScene:drawBottomScreen()
     if self.nameSelected or self.hasHatSelected then
       for i,v in ipairs(self.correctValues) do
         if self.selectedBot == 1 then
-          love.graphics.draw(self.arrow, 130, 93, 0, 0.75, 0.75) 
+          love.graphics.draw(self.arrow, 130, 113, 0, 0.75, 0.75) 
         elseif self.selectedBot == 2 then
-          love.graphics.draw(self.arrow, 130, 127, 0, 0.75, 0.75)
+          love.graphics.draw(self.arrow, 130, 150, 0, 0.75, 0.75)
         end
       end
     end
@@ -237,7 +237,7 @@ function VarTutFriendScene:drawBottomScreen()
 
   if self.selectingVariables then
     fontManager:setFont('18px_italic')
-    love.graphics.print('Select the correct "name" from the list \nwhich matches the value')
+    love.graphics.print('Select the correct "name" from the list \nwhich matches the value', 7, 5)
 
     fontManager:setFont('18px_bold')
     for i,v in ipairs(self.correctValues) do
@@ -254,26 +254,26 @@ function VarTutFriendScene:drawBottomScreen()
       end
     end
 
-    love.graphics.rectangle('fill', 20, 50, 125,  40)
-    love.graphics.print('NAMES', 35, 53)
-    love.graphics.rectangle('line', 20, 90, 125, 40)
-    love.graphics.rectangle('line', 20, 130, 125, 40)
+    love.graphics.rectangle('fill', 20, 80, 125, 30)
+    love.graphics.print('NAMES', 35, 83)
+   -- love.graphics.rectangle('line', 20, 90, 125, 40)
+   -- love.graphics.rectangle('line', 20, 130, 125, 40)
 
     for i,v in ipairs(self.correctVariables) do
       if i == 1 then
-        love.graphics.print(v, 25, 93)
+        love.graphics.print(v, 25, 113)
       end
       if i == 2  then
-        love.graphics.print(v,  25, 133)
+        love.graphics.print(v,  25, 153)
       end
     end
 
     if self.nameValueSelected or self.hatValueSelected then
       for i,v in ipairs(self.correctValues) do
         if self.selectedBot == 1 then
-          love.graphics.draw(self.arrow, 145, 93, 0, -0.75, 0.75) 
+          love.graphics.draw(self.arrow, 205, 113, 0, -0.75, 0.75) 
         elseif self.selectedBot == 2 then
-          love.graphics.draw(self.arrow, 145, 127, 0, -0.75, 0.75)
+          love.graphics.draw(self.arrow, 205, 150, 0, -0.75, 0.75)
         end
       end
     end

@@ -1,1 +1,1 @@
-testing: eryn
+testing: eryn 2.0

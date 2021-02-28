@@ -2,8 +2,8 @@ GameManager = Object:extend()
 
 function GameManager:new()
   self.currentScene = TitleScene()
-  self.topBG = love.graphics.newImage('Assets/Images/grassB1.png')
-  self.bottomBG = love.graphics.newImage('Assets/Images/grassB2.png')
+  self.topBG = love.graphics.newImage('Assets/Images/Panels/top/grassB1.png')
+  self.bottomBG = love.graphics.newImage('Assets/Images/Panels/bottom/grassB2.png')
 end
 
 function GameManager:update()    
