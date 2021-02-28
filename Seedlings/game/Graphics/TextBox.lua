@@ -20,8 +20,10 @@ function TextBox:new(args)
   self.font = args.font or 'default'
   self.text = args.text or ''
   self.align = args.align or 'left'
-  self.lineList = nil
+  self.lineList = ArrayList()
   self.color = args.color or Color(1,1,1)
+
+  self:initialize()
 end
 
 function TextBox:setText(text)
@@ -70,7 +72,7 @@ function TextBox:initialize()
   end
   
   -- Get the strings for each line
-  self.lineList = ArrayList()
+  -- self.lineList = ArrayList()
   local curLine = ""
   for i = 0, wordList:getSize() - 1, 1 do
     local curWord = wordList:get(i)
@@ -103,7 +105,7 @@ function TextBox:initialize()
 end
 
 function TextBox:draw()
-  if self.lineList == nil then
+  if self.lineList:getSize() == 0 then
     self:initialize()
   end
   
