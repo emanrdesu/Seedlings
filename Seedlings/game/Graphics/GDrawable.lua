@@ -1,4 +1,6 @@
 
+imageCache = {}
+
 GDrawable = Object:extend()
 
 function GDrawable:new(args)
@@ -41,7 +43,9 @@ Image = GDrawable:extend()
 
 function Image:new(args)
    Image.super.new(self, args)
-   self.image = love.graphics.newImage(args.path or args[1])
+   self.image = imageCache[args.path or args[1]]
+   self.image = self.image or love.graphics.newImage(args.path or args[1])
+   imageCache[args.path or args[1]] = self.image
    self.width, self.height = self.image:getDimensions()
 end
 
