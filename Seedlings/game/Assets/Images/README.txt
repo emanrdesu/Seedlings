@@ -14,5 +14,5 @@ Image asset collection update:
 - Updates to variable tutorial bgs - resized to proper 400x240
 - Variable tutorial bg assets separated for backend functionality
 - Melody maker: notes given homologous canvas sizes for backend functionality
-- README.txt's updated
+- README.txt's updated - include nomenclature review
 - gameflow pdfs uploaded
