@@ -40,43 +40,60 @@ function FallingAppleScene:new()
     position = 'left',
     apple = self.startPosition,
   }
+  
+  self.intro = true
+  self.textBoxes = TextBoxList()
+  self.textBoxes:addText("Welcome to the falling apple game.\nIn this game your goal is to catch apples as they fall with a basket.")
+  self.textBoxes:addText("There are two different columns that the apple can fall in. A 'left' column and a 'right' column.")
+  self.textBoxes:addText("The 'basket' variable contains the position that the basket currently is in. It will be either 'left' or 'right'.")
+  self.textBoxes:addText("The 'apple' variable contains the position of the currently falling apple. It will also be 'left' or 'right'.")
+  self.textBoxes:addText("The code you create will be run once each time an apple is falling. You can use the move commands to change the position of the basket.")
+  self.textBoxes:addText("The move left command moves the basket into the left column (if the basket is in the left column already, it will not move).")
+  self.textBoxes:addText("The move right command will move the basket into the right column similar to the move left command.")
+  self.textBoxes:addText("Use the if statements to check the position of the falling apple and try to move the basket to catch it.")
 end
 
 function FallingAppleScene:update()
-  -- Update UI
-  self.commandUI:update()
-  
-  -- If running, process the stuff
-  local dt = love.timer.getDelta()
-  if self.running then
-    -- Update command manager
-    self.commandUI.commandManager:update()
+  if self.intro == true then
+    -- If reading the text, only update that
+    local finished = self.textBoxes:update()
+    if finished then self.intro = false end
+  else
+    -- Update UI
+    self.commandUI:update()
     
-    -- Have the apple fall
-    self.appleY = self.appleY + self.appleVel * dt
-  
-    -- If past the threshhold, run user code
-    if self.hasRun == false and self.appleY >= self.yToRunAt then
-      self.commandUI.commandManager:start()
-      self.hasRun = true
+    -- If running, process the stuff
+    local dt = love.timer.getDelta()
+    if self.running then
+      -- Update command manager
+      self.commandUI.commandManager:update()
+      
+      -- Have the apple fall
+      self.appleY = self.appleY + self.appleVel * dt
+    
+      -- If past the threshhold, run user code
+      if self.hasRun == false and self.appleY >= self.yToRunAt then
+        self.commandUI.commandManager:start()
+        self.hasRun = true
+      end
+      
+      -- If the apple hits the user, just return a new scene
+      if self.appleY + self.appleRadius >= self.boxY + 10 and sandbox.apple == sandbox.position then
+        return FallingAppleScene()
+      end
+      
+      -- If the apple is done falling, put it back on top and reset the hasRun val
+      if self.appleY > Constants.TOP_SCREEN_HEIGHT + self.appleRadius then
+        self.appleY = - self.appleRadius
+        if love.math.random() < 0.5 then sandbox.apple = 'left' else sandbox.apple = 'right' end
+        self.hasRun = false
+        self.timesFallen = self.timesFallen + 1
+        if self.timesFallen > 5 then self.running = false end
+      end
+      
     end
-    
-    -- If the apple hits the user, just return a new scene
-    if self.appleY + self.appleRadius >= self.boxY + 10 and sandbox.apple == sandbox.position then
-      return FallingAppleScene()
-    end
-    
-    -- If the apple is done falling, put it back on top and reset the hasRun val
-    if self.appleY > Constants.TOP_SCREEN_HEIGHT + self.appleRadius then
-      self.appleY = - self.appleRadius
-      if love.math.random() < 0.5 then sandbox.apple = 'left' else sandbox.apple = 'right' end
-      self.hasRun = false
-      self.timesFallen = self.timesFallen + 1
-      if self.timesFallen > 5 then self.running = false end
-    end
-    
   end
-  
+    
   return self
 end
 
@@ -113,9 +130,10 @@ function FallingAppleScene:drawTopScreen()
     color = Color.RED,
   })
   
-
+  if self.intro == true then self.textBoxes:drawTopScreen() end
 end
 
 function FallingAppleScene:drawBottomScreen()
   self.commandUI:drawBottomScreen()
+  if self.intro == true then self.textBoxes:drawBottomScreen() end
 end

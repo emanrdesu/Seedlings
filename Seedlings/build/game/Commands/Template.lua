@@ -4,7 +4,8 @@ Template.COMMAND_NAME = 'Name that user seems'
 function Template:new(args)
   -- Params is the set of things that the user can modify for this command
   self.params = {
-    position = args.position or '0'
+    position = args.position or '0',
+    canHaveOptions = ''
   }
   
   -- paramList stores a list of params with 2 values: userString is what will appear in the UI when modifying it
@@ -12,7 +13,12 @@ function Template:new(args)
   -- If you want the user string to hold other info that changes with the values, create a new list and return in the getParamList function
   
   self.paramList = ArrayList()
+  local options = ArrayList()
+  options:add({userString = 'Option 1', codeString = 'abc'})
+  options:add({userString = 'Option 1', codeString = 'def'})
+  
   self.paramList:add({userString = 'myPosition', codeString = 'position'})
+  self.paramList:add({userString = 'optionTest', codeString = 'canHaveOptions', optionList = options})
 end
 
 -- What the user sees in the command list
