@@ -20,3 +20,10 @@ function SetValTo:toLuaStringList()
   list:add(Command.YIELD)
   return list
 end
+
+function SetValTo:getParameters()
+  local res = ArrayList()
+  res:add(self.variable)
+  res:add(self.value)
+  return res
+end

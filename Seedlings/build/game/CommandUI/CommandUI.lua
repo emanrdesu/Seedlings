@@ -27,22 +27,102 @@ CommandSelector ->  (will be passed a reference to this object to reference the 
 --]]
 
 function CommandUI:new()
+  -- Initialize stuff. Have the command lister on the top of the stack
+  self.commandLister = CommandLister(self)
   self.availableCommands = ArrayList()
   self.commandManager = CommandManager()
   self.uiStack = Queue()
-  self.uiStack:addLast(CommandLister(this))
+  self.uiStack:addLast(self.commandLister)
   self.buttonList = ArrayList()
+  
+  self.onRun = function() end
+  
+  -- Create buttons
+  local width = 62
+  local height = 53
+  local x = 250;
+  local deltaHeight = 3
+  
+  -- Functions for drawing buttons
+  function getDrawNormal(x, y, w, h, text)
+    return function()
+      draw:rectangle({x=x, y=y, width=w, height=h, color = Color.LIGHT_GRAY})
+      draw:print({x=x, y=y, text = text, color = Color.BLACK, font = '18px'})
+    end
+  end
+  
+  function getDrawHovered(x, y, w, h, text)
+    return function()
+      draw:rectangle({x=x, y=y, width=w, height=h, color = Color:byte(178, 178, 178)})
+      draw:print({x=x, y=y, text = text, color = Color.BLACK, font = '18px'})
+    end
+  end
+  
+  -- ADD button
+  local y1 = 3
   self.buttonList:add(
     Button({
-      hitbox = {shape = 'circle', x = 300, y = 50, r = 15},
-      drawNormal = function()
-        draw:circle({mode = 'fill', x = 300, y = 50, radius = 15, segments = 10, color = Color.RED})
-      end,
-      drawHovered = function()
-        draw:circle({mode = 'fill', x = 300, y = 50, radius = 15, segments = 10, color = Color.BLUE})
+      hitbox = {shape = 'rectangle', x = x, y = y1, width = width, height = height},
+      drawNormal = getDrawNormal(x, y1, width, height, "ADD"),
+      drawHovered = getDrawHovered(x, y1, width, height, "ADD"),
+      onClick = function()
+        -- Add the command selector to the top of the stack
+        self.uiStack:addLast(CommandSelector(self, nil, self.commandLister.selectedIndex), nil)
       end
     })
-  );
+  )
+
+  -- EDIT button
+  local y2 = y1 + height + deltaHeight
+  self.buttonList:add(
+    Button({
+      hitbox = {shape = 'rectangle', x = x, y = y2, width = width, height = height},
+      drawNormal = getDrawNormal(x, y2, width, height, "EDIT"),
+      drawHovered = getDrawHovered(x, y2, width, height, "EDIT"),
+      onClick = function()
+        -- Add a command editor to the top of the stack for the selected command
+        if self.commandManager.commandList:getSize() > 0 then
+          local cmd = self.commandManager.commandList:get(self.commandLister.selectedIndex)
+          self.uiStack:addLast(CommandEditor(self, cmd))
+        end
+      end
+    })
+  )
+  
+  -- Del button
+  local y3 = y2 + height + deltaHeight
+  self.buttonList:add(
+    Button({
+      hitbox = {shape = 'rectangle', x = x, y = y3, width = width, height = height},
+      drawNormal = getDrawNormal(x, y3, width, height, "DEL"),
+      drawHovered = getDrawHovered(x, y3, width, height, "DEL"),
+      onClick = function()
+        -- If there are commands, delete the selected one
+        -- Then update the current selected index
+        if self.commandManager.commandList:getSize() > 0 then
+          self.commandManager:removeCommand(self.commandLister.selectedIndex)
+          if self.commandLister.selectedIndex >= self.commandManager.commandList:getSize() then
+            self.commandLister.selectedIndex = self.commandManager.commandList:getSize() - 1
+          end
+          if self.commandLister.selectedIndex < 0 then self.commandLister.selectedIndex = 0 end
+        end
+      end
+    })
+  )
+  
+  -- Run button
+  -- TODO: Implement the run button onClick
+  local runHeight = height + 13
+  local y4 = y3 + height + deltaHeight
+  self.buttonList:add(
+    Button({
+      hitbox = {shape = 'rectangle', x = x, y = y4, width = width, height = runHeight},
+      drawNormal = getDrawNormal(x, y4, width, runHeight, "RUN"),
+      drawHovered = getDrawHovered(x, y4, width, runHeight, "RUN"),
+      onClick = function() self:execute() end
+    })
+  )
+  
 end
 
 function CommandUI:update()
@@ -68,7 +148,7 @@ function CommandUI:drawBottomScreen()
     height = Constants.BOTTOM_SCREEN_HEIGHT,
   })
 
-  -- TODO: Draw buttons
+  --Draw buttons
   for i = 0, self.buttonList:getSize() - 1, 1 do
     self.buttonList:get(i):draw()
   end
@@ -76,4 +156,17 @@ function CommandUI:drawBottomScreen()
   -- Draw what is on the top of the stack
   local top = self.uiStack:peekLast()
   top:drawBottomScreen()
+end
+
+-- Add an available command for this manager
+function CommandUI:addAvailableCommand(cmd)
+  self.availableCommands:add(cmd)
+end
+
+function CommandUI:execute()
+  self.onRun()
+end
+
+function CommandUI:setOnRun(func)
+  self.onRun = func
 end

@@ -7,18 +7,21 @@ function TitleScene:new()
     y = -100,
     r = 0,
     vx = 0,
-    vy = 180,
+    vy = 250,
     vr = 0,
     scaleX = 0.4,
     scaleY = 0.4,
     state = "FALLING",
     stopY = 0.25 * Constants.TOP_SCREEN_HEIGHT,
-    stopX = 0.3 * Constants.TOP_SCREEN_WIDTH,
-    img = love.graphics.newImage('Assets/Images/apple.png')
+    stopX = 0.25 * Constants.TOP_SCREEN_WIDTH,
+    img = love.graphics.newImage('Assets/Images/Objects/apple.png')
   }
+  self.titleAlpha = 0
+  self.titleDAlpha = 0.5
+  
   self.waitUntilCanStart = 1.5
-  self.topBG = love.graphics.newImage('Assets/Images/grassB1.png')
-  self.bottomBG = love.graphics.newImage('Assets/Images/grassB2.png')
+  self.topBG = love.graphics.newImage('Assets/Images/Panels/top/grassB1.png')
+  self.bottomBG = love.graphics.newImage('Assets/Images/Panels/bottom/grassB2.png')
 end
 
 function TitleScene:update()
@@ -31,9 +34,9 @@ function TitleScene:update()
   if self.apple.state == "FALLING" then 
     if self.apple.y >= self.apple.stopY then 
       self.apple.state = "ROLLING" 
-      self.apple.vx = -130
+      self.apple.vx = -130 -- 130
       self.apple.vy = 0
-      self.apple.vr = -6.5
+      self.apple.vr = -7.5
     end
   elseif self.apple.state == "ROLLING" then
     if math.abs(self.apple.r % (2 * math.pi)) <= 0.13 and self.apple.x <= self.apple.stopX then
@@ -44,6 +47,8 @@ function TitleScene:update()
       self.apple.vr = 0
     end
   else 
+    self.titleAlpha = self.titleAlpha + dt * self.titleDAlpha
+    if self.titleAlpha > 1 then self.titleAlpha = 1 end
     self.waitUntilCanStart = self.waitUntilCanStart - dt
   end
   
@@ -87,20 +92,35 @@ function TitleScene:drawTopScreen()
     local w, h = self.apple.img:getDimensions()
     w = w * self.apple.scaleX
     h = h * self.apple.scaleY
-    fontManager:setFont('36px')
-    love.graphics.print("Seedlings", self.apple.x + w, self.apple.y + 30, 0)
+    draw:print({x = self.apple.x + w, y = self.apple.y + 30, font = '36px', color = Color.WHITE:withAlpha(self.titleAlpha), text = "Seedlings"})
+    -- fontManager:setFont('36px')
+    -- love.graphics.print("Seedlings", self.apple.x + w, self.apple.y + 30, 0)
   end
 end
 
 function TitleScene:drawBottomScreen()
   love.graphics.draw(self.bottomBG, 0, 0)
   if self.waitUntilCanStart <= 0 then
+    
     fontManager:setFont('18px')
     local w = fontManager:getWidth("Press start to play!")
     local h = fontManager:getHeight("Press start to play!")
+    local w2 = w + 30
+    local h2 = h + 20
+    
+    draw:brectangle({
+      x = (Constants.BOTTOM_SCREEN_WIDTH - w2) / 2.0,
+      y = (Constants.BOTTOM_SCREEN_HEIGHT - h2) / 1.5,
+      color = Color.WHITE,
+      borderColor = Color.BLACK,
+      borderWidth = 4,
+      width = w2,
+      height = h2,
+    })
+        
     local offsetX = (Constants.BOTTOM_SCREEN_WIDTH - w) / 2.0
-    local offsetY = (Constants.BOTTOM_SCREEN_HEIGHT - h) / 2.0
-    love.graphics.print("Press start to play!", offsetX, offsetY)
+    local offsetY = 10 + (Constants.BOTTOM_SCREEN_HEIGHT - h2) / 1.5
+    draw:print({x = offsetX, y = offsetY, text = "Press start to play!", color = Color.BLACK, font = '18px'})
   end
 end
 

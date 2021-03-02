@@ -35,6 +35,11 @@ function ArrayList:remove(id)
 end
 
 function ArrayList:insert(index, v)
+  if self.size == 0 then
+    self:add(v)
+    return
+  end
+  
   local newAr = {}
   local idx = 0
   
@@ -73,6 +78,10 @@ end
 
 function ArrayList:get(v)
   return self:get0Indexed(v)
+end
+
+function ArrayList:set(index, v)
+  self.ar[index] = v
 end
 
 function ArrayList:traverse()
