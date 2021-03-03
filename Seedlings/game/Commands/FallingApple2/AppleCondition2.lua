@@ -61,3 +61,5 @@ function AppleCondition2:getParamList()
   self.paramList:add({userString = self.params.right, codeString = 'right', optionList = self.rightList})
   return self.paramList
 end
+
+function AppleCondition2:increaseIndent() return true end
