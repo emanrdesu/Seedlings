@@ -15,6 +15,7 @@ function MainMenuScene:new()
   self.sceneList:add({name='MultiVarMelodyMaker', ref = MultiVarMelodyMaker, lock = 0})
   self.sceneList:add({name='Command Test', ref = CTS, lock = 0})
   self.sceneList:add({name='Falling Apple', ref = FallingAppleScene, lock = 0})
+  self.sceneList:add({name='Falling Apple 2', ref = FallingApple2Scene, lock = 0})
   
   self.scenesPerScreen = 3
   self.currentPage = 0
