@@ -21,7 +21,7 @@ end
 -- Translate to valid lua code
 function AppleMoveLeft:toLuaStringList()  
   local list = ArrayList()
-  list:add('position = "left"; ')
+  list:add('basket = "left"; ')
   list:add(Command.YIELD)
   return list
 end

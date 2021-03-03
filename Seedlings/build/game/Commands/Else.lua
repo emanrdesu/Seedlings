@@ -22,7 +22,6 @@ end
 function Else:toLuaStringList()  
   local list = ArrayList()
   list:add(' else ')
-  list:add(Command.YIELD)
   return list
 end
 

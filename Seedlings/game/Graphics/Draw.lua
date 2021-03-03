@@ -67,9 +67,9 @@ function Draw:arc(args)
       local y1 = points[i+1]
       local x2 = points[i+2]
       local y2 = points[i+3]
-      -- if i > 1 then
-      --  love.graphics.circle('fill', x1, y1, lineWidth/2.0)
-      -- end 
+      if i > 1 then
+        love.graphics.circle('fill', x1, y1, lineWidth/2.0)
+       end 
       love.graphics.line(x1,y1,x2,y2)
     end
     
