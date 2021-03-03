@@ -62,16 +62,17 @@ end
 
 function MainMenuScene:drawBottomScreen()
   -- Print page number at the bottom
+  local pageText = "Page "..(self.currentPage+1).." / "..self.totalPages
+  local pageTextWidth = fontManager:getWidth(pageText)
   draw:print({
-      text = "Page "..(self.currentPage+1).." / "..self.totalPages, 
-      x = 130,
+      text = pageText,
+      x = (Constants.BOTTOM_SCREEN_WIDTH - pageTextWidth) / 2.0,
       y = 200,
       color = Color.BLACK,
       font = 'default',
     })
   
   -- Print current options
-  local recX = 100
   local startRecY = 50
   local height = 150
   local dy = height / self.scenesPerScreen 
@@ -80,31 +81,41 @@ function MainMenuScene:drawBottomScreen()
   for i = 0, self.scenesPerScreen - 1, 1 do
     if startIndex + i >= self.sceneList:getSize() then break end
     local section = self.sceneList:get(startIndex + i)
-    if i == self.currentIndex then
-      draw:circle({
-        x = recX - 30,
-        y = math.floor(startRecY + dy * i + 10),
-        radius = 5,
-        color = Color.RED
-      })
-    end
+    local text = "LOCKED"
     if self.currentProgress >= section.lock then
-      draw:print({
-        text = section.name,
-        x = recX,
-        y = math.floor(startRecY + dy * i),
-        font = 'default',
-        color = Color.BLACK,
+      text = section.name
+    end
+    local textWidth = fontManager:getWidth(text)
+    local textHeight = fontManager:getHeight()
+    local recX = (Constants.BOTTOM_SCREEN_WIDTH - textWidth) / 2.0
+    local PADDING = 10
+    local BORDER = 4
+    if i == self.currentIndex and textWidth > 0 then
+      draw:brectangle({
+          x = recX - PADDING - BORDER,
+          y = math.floor(startRecY + dy * i - BORDER),
+          width = textWidth + 2 * PADDING + 2 * BORDER,
+          height = textHeight + 5 + 2 * BORDER,
+          borderWidth = BORDER,
+          color = Color.WHITE,
+          borderColor = Color.BLACK,
       })
     else
-      draw:print({
-        text = "LOCKED",
-        x = recX,
-        y = math.floor(startRecY + dy * i),
-        font = 'default',
-        color = Color.BLACK,
+      draw:rectangle({
+          x = recX - PADDING,
+          y = math.floor(startRecY + dy * i),
+          width = textWidth + 2 * PADDING,
+          height = textHeight + 5,
+          color = Color.WHITE,
       })
     end
+    draw:print({
+      text = text,
+      x = recX,
+      y = math.floor(startRecY + dy * i),
+      font = 'default',
+      color = Color.BLACK,
+    })
   end
 
 end
