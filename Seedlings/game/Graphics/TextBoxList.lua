@@ -33,6 +33,10 @@ function TextBoxList:addText(text)
   }))
 end
 
+function TextBoxList:reset()
+  self.index = 0
+end
+
 -- Returns true if the user completes all text entries
 function TextBoxList:update()
   if inputManager:isPressed('a') then

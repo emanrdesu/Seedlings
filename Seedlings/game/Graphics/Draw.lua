@@ -290,6 +290,55 @@ function Draw:draw(args)
   love.graphics.draw(drawable, x, y, r, sx, sy, ox, oy, kx, ky)
 end
 
+function Draw:img(args)
+  local img, x, y, sx, sy, kx, ky, r, center, rotateCenter = 
+    args.img or nil,
+    args.x or 0,
+    args.y or 0,
+    args.sx or 1,
+    args.sy or 1,
+    args.kx or 0,
+    args.ky or 0,
+    args.r or 0,
+    args.center or false,
+    args.rotateCenter or true
+  
+  -- Get where we will print the image
+  local drawX = x
+  local drawY = y
+  
+  -- Get width/height
+  local width, height = img:getDimensions()
+  width = width * sx
+  height = height * sy
+  
+  -- Center image at x, y (apply an offset
+  if center == true then
+    drawX = math.floor(drawX - (width / 2))
+    drawY = math.floor(drawY - (height / 2))
+  end
+  
+  -- Want to rotate image around center, apply another offset
+  if rotateCenter == true then
+    local cx = x + (width / 2)
+    local cy = y + (height / 2)
+    
+    local vecX = x - cx
+    local vecY = y - cy
+    
+    -- rotate vecX by r degrees
+    local newVecX = vecX * math.cos(r) - vecY * math.sin(r)
+    local newVecY = vecX * math.sin(r) + vecY * math.cos(r)
+    
+    local dx = newVecX - vecX
+    local dy = newVecY - vecY    
+    drawX = drawX + dx
+    drawY = drawY + dy
+  end
+  
+  love.graphics.draw(img, drawX, drawY, r, sx, sy);
+end
+
 -- draw:print({text="test message", x = 230, y = 160, color = Color.BLUE, font='36px'})
 function Draw:print(args)
   local text, x, y, r, sx, sy, ox, oy, font, color = 
