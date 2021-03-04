@@ -67,10 +67,11 @@ function FallingApple2Scene:new()
   self.intro = true
   self.textBoxes = TextBoxList()
   self.textBoxes:addText("This falling apple game is similar to the previous one. However in this game, there are 3 columns instead of of 2. The 3 columns are 'left', 'right', and 'center'.")
-  self.textBoxes:addText("")
-  self.textBoxes:addText("")
-  self.textBoxes:addText("")
-  self.textBoxes:addText("")
+  self.textBoxes:addText("The move left command will move the basket one column to the left, or not move it if the basket is already in the left column.")
+  self.textBoxes:addText("The move right command does the same thing in the opposite direction.")
+  self.textBoxes:addText("Keep in mind that you may move the basket multiple times in your code.")
+  self.textBoxes:addText("For example, moving the basket left twice will have the basket end up in the left column regardless of where it started.")
+  self.textBoxes:addText("Try to catch all of the apples again!")
 
   -- If summary is true, user is in the stage after all the apples fall that tells them whether they passed or failed
   self.summary = false
