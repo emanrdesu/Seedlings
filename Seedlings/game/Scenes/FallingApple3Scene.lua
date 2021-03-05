@@ -30,6 +30,7 @@ function FallingApple3Scene:new()
   self.catchTolerance = 5
 
   self.appleImg = love.graphics.newImage('Assets/Images/Objects/apple.png')
+  self.basketImg = love.graphics.newImage('Assets/Images/Objects/basket.png')
   
   -- Apple info
   self.appleY = 0
@@ -143,7 +144,7 @@ function FallingApple3Scene:update()
       end
       
       -- If the apple hits the user, add to the count of apples caught & create a new apple
-      if self.appleY + self.appleRadius >= self.basketY + 35 
+      if self.appleY + self.appleRadius >= self.basketY + 25 
         and self.appleY + self.appleRadius <= self.basketY + 65
         and self:isCaught(sandbox.apple, sandbox.basket) then
         self.applesCaught = self.applesCaught + 1
@@ -173,21 +174,6 @@ function FallingApple3Scene:drawTopScreen()
     })
   end
   drawColumn(self.columnStart, self.columnWidth)
-  
-  -- Draw the basket
-  local x = math.floor(self.columnStart + self.padding + (self.columnWidth - 2 * self.padding) * (sandbox.basket / 100))
-  draw:arc({
-    mode = 'line',
-    arctype = 'open',
-    x = x,
-    y = self.basketY,
-    fromAngle = math.pi/2 + -1.5,
-    toAngle = math.pi/2 + 1.5,
-    color = Color.BLACK,
-    segments = 10,
-    lineWidth = 4,
-    radius = 15,
-  })
 
   -- Draw the apple
   local appleX = math.floor(self.columnStart + self.padding + (self.columnWidth - 2 * self.padding) * (sandbox.apple / 100))
@@ -200,6 +186,29 @@ function FallingApple3Scene:drawTopScreen()
     sy = self.appleScale,
     center = true,
     rotateCenter = true,
+  })
+  
+  -- Draw the basket
+  local x = math.floor(self.columnStart + self.padding + (self.columnWidth - 2 * self.padding) * (sandbox.basket / 100))
+  --[[draw:arc({
+    mode = 'line',
+    arctype = 'open',
+    x = x,
+    y = self.basketY,
+    fromAngle = math.pi/2 + -1.5,
+    toAngle = math.pi/2 + 1.5,
+    color = Color.BLACK,
+    segments = 10,
+    lineWidth = 4,
+    radius = 15,
+  })--]]
+  draw:img({
+    x = x,
+    y = self.basketY,
+    sx = 0.7,
+    sy = 0.7,
+    center = true,
+    img = self.basketImg,
   })
   
   -- Draw the information of number of apples caught
