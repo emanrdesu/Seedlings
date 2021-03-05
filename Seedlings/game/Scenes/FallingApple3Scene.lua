@@ -1,13 +1,17 @@
-FallingApple2Scene = Scene:extend()
+FallingApple3Scene = Scene:extend()
 
-function FallingApple2Scene:new()
+function FallingApple3Scene:new()
   self.commandUI = CommandUI()
-  self.commandUI:addAvailableCommand(AppleMoveLeft2)
-  self.commandUI:addAvailableCommand(AppleMoveRight2)
-  self.commandUI:addAvailableCommand(AppleCondition2)
+  self.commandUI:addAvailableCommand(AppleMoveLeft3)
+  self.commandUI:addAvailableCommand(AppleMoveRight3)
+  self.commandUI:addAvailableCommand(AppleCondition3)
   self.commandUI:addAvailableCommand(End)
   self.commandUI:addAvailableCommand(Else)
-  self.commandUI.commandManager:setTimePerLine(0.15)
+  self.commandUI:addAvailableCommand(AppleCustomCondition)
+  self.commandUI:addAvailableCommand(AppleCustomMoveLeft)
+  self.commandUI:addAvailableCommand(AppleCustomMoveRight)
+
+  self.commandUI.commandManager:setTimePerLine(0.1)
   self.commandUI:setOnRun(
     function() 
       -- Reset game values if game is not running and not in summary stage
@@ -20,13 +24,11 @@ function FallingApple2Scene:new()
   )
   
   -- Column info & apple img
-  self.columnWidth = 60
-  self.distFromSide = 30
-  self.distBetweenColumns = 80
-  
-  self.leftX = math.floor(self.distFromSide + (self.columnWidth / 2))
-  self.centerX = self.leftX + self.distBetweenColumns
-  self.rightX = self.centerX + self.distBetweenColumns
+  self.columnWidth = Constants.TOP_SCREEN_WIDTH
+  self.columnStart = 0
+  self.padding = 25
+  self.catchTolerance = 5
+
   self.appleImg = love.graphics.newImage('Assets/Images/Objects/apple.png')
   
   -- Apple info
@@ -34,7 +36,7 @@ function FallingApple2Scene:new()
   self.appleVel = 200
   self.appleR = 0
   self.appleDTheta = 9  
-  self.appleScale = 0.26
+  self.appleScale = 0.18
   self.appleW, self.appleH = self.appleImg:getDimensions()
   self.appleRadius = (self.appleW * self.appleScale) / 2
   
@@ -46,27 +48,21 @@ function FallingApple2Scene:new()
   
   self.basketY = 200
   
-  -- Info for when to run users code
-  self.hasRun = false
-  self.yToRunAt = 40
-  
   -- Get the apple position (make it random)
   love.math.setRandomSeed(love.timer.getTime())
   self.startPosition = self:randomApplePosition()
+  self.basketStartPosition = 50
   
   -- Create sandbox environment
   -- Stores the position of the person and apple
   sandbox = {
-    basket = 'left',
+    basket = self.basketStartPosition,
     apple = self.startPosition,
-    left = 'left',
-    center = 'center',
-    right = 'right',
   }
   
   self.intro = true
   self.textBoxes = TextBoxList()
-  self.textBoxes:addText("This falling apple game is similar to the previous one. However in this game, there are 3 columns instead of of 2. The 3 columns are 'left', 'right', and 'center'.")
+  self.textBoxes:addText("3 This falling apple game is similar to the previous one. However in this game, there are 3 columns instead of of 2. The 3 columns are 'left', 'right', and 'center'.")
   self.textBoxes:addText("The move left command will move the basket one column to the left, or not move it if the basket is already in the left column.")
   self.textBoxes:addText("The move right command does the same thing in the opposite direction.")
   self.textBoxes:addText("Keep in mind that you may move the basket multiple times in your code.")
@@ -81,7 +77,7 @@ function FallingApple2Scene:new()
   self.gameFailTextBoxes = TextBoxList()
 end
 
-function FallingApple2Scene:update()
+function FallingApple3Scene:update()
   if self.intro == true then
     -- If reading the text, only update that
     local finished = self.textBoxes:update()
@@ -91,7 +87,7 @@ function FallingApple2Scene:update()
       -- Show the winning thing
       -- If finished with the game clear, go to main menu
       if self.gameClearTextBoxes:update() then
-        return FallingApple3Scene()
+        return MainMenuScene()
       end
     else
       -- Show the losing thing
@@ -109,18 +105,18 @@ function FallingApple2Scene:update()
     -- If running, process the stuff
     local dt = love.timer.getDelta()
     if self.running then
+      
+      -- In this game, always run the user's code
+      if not self.commandUI.commandManager:codeIsRunning() then
+        self.commandUI.commandManager:start()
+      end
+      
       -- Update command manager
       self.commandUI.commandManager:update()
       
       -- Have the apple fall
       self.appleY = self.appleY + self.appleVel * dt
       self.appleR = self.appleR + self.appleDTheta * dt
-    
-      -- If past the threshhold, run user code
-      if self.hasRun == false and self.appleY >= self.yToRunAt then
-        self.commandUI.commandManager:start()
-        self.hasRun = true
-      end
       
       -- Function to reset apple
       function resetApple()
@@ -143,7 +139,9 @@ function FallingApple2Scene:update()
       end
       
       -- If the apple hits the user, add to the count of apples caught & create a new apple
-      if self.appleY + self.appleRadius >= self.basketY + 35 and sandbox.apple == sandbox.basket then
+      if self.appleY + self.appleRadius >= self.basketY + 35 
+        and self.appleY + self.appleRadius <= self.basketY + 55
+        and self:isCaught(sandbox.apple, sandbox.basket) then
         self.applesCaught = self.applesCaught + 1
         resetApple()
       end
@@ -159,30 +157,21 @@ function FallingApple2Scene:update()
   return self
 end
 
-function FallingApple2Scene:drawTopScreen()
+function FallingApple3Scene:drawTopScreen()
   -- Draw the three columns
-  function drawColumn(columnX, columnWidth)
+  function drawColumn(columnStart, columnWidth)
     draw:rectangle({
-      x = columnX - (columnWidth / 2),
+      x = columnStart,
       y = 0,
       width = columnWidth,
       height = Constants.TOP_SCREEN_HEIGHT,
       color = Color.YELLOW:withAlpha(0.3),
     })
   end
-  drawColumn(self.leftX, self.columnWidth)
-  drawColumn(self.rightX, self.columnWidth)
-  drawColumn(self.centerX, self.columnWidth)
+  drawColumn(self.columnStart, self.columnWidth)
   
   -- Draw the basket
-  local x = 0
-  if sandbox.basket == 'left' then
-    x = self.leftX
-  elseif sandbox.basket == 'center' then
-    x = self.centerX
-  else
-    x = self.rightX
-  end
+  local x = math.floor(self.columnStart + self.padding + (self.columnWidth - 2 * self.padding) * (sandbox.basket / 100))
   draw:arc({
     mode = 'line',
     arctype = 'open',
@@ -192,19 +181,12 @@ function FallingApple2Scene:drawTopScreen()
     toAngle = math.pi/2 + 1.5,
     color = Color.BLACK,
     segments = 10,
-    lineWidth = 5,
-    radius = 25,
+    lineWidth = 4,
+    radius = 15,
   })
 
   -- Draw the apple
-  local appleX = 0
-  if sandbox.apple == 'left' then
-    appleX = self.leftX
-  elseif sandbox.apple == 'center' then
-    appleX = self.centerX
-  else
-    appleX = self.rightX
-  end
+  local appleX = math.floor(self.columnStart + self.padding + (self.columnWidth - 2 * self.padding) * (sandbox.apple / 100))
   draw:img({
     img = self.appleImg,
     x = appleX,
@@ -218,7 +200,7 @@ function FallingApple2Scene:drawTopScreen()
   
   -- Draw the information of number of apples caught
   draw:print({
-    x = 270,
+    x = 145,
     y = 80,
     text = "Apples Caught:\n         "..tostring(self.applesCaught).." / "..tostring(self.totalApples),
     color = Color.BLACK,
@@ -237,7 +219,7 @@ function FallingApple2Scene:drawTopScreen()
   end
 end
 
-function FallingApple2Scene:drawBottomScreen()
+function FallingApple3Scene:drawBottomScreen()
   self.commandUI:drawBottomScreen()
   if self.intro == true then self.textBoxes:drawBottomScreen() end
   if self.summary == true then
@@ -251,9 +233,11 @@ function FallingApple2Scene:drawBottomScreen()
   end
 end
 
-function FallingApple2Scene:randomApplePosition()
-  local v = love.math.random()
-  if v <= 0.333333 then return 'left' end
-  if v <= 0.666666 then return 'center' end
-  return 'right'
+-- Random number between 1 and 100
+function FallingApple3Scene:randomApplePosition()
+  return math.ceil(100 * love.math.random())
+end
+
+function FallingApple3Scene:isCaught(basket, apple)
+  return math.abs(basket - apple) <= self.catchTolerance
 end
