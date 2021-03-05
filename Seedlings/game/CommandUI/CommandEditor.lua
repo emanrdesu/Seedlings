@@ -61,7 +61,7 @@ function CommandEditor:refresh()
   -- Create the button for the command type
   local cx = self.startX + 10
   local cy = self.startY + 10
-  local cw = 200
+  local cw = 270
   local ch = 30
   local cmdButton = Button({
     hitbox = {shape = 'rectangle', x = cx, y = cy, width = cw, height = ch},

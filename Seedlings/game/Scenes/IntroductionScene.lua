@@ -22,7 +22,7 @@ function IntroductionScene:new()
     y = self.y,
     width = self.width,
     align = 'center',
-    text = "Textbox 2\n yaaaay",
+    text = "There are various minigames to play, and each time you'll learn something new",
     color = Color.BLACK
   })
   self.textboxList:add(tb2)
@@ -32,10 +32,37 @@ function IntroductionScene:new()
     y = self.y,
     width = self.width,
     align = 'center',
-    text = "Third and final textbox! Hitting 'a' after this should then bring you to the main menu!",
+    text = "Initially, only the first minigame is unlocked. Each time you clear a minigame, you will unlock the next game",
     color = Color.BLACK
   })
   self.textboxList:add(tb3)
+  
+  self.textboxList:add(TextBox({
+    x = self.x, 
+    y = self.y,
+    width = self.width,
+    align = 'center',
+    text = "Once you unlock a minigame, you can select it from the main menu to replay it anytime that you like. Have fun!",
+    color = Color.BLACK
+  }))
+
+  self.textboxList:add(TextBox({
+    x = self.x, 
+    y = self.y,
+    width = self.width,
+    align = 'center',
+    text = "This text box only shows up the first time you start up the game. To view it again, select the '?' icon in the main menu",
+    color = Color.BLACK
+  }))
+
+  self.textboxList:add(TextBox({
+    x = self.x, 
+    y = self.y,
+    width = self.width,
+    align = 'center',
+    text = "You can also clear your save data from the main menu with the 'R' button",
+    color = Color.BLACK
+  }))
   
   self.index = 0
 end
@@ -63,7 +90,7 @@ function IntroductionScene:drawTopScreen()
     x = self.x - extra, 
     y = 15,
     width = self.width + 2*extra,
-    height = 200,
+    height = 210,
     color = Color.SAND,
     borderColor = Color.BLACK,
     borderWidth = 3,
@@ -74,7 +101,7 @@ function IntroductionScene:drawTopScreen()
   local text = tostring(1 + self.index)..' / '..tostring(self.textboxList:getSize())
   draw:print({
     x = 180,
-    y = 180,
+    y = 190,
     color = Color.BLACK,
     font = '18px',
     text = text,

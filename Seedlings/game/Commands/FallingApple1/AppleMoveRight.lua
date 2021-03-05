@@ -21,7 +21,7 @@ end
 -- Translate to valid lua code
 function AppleMoveRight:toLuaStringList()  
   local list = ArrayList()
-  list:add('position = "right"; ')
+  list:add('basket = "right"; ')
   list:add(Command.YIELD)
   return list
 end

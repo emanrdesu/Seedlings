@@ -15,12 +15,46 @@ function MainMenuScene:new()
   self.sceneList:add({name='MultiVarMelodyMaker', ref = MultiVarMelodyMaker, lock = 0})
   self.sceneList:add({name='Command Test', ref = CTS, lock = 0})
   self.sceneList:add({name='Falling Apple', ref = FallingAppleScene, lock = 0})
+  self.sceneList:add({name='Falling Apple 2', ref = FallingApple2Scene, lock = 0})
+  self.sceneList:add({name='Falling Apple 3', ref = FallingApple3Scene, lock = 0})
   
   self.scenesPerScreen = 3
   self.currentPage = 0
   self.currentIndex = 0
   self.currentProgress = saveManager:getValue('lock') or 0
   self.totalPages = math.ceil(self.sceneList:getSize() / self.scenesPerScreen)
+  
+  local bx = 285
+  local by = 210
+  local br = 17
+  self.helpMenu = false
+  self.helpButton = Button({
+    hitbox = {shape = 'circle', x = bx, y = by, r = br},
+    drawNormal = function()
+      draw:circle({x=bx, y=by, radius=br+3, color = Color.BLACK, mode = 'fill'})
+      draw:circle({x=bx, y=by, radius=br, color = Color.SAND, mode = 'fill'})
+      draw:print({text='?', color = Color.BLACK, x = bx - 4, y = by - 13, font = '18px_bold'})
+    end,
+    onClick = function()
+      self.helpMenu = true
+    end
+  })
+
+  local rx = 35
+  local ry = 210
+  local rr = 17
+  self.resetMenu = false
+  self.resetButton = Button({
+    hitbox = {shape = 'circle', x = rx, y = ry, r = rr},
+    drawNormal = function()
+      draw:circle({x=rx, y=ry, radius=rr+3, color = Color.BLACK, mode = 'fill'})
+      draw:circle({x=rx, y=ry, radius=rr, color = Color.SAND, mode = 'fill'})
+      draw:print({text='R', color = Color.BLACK, x = rx - 6, y = ry - 13, font = '18px_bold'})
+    end,
+    onClick = function()
+      self.resetMenu = true
+    end
+  })
 end
 
 function MainMenuScene:update()
@@ -46,6 +80,11 @@ function MainMenuScene:update()
     local scene = self.sceneList:get(self.scenesPerScreen * self.currentPage + self.currentIndex)
     if scene.lock <= self.currentProgress then return scene.ref() end
   end
+  
+  self.helpButton:update()
+  if self.helpMenu == true then return IntroductionScene() end
+  self.resetButton:update()
+  if self.resetMenu == true then return ClearDataScene() end
   
   return self
 end
@@ -118,4 +157,6 @@ function MainMenuScene:drawBottomScreen()
     })
   end
 
+  self.helpButton:draw()
+  self.resetButton:draw()
 end
