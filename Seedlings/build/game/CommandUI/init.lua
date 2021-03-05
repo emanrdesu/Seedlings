@@ -1,3 +1,6 @@
 require 'CommandUI/CommandUI'
 require 'CommandUI/CommandLister'
 require 'CommandUI/Button'
+require 'CommandUI/CommandEditor'
+require 'CommandUI/CommandSelector'
+require 'CommandUI/CommandOptionList'

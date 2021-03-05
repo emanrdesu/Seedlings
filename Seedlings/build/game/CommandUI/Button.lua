@@ -1,5 +1,27 @@
 Button = Object:extend()
 
+--[[
+Creating button example (creates a button who's onclick creates another button recursively)
+function createButton(xx, yy, segs, rr, aa)
+  return function()
+    self.buttonList:add(
+      Button({
+        hitbox = {shape = 'circle', x = xx, y = yy, r = rr},
+        drawNormal = function()
+          draw:circle({mode = 'fill', x = xx, y = yy, radius = rr, segments = segs, color = Color.RED:withAlpha(aa)})
+        end,
+        drawHovered = function()
+          draw:circle({mode = 'fill', x = xx, y = yy, radius = rr, segments = segs, color = Color.BLUE:withAlpha(aa)})
+        end,
+        onClick = createButton(xx, yy+2*rr, segs + 1, rr - 2, aa * 0.75)
+      })
+    )
+  end
+end
+
+createButton(0, 0, 10, 10, 1)
+]]--
+
 function Button:new(args)
   self.hitbox = args.hitbox or {shape = 'circle', x = 0, y = 0, r = 0}
   self.__onClick = args.onClick or function() end
@@ -64,8 +86,8 @@ function Button:pointInside(x, y)
     if dx*dx + dy*dy <= self.hitbox.r * self.hitbox.r then return true end
   end
   if self.hitbox.shape == 'rectangle' then
-    local xi = x >= self.hitbox.x and x <= self.hitbox.x + self.hitbox.width
-    local yi = y >= self.hitbox.y and y <= self.hitbox.y + self.hitbox.width
+    local xi = x > self.hitbox.x and x < self.hitbox.x + self.hitbox.width
+    local yi = y > self.hitbox.y and y < self.hitbox.y + self.hitbox.height
     return xi and yi
   end
   return false

@@ -2,6 +2,9 @@ CTS = Scene:extend()
 
 function CTS:new()
   self.commandUI = CommandUI()
+  for i = 0, 10, 1 do
+    self.commandUI:addAvailableCommand(SetValTo2)
+  end
 end
 
 function CTS:update()
