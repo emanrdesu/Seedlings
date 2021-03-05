@@ -62,12 +62,16 @@ function FallingApple3Scene:new()
   
   self.intro = true
   self.textBoxes = TextBoxList()
-  self.textBoxes:addText("3 This falling apple game is similar to the previous one. However in this game, there are 3 columns instead of of 2. The 3 columns are 'left', 'right', and 'center'.")
-  self.textBoxes:addText("The move left command will move the basket one column to the left, or not move it if the basket is already in the left column.")
-  self.textBoxes:addText("The move right command does the same thing in the opposite direction.")
-  self.textBoxes:addText("Keep in mind that you may move the basket multiple times in your code.")
-  self.textBoxes:addText("For example, moving the basket left twice will have the basket end up in the left column regardless of where it started.")
-  self.textBoxes:addText("Try to catch all of the apples again!")
+  self.textBoxes:addText("This final falling apple game is very different from the last two. This time there are no columns. The apple will instead have a number value between 1 and 100")
+  self.textBoxes:addText("The smaller values like 1 are on the left side of the screen. The larger values like 100 are on the right side of the screen.")
+  self.textBoxes:addText("The move commands are also different. The basket, like an apple, has a value between 1 and 100 that starts at 50. Each move command has a number.")
+  self.textBoxes:addText("The move left command makes the basket's value smaller by the number it has. The move right command makes the basket's value larger.")
+  self.textBoxes:addText("You can modify this value for the move commands. The basket value will always remain between 1 and 100, even if you try to move it left when it has a value of 1.")
+  self.textBoxes:addText("The if statement allows adding or subtracting a number when comparing the apple and basket. If you want more customization, use the custom commands.")
+  self.textBoxes:addText("The custom move commands allow you to enter in your own number for moving the basket.")
+  self.textBoxes:addText("The custom if statement allows you to write whatever you want for the conditions. Be careful!")
+  self.textBoxes:addText("Try to catch all of the apples one last time!")
+  self.textBoxes:addText("An apple will be caught by a basket if their values are closer than "..tostring(self.catchTolerance).." apart.")
 
   -- If summary is true, user is in the stage after all the apples fall that tells them whether they passed or failed
   self.summary = false
@@ -140,7 +144,7 @@ function FallingApple3Scene:update()
       
       -- If the apple hits the user, add to the count of apples caught & create a new apple
       if self.appleY + self.appleRadius >= self.basketY + 35 
-        and self.appleY + self.appleRadius <= self.basketY + 55
+        and self.appleY + self.appleRadius <= self.basketY + 65
         and self:isCaught(sandbox.apple, sandbox.basket) then
         self.applesCaught = self.applesCaught + 1
         resetApple()
