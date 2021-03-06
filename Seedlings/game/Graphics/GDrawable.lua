@@ -1,6 +1,4 @@
 
-imageCache = {}
-
 GDrawable = Object:extend()
 
 function GDrawable:new(args)
@@ -12,7 +10,6 @@ function GDrawable:new(args)
    self.margin = args and args.margin or {x = 0, y = 0}
    self.radians = args and args.radians or 0
    self.color = args and args.color or Color(1,1,1)
-   self.color2 = args and args.color2 or Color.EIGENGRAU -- alternate color
    self.marked = args and args.marked or false
    self.opacity = args and args.opacity or 1 -- the alpha value in rgba
 end
@@ -22,7 +19,7 @@ function GDrawable:draw()
    -- required
 end
 
-function GDrawable:onButton(button)
+function GDrawable:onButton()
    -- to be implemented by GDrawable children
 end
 
@@ -39,6 +36,7 @@ function GDrawable:getDimensions()
 end
 
 -- Image
+imageCache = {}
 Image = GDrawable:extend()
 
 function Image:new(args)
@@ -55,6 +53,25 @@ function Image:draw()
                       self.radians,
 		      self.scale.x, self.scale.y,
                       self.margin.x, self.margin.y)
+end
+
+-- PulseImage
+
+PulseImage = Image:extend()
+
+function PulseImage:new(args)
+   PulseImage.super.new(self, args)
+   self.base = args.base or 0.2
+   self.range = args.range or 0.5
+   self.rate = args.rate or 0.4
+end
+
+function PulseImage:draw()
+   local r,g,b,a = love.graphics.getColor()
+   local t = self.range * math.abs(math.sin(getTime() / self.rate)) + self.base
+   love.graphics.setColor(r,g,b,t)
+   PulseImage.super.draw(self)
+   love.graphics.setColor(r,g,b,a)
 end
 
 -- Rectangle and PulseRectangle
@@ -85,6 +102,11 @@ end
 function PulseRectangle:draw()
    local t, d = math.abs(math.sin(getTime() / self.rate))
 
+   if not self.marked then
+      PulseRectangle.super.draw(self)
+      return
+   end
+
    if self.axis == 'r' then
       d = math.min(self.range, 1 - self.color.r) * t
       self.color.r = self.color.r + d
@@ -107,7 +129,7 @@ function PulseRectangle:draw()
    end
 end
 
--- Ellipse and PulseEllipse
+-- Ellipse and PulseEllipse (todo if needed)
 
 Ellipse = GDrawable:extend()
 
@@ -133,7 +155,7 @@ function Ellipse:draw()
    self.y = self.y - self.radiusY
 end
 
--- Circle and PulseCircle
+-- Circle and PulseCircle (todo if needed)
 Circle = GDrawable:extend()
 
 function Circle:new(args)
@@ -213,7 +235,7 @@ function Lista:new(args)
    self.titleFont = args.titleFont or '18px_bold'
    self.borderWidth = args.borderWidth or 3
 
-   self.strings = args
+   self.strings = args.items or args
    self.colors = {}
    setmetatable(self.colors, { __index = function() return self.color end })
 
@@ -233,12 +255,11 @@ function Lista:new(args)
    if self.title then
       self.height = self.height + fontManager:getHeight(self.title, self.titleFont)
       self.height = self.height + (2 * self.margin.y) + self.borderWidth
+      self.width = math.max(self.width, fontManager:getWidth(self.title, self.titleFont))
    end
 
    self.height = self.height + self.borderWidth
    self.maxHeight = self.maxHeight + 2 * (self.margin.y + self.borderWidth)
-   
-   self.width = math.max(self.width, fontManager:getWidth(self.title, self.titleFont))
    self.width = self.width + 2 * (self.margin.x + self.borderWidth)
 end
 
@@ -314,15 +335,12 @@ function Lista:draw()
    end
 end
 
-function Lista:onButton(button)
-   if button == 'a' then
-   end
-   
-   if button == 'up' then
+function Lista:onButton()
+   if inputManager:isPressed('dpup') then
       self.index = math.max(self.index - 1, 1)
    end
    
-   if button == 'down' then
+   if inputManager:isPressed('dpdown') then
       self.index = math.min(self.index + 1, #self.strings)
    end
 end
@@ -361,11 +379,11 @@ Stack = GDrawable:extend()
 function Stack:new(args)
    Stack.super.new(self, args)
    self.orientation = args.orientation
-   self.children = {}
+   self.children = args
 
-   for _,g in ipairs(args) do 
-      table.insert(self.children, g)
-   end
+--   for _,g in ipairs(args) do 
+--      table.insert(self.children, g)
+--   end
 end
 
 function Stack:draw()
