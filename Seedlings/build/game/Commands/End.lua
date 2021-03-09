@@ -22,11 +22,10 @@ end
 function End:toLuaStringList()  
   local list = ArrayList()
   list:add(' end ')
-  list:add(Command.YIELD)
   return list
 end
 
 -- Param list as shown above
 function End:getParamList()
-  return paramList
+  return self.paramList
 end
