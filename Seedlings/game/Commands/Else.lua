@@ -22,7 +22,6 @@ end
 function Else:toLuaStringList()  
   local list = ArrayList()
   list:add(' else ')
-  list:add(Command.YIELD)
   return list
 end
 
@@ -30,3 +29,6 @@ end
 function Else:getParamList()
   return self.paramList
 end
+
+function Else:increaseIndent() return true end
+function Else:decreaseIndent() return true end

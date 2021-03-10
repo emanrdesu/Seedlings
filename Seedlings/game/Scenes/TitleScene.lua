@@ -106,7 +106,7 @@ function TitleScene:drawBottomScreen()
     local w = fontManager:getWidth("Press start to play!")
     local h = fontManager:getHeight("Press start to play!")
     local w2 = w + 30
-    local h2 = h + 20
+    local h2 = h + 25
     
     draw:brectangle({
       x = (Constants.BOTTOM_SCREEN_WIDTH - w2) / 2.0,
@@ -118,8 +118,8 @@ function TitleScene:drawBottomScreen()
       height = h2,
     })
         
-    local offsetX = (Constants.BOTTOM_SCREEN_WIDTH - w) / 2.0
-    local offsetY = 10 + (Constants.BOTTOM_SCREEN_HEIGHT - h2) / 1.5
+    local offsetX = math.floor((Constants.BOTTOM_SCREEN_WIDTH - w) / 2.0)
+    local offsetY = 10 + math.floor((Constants.BOTTOM_SCREEN_HEIGHT - h2) / 1.5)
     draw:print({x = offsetX, y = offsetY, text = "Press start to play!", color = Color.BLACK, font = '18px'})
   end
 end
