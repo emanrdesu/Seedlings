@@ -8,6 +8,7 @@ function CommandLister:new(uiRef)
   self.startY = 0
   self.width = 230
   self.height = 240
+  self.spacePerIndent = 15
   
   -- Height per command, and border width
   -- Commands are drawn with their borders overlapping, so the effective height is (height - borderWidth)
@@ -69,6 +70,7 @@ function CommandLister:drawBottomScreen()
   })
   
   -- Draw commands
+  local currentIndent = 0
   for i = 0, self.uiRef.commandManager.commandList:getSize() - 1, 1 do
     local x = self.startX
     local y = self.startY + (i * (self.heightPerCommand - self.commandBorderWidth)) + self.offsetY
@@ -81,14 +83,21 @@ function CommandLister:drawBottomScreen()
     
     local textColor = Color.BLACK
     if i == self.selectedIndex then textColor = Color.BLUE end
+    
+    -- Decrease indent if we need to
+    local cmd = self.uiRef.commandManager.commandList:get(i)
+    if cmd:decreaseIndent() and currentIndent > 0 then currentIndent = currentIndent - 1 end
   
     draw:print({
-      x = x + 10,
+      x = x + 10 + (currentIndent * self.spacePerIndent),
       y = y,
       color = textColor,
       font = 'default',
-      text = self.uiRef.commandManager.commandList:get(i):toUserString(),
+      text = cmd:toUserString(),
     })
+  
+    -- Increase indent if we need to
+    if cmd:increaseIndent() then currentIndent = currentIndent + 1 end
   end
   
 end
