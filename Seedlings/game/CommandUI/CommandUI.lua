@@ -47,7 +47,9 @@ function CommandUI:new()
   -- Functions for drawing buttons
   function getDrawNormal(x, y, w, h, text)
     return function()
-      draw:rectangle({x=x, y=y, width=w, height=h, color = Color.LIGHT_GRAY})
+      local clr = Color.LIGHT_GRAY
+      if (text == "DEL" or text == "EDIT") and not self.commandManager.commandList:get(self.commandLister.selectedIndex):canEdit() then clr = Color:byte(178, 178, 178) end
+      draw:rectangle({x=x, y=y, width=w, height=h, color = clr})
       
       fontManager:setFont('18px')
       local th = fontManager:getHeight()
