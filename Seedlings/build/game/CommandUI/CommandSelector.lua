@@ -152,10 +152,21 @@ function CommandSelector:drawBottomScreen()
   
     draw:print({
       x = x + 10,
-      y = y,
+      y = y + 8,
       color = textColor,
       font = '18px',
       text = self.uiRef.availableCommands:get(i).COMMAND_NAME,
     })
+  end
+  
+    -- Draw little arrows to indicate whether scrolling is possible
+  if self.offsetY < 0 then
+    -- We are able to scroll up
+    CommandUIButtons.scrollUp(115)
+  end
+  
+  if self.offsetY > self.minOffsetY then
+    -- We are able to scroll down
+    CommandUIButtons.scrollDown(115)
   end
 end

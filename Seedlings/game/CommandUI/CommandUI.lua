@@ -47,14 +47,28 @@ function CommandUI:new()
   function getDrawNormal(x, y, w, h, text)
     return function()
       draw:rectangle({x=x, y=y, width=w, height=h, color = Color.LIGHT_GRAY})
-      draw:print({x=x, y=y, text = text, color = Color.BLACK, font = '18px'})
+      
+      fontManager:setFont('18px')
+      local th = fontManager:getHeight()
+      local tw = fontManager:getWidth(text)
+      
+      draw:print({
+          x=math.floor(x + (w - tw) / 2) - 1, 
+          y=math.floor(y + (h - th) / 2) - 3, 
+          text = text, color = Color.BLACK, font = '18px'})
     end
   end
   
   function getDrawHovered(x, y, w, h, text)
     return function()
       draw:rectangle({x=x, y=y, width=w, height=h, color = Color:byte(178, 178, 178)})
-      draw:print({x=x, y=y, text = text, color = Color.BLACK, font = '18px'})
+      fontManager:setFont('18px')
+      local th = fontManager:getHeight()
+      local tw = fontManager:getWidth(text)
+      draw:print({
+          x=math.floor(x + (w - tw) / 2) - 1, 
+          y=math.floor(y + (h - th) / 2) - 3, 
+          text = text, color = Color.BLACK, font = '18px'})
     end
   end
   
