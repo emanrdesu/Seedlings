@@ -30,28 +30,7 @@ function CommandSelector:new(uiRef, commandRef, commandIndex, editorRef)
       height = xheight,
     },
     drawNormal = function()      
-      draw:rectangle({
-        x = buttonX,
-        y = buttonY,
-        width = xwidth,
-        height = xheight,
-        color = Color.RED
-      })
-      local of = 8
-      local tl = {x = buttonX + of, y = buttonY + of}
-      local tr = {x = buttonX + xwidth - of, y = buttonY + of}
-      local bl = {x = buttonX + of, y = buttonY + xheight - of}
-      local br = {x = buttonX + xwidth - of, y = buttonY + xheight - of}
-      draw:line({
-        points = {tl.x, tl.y, br.x, br.y},
-        color = Color.WHITE,
-        lineWidth = 4,
-      })
-      draw:line({
-        points = {tr.x, tr.y, bl.x, bl.y},
-        color = Color.WHITE,
-        lineWidth = 4,
-      })
+      CommandUIButtons.drawClose()
     end,
     onClick = function()
       self.uiRef.uiStack:pollLast()
@@ -73,23 +52,7 @@ function CommandSelector:new(uiRef, commandRef, commandIndex, editorRef)
           height = confirmH
       },
       drawNormal = function()
-        draw:rectangle({
-          x = confirmX,
-          y = confirmY,
-          width = confirmW,
-          height = confirmH,
-          color = Color:byte(38, 239, 10)
-        })
-        local centX = confirmX + (confirmW / 2)
-        local centY = confirmY + (confirmH / 2)
-        draw:circle({
-          mode = 'line',
-          lineWidth = 4,
-          color = Color.WHITE,
-          radius = 12,
-          x = centX,
-          y = centY,
-        })
+        CommandUIButtons.drawConfirm()
       end,
       onClick = function()
         if self.commandRef == nil then
