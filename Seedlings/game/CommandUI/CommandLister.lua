@@ -100,4 +100,15 @@ function CommandLister:drawBottomScreen()
     if cmd:increaseIndent() then currentIndent = currentIndent + 1 end
   end
   
+  -- Draw little arrows to indicate whether scrolling is possible
+  if self.offsetY < 0 then
+    -- We are able to scroll up
+    CommandUIButtons.scrollUp(115)
+  end
+  
+  if self.offsetY > self.minOffsetY then
+    -- We are able to scroll down
+    CommandUIButtons.scrollDown(115)
+  end
+  
 end

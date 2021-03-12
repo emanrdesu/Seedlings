@@ -25,20 +25,7 @@ function CommandEditor:new(uiRef, commandRef)
       height = xheight,
     },
     drawNormal = function()
-      draw:rectangle({
-        x = buttonX,
-        y = buttonY,
-        width = xwidth,
-        height = xheight,
-        color = Color.GRAY
-      })
-      draw:print({
-        x = buttonX + 10,
-        y = buttonY,
-        font = '18px',
-        text = 'X',
-        color = Color.BLACK,
-      })
+      CommandUIButtons.drawClose()
     end,
     onClick = function()
       -- Pull this editor off the stack on exit
