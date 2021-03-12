@@ -12,7 +12,7 @@ function CommandLister:new(uiRef)
   
   -- Height per command, and border width
   -- Commands are drawn with their borders overlapping, so the effective height is (height - borderWidth)
-  self.heightPerCommand = 22
+  self.heightPerCommand = 20
   self.commandBorderWidth = 2
   
   self.selectedIndex = 0
@@ -90,9 +90,9 @@ function CommandLister:drawBottomScreen()
   
     draw:print({
       x = x + 10 + (currentIndent * self.spacePerIndent),
-      y = y,
+      y = y + 3,
       color = textColor,
-      font = 'default',
+      font = 'consolas_12',
       text = cmd:toUserString(),
     })
   

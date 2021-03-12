@@ -29,20 +29,28 @@ function CommandSelector:new(uiRef, commandRef, commandIndex, editorRef)
       width = xwidth,
       height = xheight,
     },
-    drawNormal = function()
+    drawNormal = function()      
       draw:rectangle({
         x = buttonX,
         y = buttonY,
         width = xwidth,
         height = xheight,
-        color = Color.GRAY
+        color = Color.RED
       })
-      draw:print({
-        x = buttonX + 10,
-        y = buttonY,
-        font = '18px',
-        text = 'X',
-        color = Color.BLACK,
+      local of = 8
+      local tl = {x = buttonX + of, y = buttonY + of}
+      local tr = {x = buttonX + xwidth - of, y = buttonY + of}
+      local bl = {x = buttonX + of, y = buttonY + xheight - of}
+      local br = {x = buttonX + xwidth - of, y = buttonY + xheight - of}
+      draw:line({
+        points = {tl.x, tl.y, br.x, br.y},
+        color = Color.WHITE,
+        lineWidth = 4,
+      })
+      draw:line({
+        points = {tr.x, tr.y, bl.x, bl.y},
+        color = Color.WHITE,
+        lineWidth = 4,
       })
     end,
     onClick = function()
@@ -70,14 +78,17 @@ function CommandSelector:new(uiRef, commandRef, commandIndex, editorRef)
           y = confirmY,
           width = confirmW,
           height = confirmH,
-          color = Color.GRAY
+          color = Color:byte(38, 239, 10)
         })
-        draw:print({
-          x = confirmX + 10,
-          y = confirmY,
-          font = '18px',
-          text = 'Y',
-          color = Color.BLACK,
+        local centX = confirmX + (confirmW / 2)
+        local centY = confirmY + (confirmH / 2)
+        draw:circle({
+          mode = 'line',
+          lineWidth = 4,
+          color = Color.WHITE,
+          radius = 12,
+          x = centX,
+          y = centY,
         })
       end,
       onClick = function()

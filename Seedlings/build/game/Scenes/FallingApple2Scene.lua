@@ -1,13 +1,13 @@
-FallingAppleScene = Scene:extend()
+FallingApple2Scene = Scene:extend()
 
-function FallingAppleScene:new()
+function FallingApple2Scene:new()
   self.commandUI = CommandUI()
-  self.commandUI:addAvailableCommand(AppleMoveLeft)
-  self.commandUI:addAvailableCommand(AppleMoveRight)
-  self.commandUI:addAvailableCommand(AppleCondition)
+  self.commandUI:addAvailableCommand(AppleMoveLeft2)
+  self.commandUI:addAvailableCommand(AppleMoveRight2)
+  self.commandUI:addAvailableCommand(AppleCondition2)
   self.commandUI:addAvailableCommand(End)
   self.commandUI:addAvailableCommand(Else)
-  self.commandUI.commandManager:setTimePerLine(0.2)
+  self.commandUI.commandManager:setTimePerLine(0.15)
   self.commandUI:setOnRun(
     function() 
       -- Reset game values if game is not running and not in summary stage
@@ -21,12 +21,15 @@ function FallingAppleScene:new()
   
   -- Column info & apple img
   self.columnWidth = 60
-  self.distFromSide = 75
+  self.distFromSide = 30
+  self.distBetweenColumns = 80
   
   self.leftX = math.floor(self.distFromSide + (self.columnWidth / 2))
-  self.rightX = math.floor(Constants.TOP_SCREEN_WIDTH - self.distFromSide - (self.columnWidth / 2))
+  self.centerX = self.leftX + self.distBetweenColumns
+  self.rightX = self.centerX + self.distBetweenColumns
   self.appleImg = love.graphics.newImage('Assets/Images/Objects/apple.png')
   self.basketImg = love.graphics.newImage('Assets/Images/Objects/basket.png')
+
   
   -- Apple info
   self.appleY = 0
@@ -40,7 +43,7 @@ function FallingAppleScene:new()
   -- Game info
   self.running = false
   self.timesFallen = 0
-  self.totalApples = 8
+  self.totalApples = 10
   self.applesCaught = 0
   
   self.basketY = 200
@@ -51,8 +54,7 @@ function FallingAppleScene:new()
   
   -- Get the apple position (make it random)
   love.math.setRandomSeed(love.timer.getTime())
-  self.startPosition = 'left'
-  if love.math.random() >= 0.5 then self.startPosition = 'right' end
+  self.startPosition = self:randomApplePosition()
   
   -- Create sandbox environment
   -- Stores the position of the person and apple
@@ -60,21 +62,19 @@ function FallingAppleScene:new()
     basket = 'left',
     apple = self.startPosition,
     left = 'left',
+    center = 'center',
     right = 'right',
   }
   
   self.intro = true
   self.textBoxes = TextBoxList()
-  self.textBoxes:addText("Welcome to the falling apple game.\nIn this game your goal is to catch apples as they fall with a basket.")
-  self.textBoxes:addText("There are two different columns that the apple can fall in. A 'left' column and a 'right' column.")
-  self.textBoxes:addText("The 'basket' variable contains the position that the basket currently is in. It will be either 'left' or 'right'.")
-  self.textBoxes:addText("The 'apple' variable contains the position of the currently falling apple. It will also be 'left' or 'right'.")
-  self.textBoxes:addText("The code you create will be run once each time an apple is falling. You can use the move commands to change the position of the basket.")
-  self.textBoxes:addText("The move left command moves the basket into the left column (if the basket is in the left column already, it will not move).")
-  self.textBoxes:addText("The move right command will move the basket into the right column similar to the move left command.")
-  self.textBoxes:addText("Use the if statements to check the position of the falling apple and try to move the basket to catch it.")
-  self.textBoxes:addText("Try to catch all "..tostring(self.totalApples).." apples!")
-  
+  self.textBoxes:addText("This falling apple game is similar to the previous one. However in this game, there are 3 columns instead of of 2. The 3 columns are 'left', 'right', and 'center'.")
+  self.textBoxes:addText("The move left command will move the basket one column to the left, or not move it if the basket is already in the left column.")
+  self.textBoxes:addText("The move right command does the same thing in the opposite direction.")
+  self.textBoxes:addText("Keep in mind that you may move the basket multiple times in your code.")
+  self.textBoxes:addText("For example, moving the basket left twice will have the basket end up in the left column regardless of where it started.")
+  self.textBoxes:addText("Try to catch all of the apples again!")
+
   -- If summary is true, user is in the stage after all the apples fall that tells them whether they passed or failed
   self.summary = false
   self.gameClearTextBoxes = TextBoxList()
@@ -83,7 +83,7 @@ function FallingAppleScene:new()
   self.gameFailTextBoxes = TextBoxList()
 end
 
-function FallingAppleScene:update()
+function FallingApple2Scene:update()
   if self.intro == true then
     -- If reading the text, only update that
     local finished = self.textBoxes:update()
@@ -93,7 +93,7 @@ function FallingAppleScene:update()
       -- Show the winning thing
       -- If finished with the game clear, go to main menu
       if self.gameClearTextBoxes:update() then
-        return FallingApple2Scene()
+        return FallingApple3Scene()
       end
     else
       -- Show the losing thing
@@ -128,7 +128,7 @@ function FallingAppleScene:update()
       function resetApple()
         self.appleY = - self.appleRadius
         self.appleR = 0
-        if love.math.random() < 0.5 then sandbox.apple = 'left' else sandbox.apple = 'right' end
+        sandbox.apple = self:randomApplePosition()
         self.hasRun = false
         self.timesFallen = self.timesFallen + 1
         if self.timesFallen >= self.totalApples then 
@@ -161,8 +161,8 @@ function FallingAppleScene:update()
   return self
 end
 
-function FallingAppleScene:drawTopScreen()
-  -- Draw the two columns
+function FallingApple2Scene:drawTopScreen()
+  -- Draw the three columns
   function drawColumn(columnX, columnWidth)
     draw:rectangle({
       x = columnX - (columnWidth / 2),
@@ -174,28 +174,14 @@ function FallingAppleScene:drawTopScreen()
   end
   drawColumn(self.leftX, self.columnWidth)
   drawColumn(self.rightX, self.columnWidth)
-
-    
-  --[[local x = 0
-  local wid = self.boxWidth
-  if sandbox.position == 'left' then
-    x = self.leftX - (wid / 2)
-  else
-    x = self.rightX - (wid / 2)
-  end
-  
-  draw:rectangle({
-    x = x,
-    y = self.boxY,
-    width = wid,
-    height = wid,
-    color = Color.BLUE,
-  })-]]
+  drawColumn(self.centerX, self.columnWidth)
 
   -- Draw the apple
   local appleX = 0
   if sandbox.apple == 'left' then
     appleX = self.leftX
+  elseif sandbox.apple == 'center' then
+    appleX = self.centerX
   else
     appleX = self.rightX
   end
@@ -210,11 +196,12 @@ function FallingAppleScene:drawTopScreen()
     rotateCenter = true,
   })
 
-
   -- Draw the basket
   local x = 0
   if sandbox.basket == 'left' then
     x = self.leftX
+  elseif sandbox.basket == 'center' then
+    x = self.centerX
   else
     x = self.rightX
   end
@@ -227,7 +214,7 @@ function FallingAppleScene:drawTopScreen()
     toAngle = math.pi/2 + 1.5,
     color = Color.BLACK,
     segments = 10,
-    lineWidth = 5,
+    lineWidth = 5,W
     radius = 25,
   })--]]
   draw:img({
@@ -241,7 +228,7 @@ function FallingAppleScene:drawTopScreen()
   
   -- Draw the information of number of apples caught
   draw:print({
-    x = 145,
+    x = 270,
     y = 80,
     text = "Apples Caught:\n         "..tostring(self.applesCaught).." / "..tostring(self.totalApples),
     color = Color.BLACK,
@@ -260,7 +247,7 @@ function FallingAppleScene:drawTopScreen()
   end
 end
 
-function FallingAppleScene:drawBottomScreen()
+function FallingApple2Scene:drawBottomScreen()
   self.commandUI:drawBottomScreen()
   if self.intro == true then self.textBoxes:drawBottomScreen() end
   if self.summary == true then
@@ -272,4 +259,11 @@ function FallingAppleScene:drawBottomScreen()
       self.gameFailTextBoxes:drawBottomScreen()
     end
   end
+end
+
+function FallingApple2Scene:randomApplePosition()
+  local v = love.math.random()
+  if v <= 0.333333 then return 'left' end
+  if v <= 0.666666 then return 'center' end
+  return 'right'
 end

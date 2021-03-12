@@ -1,9 +1,9 @@
-End = Command:extend()
-End.COMMAND_NAME = 'End'
+AppleMoveLeft = Command:extend()
+AppleMoveLeft.COMMAND_NAME = 'Move Left'
 
-function End:new(args)
+function AppleMoveLeft:new()
   -- Params is the set of things that the user can modify for this command
-  self.params = { }
+  self.params = {}
   
   -- paramList stores a list of params with 2 values: userString is what will appear in the UI when modifying it
   -- codeString is the name of the variable in the params table above
@@ -13,21 +13,20 @@ function End:new(args)
 end
 
 -- What the user sees in the command list
-function End:toUserString()
-  local s = "end"
+function AppleMoveLeft:toUserString()
+  local s = "move left"
   return s
 end
 
 -- Translate to valid lua code
-function End:toLuaStringList()  
+function AppleMoveLeft:toLuaStringList()  
   local list = ArrayList()
-  list:add(' end ')
+  list:add('basket = "left"; ')
+  list:add(Command.YIELD)
   return list
 end
 
 -- Param list as shown above
-function End:getParamList()
+function AppleMoveLeft:getParamList()
   return self.paramList
 end
-
-function End:decreaseIndent() return true end

@@ -110,3 +110,6 @@ function CommandManager:getSize()
   return self.commandList:getSize()
 end
 
+function CommandManager:codeIsRunning()
+  return self.isRunning
+end
