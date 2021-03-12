@@ -45,3 +45,7 @@ end
 function Template:inceraseIndent() return false end
 -- Return true if indent decreases RIGHT BEFORE this command
 function Template:decreaseIndent() return false end
+
+function Template:getColor() return Color.LIGHT_GRAY end
+
+function Template:canEdit() return true end

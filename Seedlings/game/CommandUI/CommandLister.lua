@@ -72,11 +72,13 @@ function CommandLister:drawBottomScreen()
   -- Draw commands
   local currentIndent = 0
   for i = 0, self.uiRef.commandManager.commandList:getSize() - 1, 1 do
+    local cmd = self.uiRef.commandManager.commandList:get(i)
+    
     local x = self.startX
     local y = self.startY + (i * (self.heightPerCommand - self.commandBorderWidth)) + self.offsetY
     draw:brectangle({
       x = x, y = y, width = self.width, height = self.heightPerCommand, 
-      color = Color.LIGHT_GRAY,
+      color = cmd:getColor(),
       borderColor = Color.BLACK,
       borderWidth = self.commandBorderWidth
     })
@@ -85,7 +87,6 @@ function CommandLister:drawBottomScreen()
     if i == self.selectedIndex then textColor = Color.BLUE end
     
     -- Decrease indent if we need to
-    local cmd = self.uiRef.commandManager.commandList:get(i)
     if cmd:decreaseIndent() and currentIndent > 0 then currentIndent = currentIndent - 1 end
   
     draw:print({
