@@ -38,7 +38,7 @@ function FillBowlScene:new()
   
   self.pourDp = 0.9
   self.pourWidth = 20
-  self.pourHeight = 90
+  self.pourHeight = 100
   self.pourBowlCutoff = 0.6
   
   -- Scene changing variables
@@ -190,6 +190,8 @@ function FillBowlScene:update()
 end
 
 function FillBowlScene:drawTopScreen()
+  self:drawPour()
+  
   -- Draw the machine
   local mw = 120
   -- bottom rectangle
@@ -200,8 +202,24 @@ function FillBowlScene:drawTopScreen()
     height = 20,
     color = Color.BLACK,
   })
+  -- Side rectangle
+  draw:rectangle({
+    x = self.finalBowlX + mw / 2,
+    y = self.finalBowlY - 100,
+    width = 40,
+    height = 100 + 20 + 1,
+    color = Color.BLACK,  
+  })
+
+  -- Top rectangle
+  draw:rectangle({
+    x = self.finalBowlX - (mw / 2),
+    y = self.finalBowlY - 100 - 30,
+    width = mw + 40,
+    height = 30,
+    color = Color.BLACK
+  })
   
-  self:drawPour()
   self:drawBowl(self.bowlX, self.bowlY, self.currentBowlPercent)
   if self.intro then self.textBoxes:drawTopScreen() end
   if self.summary then
