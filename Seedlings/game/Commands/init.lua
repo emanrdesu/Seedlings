@@ -24,3 +24,6 @@ require 'Commands/FallingApple3/AppleMoveRight3'
 require 'Commands/FallingApple3/AppleCustomCondition'
 require 'Commands/FallingApple3/AppleCustomMoveLeft'
 require 'Commands/FallingApple3/AppleCustomMoveRight'
+
+require 'Commands/FillBowl/FillBowl'
+require 'Commands/FillBowl/BowlIf'
