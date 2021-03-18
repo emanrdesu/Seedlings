@@ -30,10 +30,16 @@ function FillBowlScene:new()
   self.startBowlX = -100
   self.startBowlY = self.finalBowlY
   
-  self.timePerBowl = 2
+  self.timePerBowl = 3.2
   
   self.bowlDx = 250
   self.bowlDp = 0.75
+  self.bowlDy = 200
+  
+  self.pourDp = 0.9
+  self.pourWidth = 20
+  self.pourHeight = 90
+  self.pourBowlCutoff = 0.6
   
   -- Scene changing variables
   self.running = false
@@ -42,6 +48,10 @@ function FillBowlScene:new()
   self.status = '-' -- filledFull, notFillEmpty, completed
   self.ranForBowl = false
   self.bowlTimeLeft = self.timePerBowl
+  self.bowlGoingDown = false
+  
+  self.pourPercent = 0
+  self.pourDone = false
   
   self.bowlX = self.startBowlX
   self.bowlY = self.startBowlY
@@ -107,9 +117,12 @@ function FillBowlScene:update()
   if self.running then
     -- Update the command manager
     self.commandUI.commandManager:update()
-  
-    -- If bowl is moving, move it
-    if self.bowlX < self.finalBowlX then
+    
+    if self.bowlGoingDown then
+      self.bowlY = self.bowlY + dt * self.bowlDy
+      if self.bowlY - self.bowlHeight > Constants.BOTTOM_SCREEN_HEIGHT + 10 then self:nextBowl() end
+    elseif self.bowlX < self.finalBowlX then
+        -- If bowl is moving, move it
       self.bowlX = self.bowlX + dt * self.bowlDx
       if self.bowlX > self.finalBowlX then self.bowlX = self.finalBowlX end
     else
@@ -125,18 +138,33 @@ function FillBowlScene:update()
         self.bowlTimeLeft = self.bowlTimeLeft - dt -- Decrease time left
         
         if sandbox.fillingBowl then
-          if sandbox.bowlStatus == 'full' then
-            -- Failed
-            self.summary = true
-            self.status = 'filledFull'
-          else
+          if self.pourDone then
+            if sandbox.bowlStatus == 'full' then
+              -- Failed
+              self.summary = true
+              self.status = 'filledFull'
+            end
+            
+            -- Update filling bowl
             self.currentBowlPercent = self.currentBowlPercent + dt * self.bowlDp
             if self.currentBowlPercent > 1 then self.currentBowlPercent = 1 end
+            
+            if self.currentBowlPercent >= self.pourBowlCutoff then
+              self.pourPercent = self.pourPercent - dt * self.pourDp
+              if self.pourPercent < 0 then self.pourPercent = 0 end
+            end
+            
+          else
+            self.pourPercent = self.pourPercent + dt * self.pourDp
+            if self.pourPercent > 1 then
+              self.pourPercent = 1
+              self.pourDone = true
+            end
           end
         end
         
         -- If time is over
-        if self.bowlTimeLeft < 0 then
+        if self.bowlTimeLeft < 0 or (self.bowlTimeLeft < 2 and sandbox.fillingBowl == false) then
           if self.currentBowlPercent < 1 then
             -- Failed
             self.summary = true
@@ -147,7 +175,7 @@ function FillBowlScene:update()
             self.status = 'completed'
           else
             -- Completed the current bowl
-            self:nextBowl()      
+            self.bowlGoingDown = true
           end
         end
         
@@ -162,6 +190,18 @@ function FillBowlScene:update()
 end
 
 function FillBowlScene:drawTopScreen()
+  -- Draw the machine
+  local mw = 120
+  -- bottom rectangle
+  draw:rectangle({
+    x = self.finalBowlX - (mw / 2),
+    y = self.finalBowlY + 1,
+    width = mw,
+    height = 20,
+    color = Color.BLACK,
+  })
+  
+  self:drawPour()
   self:drawBowl(self.bowlX, self.bowlY, self.currentBowlPercent)
   if self.intro then self.textBoxes:drawTopScreen() end
   if self.summary then
@@ -225,8 +265,39 @@ function FillBowlScene:drawBowl(x, y, fillPercent)
   })
 end
 
+function FillBowlScene:drawPour()
+  if self.pourPercent == 0 then return end
+  
+  local bottom = self.finalBowlY
+  local top = bottom - self.pourHeight
+  if self.pourDone then
+    -- Going upwards
+    local a = {self.finalBowlX, bottom}
+    local b = {self.finalBowlX, bottom - self.pourPercent * (bottom - top)}
+    draw:line({
+      points = self:flatten2(a,b),
+      color = Color.LIGHT_BLUE,
+      lineWidth = self.pourWidth,
+    })
+  else
+    -- Going downwards
+    local a = {self.finalBowlX, top}
+    local b = {self.finalBowlX, (top + self.pourPercent * (bottom - top))}
+    draw:line({
+      points = self:flatten2(a,b),
+      color = Color.LIGHT_BLUE,
+      lineWidth = self.pourWidth,
+    })
+  end
+  
+  
+end
+
 function FillBowlScene:flatten(a,b,c,d)
   return {a[1], a[2], b[1], b[2], c[1], c[2], d[1], d[2]}
+end
+function FillBowlScene:flatten2(a,b)
+  return {a[1], a[2], b[1], b[2]}
 end
 
 function FillBowlScene:resetValues()
@@ -247,6 +318,11 @@ function FillBowlScene:resetValues()
   
   sandbox.bowlStatus = self.bowlList[1+self.currentBowlIndex]
   sandbox.fillingBowl = false
+  
+  self.ranForBowl = false
+  self.pourPercent = 0
+  self.pourDone = false
+  self.bowlGoingDown = false
 end
 
 function FillBowlScene:nextBowl()
@@ -259,4 +335,7 @@ function FillBowlScene:nextBowl()
   sandbox.bowlStatus = self.bowlList[1+self.currentBowlIndex]
   sandbox.fillingBowl = false
   self.ranForBowl = false
+  self.pourPercent = 0
+  self.pourDone = false
+  self.bowlGoingDown = false
 end
