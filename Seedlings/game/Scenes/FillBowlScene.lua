@@ -10,12 +10,12 @@ function FillBowlScene:new()
     function() 
       -- Reset game values if game is not running
       if not self.running then
-        self.running = true  
         self:resetValues()
+        self.running = true  
       end
     end
   )
-  self.commandUI.commandManager:setTimePerLine(0.001)
+  self.commandUI.commandManager:setTimePerLine(0.0001)
   
   
   -- Scene constant variables
@@ -23,14 +23,17 @@ function FillBowlScene:new()
   self.bowlTopWidth = 70
   self.bowlHeight = 40
   self.totalBowls = 6
-  self.bowlList = {'full', 'empty', 'empty', 'full', 'full', 'empty'}
+  self.bowlList = {'empty', 'full', 'empty', 'full', 'full', 'empty'}
     
   self.finalBowlX = (Constants.TOP_SCREEN_WIDTH / 2)
   self.finalBowlY = 200
   self.startBowlX = -100
   self.startBowlY = self.finalBowlY
   
+  self.timePerBowl = 2
+  
   self.bowlDx = 250
+  self.bowlDp = 0.75
   
   -- Scene changing variables
   self.running = false
@@ -38,8 +41,9 @@ function FillBowlScene:new()
   self.currentBowlPercent = 0
   self.status = '-' -- filledFull, notFillEmpty, completed
   self.ranForBowl = false
+  self.bowlTimeLeft = self.timePerBowl
   
-  self.bowlX = -100
+  self.bowlX = self.startBowlX
   self.bowlY = self.startBowlY
   
   -- Sandbox values
@@ -104,11 +108,50 @@ function FillBowlScene:update()
     -- Update the command manager
     self.commandUI.commandManager:update()
   
+    -- If bowl is moving, move it
     if self.bowlX < self.finalBowlX then
       self.bowlX = self.bowlX + dt * self.bowlDx
       if self.bowlX > self.finalBowlX then self.bowlX = self.finalBowlX end
     else
+      -- If bowl is at the center
       
+      -- If we haven't ran the user code yet, do it
+      if not self.ranForBowl then
+        self.commandUI.commandManager:start()
+        self.ranForBowl = true
+        self.bowlTimeLeft = self.timePerBowl
+      else
+        -- If we've started running the user's code
+        self.bowlTimeLeft = self.bowlTimeLeft - dt -- Decrease time left
+        
+        if sandbox.fillingBowl then
+          if sandbox.bowlStatus == 'full' then
+            -- Failed
+            self.summary = true
+            self.status = 'filledFull'
+          else
+            self.currentBowlPercent = self.currentBowlPercent + dt * self.bowlDp
+            if self.currentBowlPercent > 1 then self.currentBowlPercent = 1 end
+          end
+        end
+        
+        -- If time is over
+        if self.bowlTimeLeft < 0 then
+          if self.currentBowlPercent < 1 then
+            -- Failed
+            self.summary = true
+            self.status = 'notFillEmpty'
+          elseif self.currentBowlIndex == self.totalBowls - 1 then
+            -- Completed the game
+            self.summary = true
+            self.status = 'completed'
+          else
+            -- Completed the current bowl
+            self:nextBowl()      
+          end
+        end
+        
+      end
     end
   
   end
@@ -121,11 +164,31 @@ end
 function FillBowlScene:drawTopScreen()
   self:drawBowl(self.bowlX, self.bowlY, self.currentBowlPercent)
   if self.intro then self.textBoxes:drawTopScreen() end
+  if self.summary then
+    -- Go to main menu if completed, reset values if failed
+    if self.status == 'completed' then
+      self.completed:drawTopScreen()
+    elseif self.status == 'filledFull' then
+      self.filledFull:drawTopScreen()
+    elseif self.status == 'notFillEmpty' then
+      self.notFillEmpty:drawTopScreen()
+    end
+  end
 end
 
 function FillBowlScene:drawBottomScreen()
   self.commandUI:drawBottomScreen()
   if self.intro then self.textBoxes:drawBottomScreen() end
+    if self.summary then
+    -- Go to main menu if completed, reset values if failed
+    if self.status == 'completed' then
+      self.completed:drawBottomScreen()
+    elseif self.status == 'filledFull' then
+      self.filledFull:drawBottomScreen()
+    elseif self.status == 'notFillEmpty' then
+      self.notFillEmpty:drawBottomScreen()
+    end
+  end
 end
 
 -- (x,y) is the bottom center coordinate
@@ -176,9 +239,24 @@ function FillBowlScene:resetValues()
   self.filledFull:reset()
   self.completed:reset()
   self.summary = false
+  self.running = false
+  self.ranForBowl = false
   
-  sandbox = {
-    bowlStatus = 'empty',
-    fillingBowl = false,
-  }
+  self.bowlX = self.startBowlX
+  self.bowlY = self.startBowlY
+  
+  sandbox.bowlStatus = self.bowlList[1+self.currentBowlIndex]
+  sandbox.fillingBowl = false
+end
+
+function FillBowlScene:nextBowl()
+  self.currentBowlIndex = self.currentBowlIndex + 1
+  self.currentBowlPercent = 0
+  if self.bowlList[1+self.currentBowlIndex] == 'full' then self.currentBowlPercent = 1 end
+  
+  self.bowlX = self.startBowlX
+  self.bowlY = self.startBowlY
+  sandbox.bowlStatus = self.bowlList[1+self.currentBowlIndex]
+  sandbox.fillingBowl = false
+  self.ranForBowl = false
 end
