@@ -49,6 +49,7 @@ function TextBox:initialize()
   -- Current word
   local curWord = ""
   -- Loop through the characters
+  local prevChar = ''
   for i = 1, self.text:len(), 1 do
     -- Get the current character
     local curChar = self.text:sub(i,i)
@@ -57,12 +58,13 @@ function TextBox:initialize()
       wordList:add(curWord)
       wordList:add(curChar)
       curWord = ""
-    elseif curChar == ' ' then
+    elseif curChar == ' ' and prevChar ~= ' ' then
       wordList:add(curWord)
       curWord = ""
     else
       curWord = curWord..curChar
     end
+    prevChar = curChar
   end
   if curWord:len() > 0 then
     wordList:add(curWord)
