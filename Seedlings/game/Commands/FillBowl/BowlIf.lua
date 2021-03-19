@@ -4,7 +4,7 @@ BowlIf.COMMAND_NAME = 'If bowl is'
 function BowlIf:new(args)
   -- Params is the set of things that the user can modify for this command
   self.params = {
-    bowl = 'empty'
+    bowl = 'full'
   }
 end
 
