@@ -211,6 +211,16 @@ function FillBowlScene:drawTopScreen()
     color = Color.BLACK,  
   })
 
+  -- faucet thingy
+  local fw = 30
+  draw:rectangle({
+    x = self.finalBowlX - fw/2,
+    y = self.finalBowlY - 100 - 15,
+    width = fw,
+    height = 25,
+    color = Color.GRAY,
+  })
+
   -- Top rectangle
   draw:rectangle({
     x = self.finalBowlX - (mw / 2),
