@@ -1,5 +1,5 @@
 SetShapeColor = Command:extend()
-SetShapeColor.COMMAND_NAME = 'SetColor'
+SetShapeColor.COMMAND_NAME = 'Set Color'
 
 function SetShapeColor:new(args)
   -- Params is the set of things that the user can modify for this command
@@ -13,10 +13,15 @@ function SetShapeColor:new(args)
   -- codeString is the name of the variable in the params table above
   -- If you want the user string to hold other info that changes with the values, create a new list and return in the getParamList function
   
+  self.map = {}
+  self.map["square.color"] = "square color"
+  self.map["circle.color"] = "circle color"
+  self.map["triangle.color"] = "triangle color"
+
   self.shapeList = ArrayList()
-  self.shapeList:add({userString = 'square.color', codeString = 'square.color'})
-  self.shapeList:add({userString = 'triangle.color', codeString = 'triangle.color'})
-  self.shapeList:add({userString = 'circle.color', codeString = 'circle.color'})
+  self.shapeList:add({userString = 'square color', codeString = 'square.color'})
+  self.shapeList:add({userString = 'triangle color', codeString = 'triangle.color'})
+  self.shapeList:add({userString = 'circle color', codeString = 'circle.color'})
 
   self.opList = ArrayList()
   self.opList:add({userString = '=', codeString = '='})
@@ -33,7 +38,7 @@ end
 
 -- What the user sees in the command list
 function SetShapeColor:toUserString()
-  return tostring(self.params.shape)..' = '..tostring(self.params.color)
+  return tostring(self.map[self.params.shape])..' = '..tostring(self.params.color)
 end
 
 -- Translate to valid lua code
@@ -47,7 +52,7 @@ end
 -- Param list as shown above
 function SetShapeColor:getParamList()
   self.paramList = ArrayList()
-  self.paramList:add({userString = self.params.shape, codeString = 'shape', optionList = self.shapeList})
+  self.paramList:add({userString = self.map[self.params.shape], codeString = 'shape', optionList = self.shapeList})
   self.paramList:add({userString = self.params.op, codeString = 'op', optionList = self.opList})
   self.paramList:add({userString = self.params.color, codeString = 'color', optionList = self.colorList})
   return self.paramList

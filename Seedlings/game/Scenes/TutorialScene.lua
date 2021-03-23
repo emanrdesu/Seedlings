@@ -3,14 +3,16 @@ TutorialScene = Scene:extend()
 function TutorialScene:new()
 
   self.shapes = ArrayList()
-  self.shapes:add({shape = 'square', color = Color.WHITE})
-  self.shapes:add({shape = 'triangle', color = Color.WHITE})
-  self.shapes:add({shape = 'circle', color = Color.WHITE})
+  self.shapes:add({shape = 'square', color = Color.WHITE, wanted_color = Color.RED})
+  self.shapes:add({shape = 'triangle', color = Color.WHITE, wanted_color = Color.GREEN})
+  self.shapes:add({shape = 'circle', color = Color.WHITE, wanted_color = Color.BLUE})
 
   self.commandUI = CommandUI()
   self.commandUI:addAvailableCommand(SetShapeColor)
 
-  self.commandUI.commandManager:setTimePerLine(0.0)
+  self.WAIT_TIME = 0.4
+
+  self.commandUI.commandManager:setTimePerLine(self.WAIT_TIME)
   self.commandUI:setOnRun(
     function() 
       if not self.running then
@@ -30,21 +32,63 @@ function TutorialScene:new()
   self.running = false
   self.initiate = false
 
+  self.intro = true
+  self.textBoxes = TextBoxList()
+  self.textBoxes:addText("Welcome to the Tutorial Game.\nYour goal is to assign the shapes their appropriate colors.")
+  self.textBoxes:addText(
+    "These are the final colors:\n"..
+    "\t - "..sandbox.square.shape.." = "..Color:tostring(sandbox.square.wanted_color).."\n"..
+    "\t - "..sandbox.circle.shape.." = "..Color:tostring(sandbox.circle.wanted_color).."\n"..
+    "\t - "..sandbox.triangle.shape.." = "..Color:tostring(sandbox.triangle.wanted_color)
+  )
+
+  self.waitTimeForSummary = 0
+  self.waitForSummary = false
+  self.summary = false
+  self.gameClearTextBoxes = TextBoxList()
+  self.gameClearTextBoxes:addText("Congratulations!\n".."You passed this level!")
+
 end
 
 function TutorialScene:update()
-  self.commandUI:update()
-  
-  if self.initiate then
-    self.commandUI.commandManager:start()
-    self.initiate = false
-  end
-  
-  if self.running then
-    if not self.commandUI.commandManager.isRunning then
-      self.running = false
-    else
-      self.commandUI.commandManager:update()
+  if self.intro == true then
+    local finished = self.textBoxes:update()
+    if finished == true then self.intro = false end
+  elseif self.summary == true then
+    if self.waitForSummary == true and love.timer.getTime() > self.waitTimeForSummary then
+      self.waitForSummary = false
+    end
+    if not self.waitForSummary and self.gameClearTextBoxes:update() then
+      return FallingAppleScene()
+    end
+  else
+    self.commandUI:update()
+    
+    if self.initiate then
+      self.commandUI.commandManager:start()
+      self.initiate = false
+    end
+    
+    if self.running then
+      if not self.commandUI.commandManager.isRunning then
+        self.running = false
+      else
+        self.commandUI.commandManager:update()
+      end
+    end
+
+    local valid = true
+    for i = 0, self.shapes:getSize() - 1, 1 do
+      local shape = self.shapes:get(i)
+      if shape.color ~= shape.wanted_color then
+        valid = false
+      end
+    end
+
+    if valid then
+      self.summary = true
+      self.waitForSummary = true
+      self.waitTimeForSummary = love.timer.getTime() + self.WAIT_TIME
     end
   end
 
@@ -94,8 +138,15 @@ function TutorialScene:drawTopScreen()
       error("UNKOWN SHAPE!! "..shape.shape)
     end
   end
+
+  if self.intro then self.textBoxes:drawTopScreen() end
+  if self.summary and not self.waitForSummary then self.gameClearTextBoxes:drawTopScreen() end
+
 end
 
 function TutorialScene:drawBottomScreen()
   self.commandUI:drawBottomScreen()
+
+  if self.intro then self.textBoxes:drawBottomScreen() end
+  if self.summary and not self.waitForSummary then self.gameClearTextBoxes:drawBottomScreen() end
 end
