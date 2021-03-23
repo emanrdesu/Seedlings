@@ -20,8 +20,10 @@ function TextBox:new(args)
   self.font = args.font or 'default'
   self.text = args.text or ''
   self.align = args.align or 'left'
-  self.lineList = nil
+  self.lineList = ArrayList()
   self.color = args.color or Color(1,1,1)
+
+  self:initialize()
 end
 
 function TextBox:setText(text)
@@ -49,6 +51,7 @@ function TextBox:initialize()
   -- Current word
   local curWord = ""
   -- Loop through the characters
+  local prevChar = ''
   for i = 1, self.text:len(), 1 do
     -- Get the current character
     local curChar = self.text:sub(i,i)
@@ -57,12 +60,13 @@ function TextBox:initialize()
       wordList:add(curWord)
       wordList:add(curChar)
       curWord = ""
-    elseif curChar == ' ' then
+    elseif curChar == ' ' and prevChar ~= ' ' then
       wordList:add(curWord)
       curWord = ""
     else
       curWord = curWord..curChar
     end
+    prevChar = curChar
   end
   if curWord:len() > 0 then
     wordList:add(curWord)
@@ -70,7 +74,7 @@ function TextBox:initialize()
   end
   
   -- Get the strings for each line
-  self.lineList = ArrayList()
+  -- self.lineList = ArrayList()
   local curLine = ""
   for i = 0, wordList:getSize() - 1, 1 do
     local curWord = wordList:get(i)
@@ -103,7 +107,7 @@ function TextBox:initialize()
 end
 
 function TextBox:draw()
-  if self.lineList == nil then
+  if self.lineList:getSize() == 0 then
     self:initialize()
   end
   
