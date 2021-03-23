@@ -8,6 +8,7 @@ require 'Commands/Condition'
 require 'Commands/Else'
 require 'Commands/Condition2'
 require 'Commands/SetChordTo'
+require 'Commands/SetShapeColor'
 
 require 'Commands/FallingApple1/AppleCondition'
 require 'Commands/FallingApple1/AppleMoveLeft'
