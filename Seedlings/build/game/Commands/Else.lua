@@ -29,3 +29,6 @@ end
 function Else:getParamList()
   return self.paramList
 end
+
+function Else:increaseIndent() return true end
+function Else:decreaseIndent() return true end

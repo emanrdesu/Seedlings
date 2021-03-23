@@ -88,7 +88,23 @@ function Draw:circle(args)
     args.segments or nil,
     args.color or Color(1,1,1),
     args.lineWidth or 0
-    
+  
+  if mode == 'line' then
+    draw:arc({
+      mode = 'line',
+      arcType = 'closed',
+      x = x,
+      y = y,
+      radius = radius,
+      lineWidth = lineWidth,
+      segments = segments, 
+      color = color,
+      fromAngle = 0,
+      toAngle = 1.99 * math.pi,
+    })
+    return
+  end
+  
   love.graphics.setLineWidth(lineWidth)
   love.graphics.setColor(color.r, color.g, color.b, color.alpha)
   if segments == nil then

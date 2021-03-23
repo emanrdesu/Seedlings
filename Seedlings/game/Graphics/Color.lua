@@ -29,6 +29,7 @@ Color.EIGENGRAU = Color(22.0/255.0, 22.0/255.0, 29.0/255.0)
 Color.GRAY = Color(0.6, 0.6, 0.6)
 Color.SAND = Color:byte(255, 255, 237)
 Color.YELLOW = Color(1,1,0)
+Color.LIGHT_BLUE = Color:byte(102, 204, 255)
 
 function Color:tostring(color)
   if color == Color.RED then return "RED" end
