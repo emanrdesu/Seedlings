@@ -84,6 +84,7 @@ function TutorialScene:update()
         valid = false
       end
     end
+    valid = valid and not self.commandUI.commandManager.isRunning
 
     if valid then
       self.summary = true
