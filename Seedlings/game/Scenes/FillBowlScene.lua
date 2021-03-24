@@ -98,7 +98,7 @@ function FillBowlScene:update()
     -- Go to main menu if completed, reset values if failed
     if self.status == 'completed' then
       local finished = self.completed:update()
-      if finished then return MainMenuScene() end
+      if finished then return ElseIntroductionScene() end
     elseif self.status == 'filledFull' then
       local finished = self.filledFull:update()
       if finished then self:resetValues() end
