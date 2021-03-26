@@ -1,16 +1,16 @@
 TestScene4 = Scene:extend()
 
 function TestScene4:new()
-  self.topBG1 = love.graphics.newImage('Assets/Images/woodbackground.png')
-  self.topBG2 = love.graphics.newImage('Assets/Images/greybkg.png')
-  self.bottomBG = love.graphics.newImage('Assets/Images/botbkg1.png')
-  self.whiteCircle = love.graphics.newImage('Assets/Images/whiteCircle.png')
-  self.greenCircle = love.graphics.newImage('Assets/Images/greenCircle.png')
-  self.shirt = love.graphics.newImage('Assets/Images/BlueShirt6_Transparent.png')
-  self.backpack = love.graphics.newImage('Assets/Images/backpackScaled.png')
-  self.greenApple = love.graphics.newImage('Assets/Images/appleGreenScaled.png')
-  self.redApple = love.graphics.newImage('Assets/Images/appleRedScaled.png')
-  self.friend = love.graphics.newImage('Assets/Images/boyblue.png')
+  self.topBG1 = love.graphics.newImage('Assets/Images/Panels/top/woodbackground.png')
+  --self.topBG2 = love.graphics.newImage('Assets/Images/greybkg.png')
+  self.bottomBG = love.graphics.newImage('Assets/Images/Panels/bottom/BotBG_red_apples_tutorialBox.png')
+  self.whiteCircle = love.graphics.newImage('Assets/Images/Objects/white_ellipse.png')
+  self.greenCircle = love.graphics.newImage('Assets/Images/Objects/green_ellipse.png')
+  self.shirt = love.graphics.newImage('Assets/Images/Objects/shirts/shirt_blue.png')
+  self.backpack = love.graphics.newImage('Assets/Images/Objects/backpackScaled.png')
+  self.greenApple = love.graphics.newImage('Assets/Images/Objects/appleGreenScaled.png')
+  self.redApple = love.graphics.newImage('Assets/Images/Objects/appleRedScaled.png')
+  self.friend = love.graphics.newImage('Assets/Images/Objects/boy.png')
   
   self.backpackScaleX = 0.6
   self.backpackScaleY = 0.6

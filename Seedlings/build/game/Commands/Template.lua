@@ -39,3 +39,9 @@ end
 function Template:getParamList()
   return self.paramList
 end
+
+-- Example for below: end will decrease. else will both increase and decrease
+-- Return true if indent increases AFTER this command
+function Template:inceraseIndent() return false end
+-- Return true if indent decreases RIGHT BEFORE this command
+function Template:decreaseIndent() return false end
