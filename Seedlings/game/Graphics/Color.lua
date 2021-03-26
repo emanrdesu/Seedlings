@@ -29,3 +29,18 @@ Color.EIGENGRAU = Color(22.0/255.0, 22.0/255.0, 29.0/255.0)
 Color.GRAY = Color(0.6, 0.6, 0.6)
 Color.SAND = Color:byte(255, 255, 237)
 Color.YELLOW = Color(1,1,0)
+Color.LIGHT_BLUE = Color:byte(102, 204, 255)
+
+function Color:tostring(color)
+  if color == Color.RED then return "RED" end
+  if color == Color.BLUE then return "BLUE" end
+  if color == Color.GREEN then return "GREEN" end
+  if color == Color.WHITE then return "WHITE" end
+  if color == Color.LIGHT_GRAY then return "LIGHT GRAY" end
+  if color == Color.BLACK then return "BLACK" end
+  if color == Color.EIGENGRAU then return "EIGENGRAU" end
+  if color == Color.GRAY then return "GRAY" end
+  if color == Color.SAND then return "SAND" end
+  if color == Color.YELLOW then return "YELLOW" end
+  return nil
+end

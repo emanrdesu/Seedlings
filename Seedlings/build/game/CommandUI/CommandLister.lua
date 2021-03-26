@@ -12,7 +12,7 @@ function CommandLister:new(uiRef)
   
   -- Height per command, and border width
   -- Commands are drawn with their borders overlapping, so the effective height is (height - borderWidth)
-  self.heightPerCommand = 22
+  self.heightPerCommand = 20
   self.commandBorderWidth = 2
   
   self.selectedIndex = 0
@@ -72,11 +72,13 @@ function CommandLister:drawBottomScreen()
   -- Draw commands
   local currentIndent = 0
   for i = 0, self.uiRef.commandManager.commandList:getSize() - 1, 1 do
+    local cmd = self.uiRef.commandManager.commandList:get(i)
+    
     local x = self.startX
     local y = self.startY + (i * (self.heightPerCommand - self.commandBorderWidth)) + self.offsetY
     draw:brectangle({
       x = x, y = y, width = self.width, height = self.heightPerCommand, 
-      color = Color.LIGHT_GRAY,
+      color = cmd:getColor(),
       borderColor = Color.BLACK,
       borderWidth = self.commandBorderWidth
     })
@@ -90,14 +92,25 @@ function CommandLister:drawBottomScreen()
   
     draw:print({
       x = x + 10 + (currentIndent * self.spacePerIndent),
-      y = y,
+      y = y + 3,
       color = textColor,
-      font = 'default',
+      font = 'consolas_12',
       text = cmd:toUserString(),
     })
   
     -- Increase indent if we need to
     if cmd:increaseIndent() then currentIndent = currentIndent + 1 end
+  end
+  
+  -- Draw little arrows to indicate whether scrolling is possible
+  if self.offsetY < 0 then
+    -- We are able to scroll up
+    CommandUIButtons.scrollUp(115)
+  end
+  
+  if self.offsetY > self.minOffsetY then
+    -- We are able to scroll down
+    CommandUIButtons.scrollDown(115)
   end
   
 end
