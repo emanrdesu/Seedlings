@@ -34,19 +34,23 @@ function TutorialScene:new()
 
   self.intro = true
   self.textBoxes = TextBoxList()
-  self.textBoxes:addText("Welcome to the Tutorial Game.\nYour goal is to assign the shapes their appropriate colors.")
-  self.textBoxes:addText(
-    "These are the final colors:\n"..
-    "\t - "..sandbox.square.shape.." = "..Color:tostring(sandbox.square.wanted_color).."\n"..
-    "\t - "..sandbox.circle.shape.." = "..Color:tostring(sandbox.circle.wanted_color).."\n"..
-    "\t - "..sandbox.triangle.shape.." = "..Color:tostring(sandbox.triangle.wanted_color)
-  )
+  self.textBoxes:addText("Welcome to the first code tutorial game.\nYour goal is to assign the shapes their appropriate colors.")
+  self.textBoxes:addText("You are able to add a 'Set Color' command to the program. This command can be used to change the color of the shapes.")
+  self.textBoxes:addText("Once you add the command, tap the command text on the bottom screen then click 'EDIT' in order to modify it.")
+  self.textBoxes:addText("When changing the command, the first value determines which shape you are changing the color of.")
+  self.textBoxes:addText("The last value determines which color the shape will be set to.")
+  self.textBoxes:addText("Your goal is to make the shapes the following colors:\n"..
+    "   - "..sandbox.square.shape.." = "..Color:tostring(sandbox.square.wanted_color).."\n"..
+    "   - "..sandbox.circle.shape.." = "..Color:tostring(sandbox.circle.wanted_color).."\n"..
+    "   - "..sandbox.triangle.shape.." = "..Color:tostring(sandbox.triangle.wanted_color)
+    )
+  self.textBoxes:addText("The dots under the shape tell you the desired color for that shape. Good luck!")
 
   self.waitTimeForSummary = 0
   self.waitForSummary = false
   self.summary = false
   self.gameClearTextBoxes = TextBoxList()
-  self.gameClearTextBoxes:addText("Congratulations!\n".."You passed this level!")
+  self.gameClearTextBoxes:addText("Congratulations!\n".."You passed this level! Now time to move on to more complex games.")
 
 end
 
@@ -59,7 +63,7 @@ function TutorialScene:update()
       self.waitForSummary = false
     end
     if not self.waitForSummary and self.gameClearTextBoxes:update() then
-      return FallingAppleScene()
+      return IfIntroductionScene()
     end
   else
     self.commandUI:update()
@@ -106,6 +110,8 @@ function TutorialScene:drawTopScreen()
   local RIGHT_X = MIDDLE_X + SIDE + PADDING
   local TOP_Y = math.floor((SCREEN_HEIGHT - SIDE) / 2.0)
   local BOTTOM_Y = math.floor((SCREEN_HEIGHT + SIDE) / 2.0)
+  local DOT_RAD = 10
+  
   for i = 0, self.shapes:getSize() - 1, 1 do
     local shape = self.shapes:get(i)
     if shape.shape == 'square' then
@@ -115,6 +121,12 @@ function TutorialScene:drawTopScreen()
         width = SIDE,
         height = SIDE,
         color = shape.color,
+      })
+      draw:circle({
+        x = LEFT_X + SIDE/2,
+        y = math.floor((SCREEN_HEIGHT - SIDE) / 2.0) + SIDE + DOT_RAD + 20,
+        radius = DOT_RAD,
+        color = shape.wanted_color,
       })
     elseif shape.shape == 'triangle' then
       draw:polygon({
@@ -127,6 +139,12 @@ function TutorialScene:drawTopScreen()
         mode = 'fill',
         lineWidth = 6,
       })
+      draw:circle({
+        x = MIDDLE_X + SIDE/2,
+        y = math.floor((SCREEN_HEIGHT - SIDE) / 2.0) + SIDE + DOT_RAD + 20,
+        radius = DOT_RAD,
+        color = shape.wanted_color,
+      })
     elseif shape.shape == 'circle' then
       draw:circle({
         mode = 'fill', 
@@ -134,6 +152,12 @@ function TutorialScene:drawTopScreen()
         y = math.floor(SCREEN_HEIGHT / 2.0),
         radius = math.floor(SIDE / 2.0),
         color = shape.color
+      })
+      draw:circle({
+        x = RIGHT_X + SIDE/2,
+        y = math.floor((SCREEN_HEIGHT - SIDE) / 2.0) + SIDE + DOT_RAD + 20,
+        radius = DOT_RAD,
+        color = shape.wanted_color,
       })
     else
       error("UNKOWN SHAPE!! "..shape.shape)
