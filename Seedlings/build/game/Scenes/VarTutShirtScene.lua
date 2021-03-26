@@ -1,11 +1,11 @@
 VarTutShirtScene = Scene:extend()
 
 function VarTutShirtScene:new()
-  self.topBG = love.graphics.newImage('Assets/Images/woodbackground.png')
-  self.bottomBG = love.graphics.newImage('Assets/Images/BotBG_layout_LHeavy_blue.png')
-  self.shirtImage = love.graphics.newImage('Assets/Images/BlueShirt6_Transparent.png')
-  self.whiteCircle = love.graphics.newImage('Assets/Images/whiteCircle.png')
-  self.arrow = love.graphics.newImage('Assets/Images/blueArrow.png')
+  self.topBG = love.graphics.newImage('Assets/Images/Panels/top/woodbackground.png')
+  self.bottomBG = love.graphics.newImage('Assets/Images/Panels/bottom/BotBG_layout_LHeavy_blue.png')
+  self.shirtImage = love.graphics.newImage('Assets/Images/Objects/shirts/shirt_blue.png')
+  self.whiteCircle = love.graphics.newImage('Assets/Images/Objects/white_ellipse.png')
+  self.arrow = love.graphics.newImage('Assets/Images/Objects/blueArrow.png')
   
   self.shirtScaleX = 1.15
   self.shirtScaleY = 1.15

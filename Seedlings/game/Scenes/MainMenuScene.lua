@@ -20,6 +20,9 @@ function MainMenuScene:new()
   self.sceneList:add({name='Falling Apple', ref = FallingAppleScene, lock = 0})
   self.sceneList:add({name='Falling Apple 2', ref = FallingApple2Scene, lock = 0})
   self.sceneList:add({name='Falling Apple 3', ref = FallingApple3Scene, lock = 0})
+  self.sceneList:add({name='Melody Maker Intor', ref =  MelodyMakerIntro, lock = 0})
+  self.sceneList:add({name='Melody Maker Tut', ref = MelodyMakerTut, lock = 0})
+  self.sceneList:add({name='Melody Maker Minigame', ref = MelodyMakerMinigame, lock = 0})
   
   self.scenesPerScreen = 3
   self.currentPage = 0

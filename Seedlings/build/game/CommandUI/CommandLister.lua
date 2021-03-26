@@ -87,6 +87,7 @@ function CommandLister:drawBottomScreen()
     if i == self.selectedIndex then textColor = Color.BLUE end
     
     -- Decrease indent if we need to
+    local cmd = self.uiRef.commandManager.commandList:get(i)
     if cmd:decreaseIndent() and currentIndent > 0 then currentIndent = currentIndent - 1 end
   
     draw:print({
