@@ -37,6 +37,7 @@ function MelodyMakerChordTut:new()
   
   sandbox = {}
   sandbox['SM'] = sm
+  --[[
   sandbox['audio_A'] = love.audio.newSource("Assets/Audio/Piano/a.wav", "static")
   sandbox['audio_B'] = love.audio.newSource("Assets/Audio/Piano/b.wav", "static")
   sandbox['audio_C'] = love.audio.newSource("Assets/Audio/Piano/c.wav", "static")
@@ -44,6 +45,14 @@ function MelodyMakerChordTut:new()
   sandbox['audio_E'] = love.audio.newSource("Assets/Audio/Piano/e_flat.wav", "static")
   sandbox['audio_F'] = love.audio.newSource("Assets/Audio/Piano/f.wav", "static")
   sandbox['audio_G'] = love.audio.newSource("Assets/Audio/Piano/g.wav", "static")
+  --]]
+  sandbox['audio_A'] = sm.audio['audio_A']
+  sandbox['audio_B'] = sm.audio['audio_B']
+  sandbox['audio_C'] = sm.audio['audio_C']
+  sandbox['audio_D'] = sm.audio['audio_D']
+  sandbox['audio_E'] = sm.audio['audio_E']
+  sandbox['audio_F'] = sm.audio['audio_F']
+  sandbox['audio_G'] = sm.audio['audio_G']
   
   self.commandManager = CommandManager()
   self.commandManager:addCommand(SetChordTo2('chordNote1', nil, 'chordNote2', nil))
@@ -77,6 +86,8 @@ function MelodyMakerChordTut:new()
 end
 
 function MelodyMakerChordTut:update()
+  if self.panel19Flag and self.playTimer <=0 and self.sequencesMatching and inputManager:isPressed('a') then return MainMenuScene() end
+
   self.commandManager:update()
   local dt = love.timer.getDelta()
   
@@ -143,7 +154,7 @@ function MelodyMakerChordTut:update()
       self.panel18Flag = false
     end
   end
-  
+    
   return self
 end
 

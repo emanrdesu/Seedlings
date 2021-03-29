@@ -13,7 +13,7 @@ function VarTut:new()
 
       [6] = "Great job!\nNow that you know how to help something with its values, lets see what Luke needs to do today!",
 
-      [7] = "Oh no!\n Those aren't the right values for those\nvariables. Press A to try again!"
+      [7] = "Oh no!\n Those aren't the right values for those\nvariables. Press A to try again!",
    }
 
    self.top = {
@@ -357,21 +357,17 @@ function VarTutEnd:new()
    }
 
    self.values = {
-      [1] = Lista {
+      Lista {
          x = 222, y = 97, -- x = 150
-         "Red", "Blue", "Green"
+         "Red", "Blue", "Green",
+         cycle = true,
       },
 
-      [2] = Lista {
+      Lista {
          x = 232, y = 97, -- x = 150
-         "  4  ", "  3  ", "  6  "
+         "  4  ", "  3  ", "  6  ",
+         cycle = true,
       }
-   }
-
-   self.scolor = {
-      bg = Color.WHITE,
-      fg = Color.BLACK,
-      border = Color.WHITE
    }
 
    return self
@@ -459,18 +455,18 @@ function VarTutEnd:update()
          end
       elseif self.aa == 1 then
          self.variables.interact = false
-         self.variables.colors[self.variables.index] = self.scolor
+         self.variables:markIndex()
          self.values[self.variables.index].interact = true
          self.values[self.variables.index]:onButton()
 
          if inputManager:isPressed('b') then
-            self.variables.colors[self.variables.index] = nil
+            self.variables:unmarkIndex()
             self.values[self.variables.index].interact = false
             self.aa = 0
          end
 
          if inputManager:isPressed('a') then
-            self.variables.colors[self.variables.index] = nil
+            self.variables:unmarkIndex()
             self[self.variables.index == 1 and 'var1' or 'var2'] = true
             self.aa = 0
          end
@@ -527,9 +523,8 @@ function VarTutEndH:drawBottomScreen()
 end
 
 function VarTutEndH:update()
-   
    if inputManager:isPressed('a') then
-      return self.ti == 6 and VarTut() or self.vte
+      return self.ti == 6 and VarMini() or self.vte
    end
 
    return self

@@ -27,6 +27,10 @@ function MelodyMakerIntro:new()
   self.helloExeFlag = false
   self.panel3Flag = false
   self.panel4Flag = false
+  
+  local lock = saveManager:getValue('lock') or 0
+  if lock < 1 then lock = 1 end
+  saveManager:setValue('lock', lock)
 end
 
 function MelodyMakerIntro:update()

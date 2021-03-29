@@ -13,6 +13,10 @@ function IfIntroductionScene:new()
   self.textBoxes:addText("For example, if you attached a camera to this machine and wanted it to take a bunch of pictures of the food bowl, the code may look like:")
   self.textBoxes:addTextAlign("if food bowl is empty then\n      fill bowl\nend\ntake picture", 'left')
   self.textBoxes:addText("Even if the food bowl is full, the machine will still take the picture!")
+  
+  local lock = saveManager:getValue('lock') or 0
+  if lock < 4 then lock = 4 end
+  saveManager:setValue('lock', lock)
 end
 
 function IfIntroductionScene:update()
