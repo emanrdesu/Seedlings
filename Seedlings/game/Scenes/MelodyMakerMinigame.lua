@@ -27,6 +27,13 @@ function MelodyMakerMinigame:new()
   self.orangeNote = love.graphics.newImage('Assets/Images/Objects/note_inner_orange.png')
   self.purpleNote = love.graphics.newImage('Assets/Images/Objects/note_inner_purple.png')
   self.redNote = love.graphics.newImage('Assets/Images/Objects/note_inner_red.png')
+  self.errorMessage = love.graphics.newImage('Assets/Images/Objects/error_notif_withText.png')
+  self.successStar1 = love.graphics.newImage('Assets/Images/Objects/success_stars_topFitted_1.png')
+  self.successStar2 = love.graphics.newImage('Assets/Images/Objects/success_stars_topFitted_2.png')
+  
+  self.starAnimation = {}
+  table.insert(self.starAnimation, self.successStar1)
+  table.insert(self.starAnimation, self.successStar2)
   
   self.noteImageTable = {}
   self.noteImageTable[1] = self.ANote
@@ -107,11 +114,18 @@ function MelodyMakerMinigame:new()
   
   self.selectingValue = false
   self.sequencesMatch = false
+  
+  self.currentFrame = 1
 end
 
 function MelodyMakerMinigame:update()
   self.commandManager:update()
   local dt = love.timer.getDelta()
+  
+  self.currentFrame = self.currentFrame + 3*dt
+  if self.currentFrame >= 3 then
+    self.currentFrame = 1
+  end
   
   if inputManager:isPressed('start') then
     self.commandManager:start()
@@ -191,6 +205,12 @@ function MelodyMakerMinigame:update()
     end
   end
   
+  if inputManager:isPressed('x') then
+    if self.panel12Flag and self.sequencesMatch then
+      return MelodyMakerChordTut()
+    end
+  end
+  
   return self
 end
 
@@ -252,30 +272,35 @@ function MelodyMakerMinigame:drawTopScreen()
     end
     
     if self.commandManager:codeIsRunning() then
-      for i = 1, 7 do
-        love.graphics.draw(self.note, 40*i*1.15, 140)
-      end
+      
+      love.graphics.draw(self.note, 40*1.15, 160)
+      love.graphics.draw(self.note, 40*2*1.15, 160)
+      love.graphics.draw(self.note, 40*3*1.15, 140)
+      love.graphics.draw(self.note, 40*4*1.15, 120)
+      love.graphics.draw(self.note, 40*5*1.15, 110)
+      love.graphics.draw(self.note, 40*6*1.15, 110)
+      love.graphics.draw(self.note, 40*7*1.15, 120)
       
       if self.noteTimer <= 7 then
-        love.graphics.draw(self.blueNote, 43*1.15, 175)
+        love.graphics.draw(self.blueNote, 43*1.15, 195)
       end
       if self.noteTimer <= 6 then
-        love.graphics.draw(self.redNote, 85*1.15, 175)
+        love.graphics.draw(self.redNote, 85*1.15, 195)
       end
       if self.noteTimer <= 5 then
         love.graphics.draw(self.orangeNote, 125*1.15, 175)
       end
       if self.noteTimer <= 4 then
-        love.graphics.draw(self.purpleNote, 165*1.15, 175)
+        love.graphics.draw(self.purpleNote, 165*1.15, 155)
       end
       if self.noteTimer <= 3 then
-        love.graphics.draw(self.greenNote, 205*1.15, 175)
+        love.graphics.draw(self.greenNote, 205*1.15, 145)
       end
       if self.noteTimer <=2 then 
-        love.graphics.draw(self.blueNote, 245*1.15, 175)
+        love.graphics.draw(self.blueNote, 245*1.15, 145)
       end
       if self.noteTimer <=1 then
-        love.graphics.draw(self.redNote, 285*1.15, 175)
+        love.graphics.draw(self.redNote, 285*1.15, 155)
       end
       if self.noteTimer <= 0.1 then
         self.panel12Flag = true
@@ -300,22 +325,28 @@ function MelodyMakerMinigame:drawTopScreen()
       love.graphics.draw(self.noteImageTable[i], 40*i*1.15, 10*i, 0, self.noteScaleX, self.noteScaleY)
     end
     
-    for i = 1, 7 do
-      love.graphics.draw(self.note, 40*i*1.15, 140)
-    end
+    love.graphics.draw(self.note, 40*1.15, 160)
+    love.graphics.draw(self.note, 40*2*1.15, 160)
+    love.graphics.draw(self.note, 40*3*1.15, 140)
+    love.graphics.draw(self.note, 40*4*1.15, 120)
+    love.graphics.draw(self.note, 40*5*1.15, 110)
+    love.graphics.draw(self.note, 40*6*1.15, 110)
+    love.graphics.draw(self.note, 40*7*1.15, 120)
       
-    love.graphics.draw(self.blueNote, 43*1.15, 175)
-    love.graphics.draw(self.redNote, 85*1.15, 175)
+    love.graphics.draw(self.blueNote, 43*1.15, 195)
+    love.graphics.draw(self.redNote, 85*1.15, 195)
     love.graphics.draw(self.orangeNote, 125*1.15, 175)
-    love.graphics.draw(self.purpleNote, 165*1.15, 175)
-    love.graphics.draw(self.greenNote, 205*1.15, 175)
-    love.graphics.draw(self.blueNote, 245*1.15, 175)
-    love.graphics.draw(self.redNote, 285*1.15, 175)
-    
+    love.graphics.draw(self.purpleNote, 165*1.15, 155)
+    love.graphics.draw(self.greenNote, 205*1.15, 145)
+    love.graphics.draw(self.blueNote, 245*1.15, 145)
+    love.graphics.draw(self.redNote, 285*1.15, 155)
+
     if self.sequencesMatch then
-      love.graphics.print("Yay! the sequences match!", 150, 150)
+      --love.graphics.print("Yay! the sequences match!", 150, 150)
+      love.graphics.draw(self.starAnimation[math.floor(self.currentFrame)])
     else
-      love.graphics.print("Error! The sequences don't match! Try again.", 150, 150)
+      --love.graphics.print("Error! The sequences don't match! Try again.", 150, 150)
+      love.graphics.draw(self.errorMessage, 90, 90)
     end
   end
 end
@@ -419,6 +450,43 @@ function MelodyMakerMinigame:drawBottomScreen()
   --Panel 12
   elseif self.panel12Flag then
     love.graphics.draw(self.botBG1)
+    
+    if self.sequencesMatch then
+      draw:print({
+          text = "Amazing! Great Job!",
+          x = 70,
+          y = 30,
+          color = Color.BLACK,
+        })
+      draw:print({
+          text = "Press 'A' to try again.",
+          x = 70,
+          y = 150,
+          color = Color.BLACK,
+        })
+      draw:print({
+          text = "Press 'X' to continue.",
+          x = 70,
+          y = 170,
+          color = Color.BLACK,
+          })
+      
+      love.graphics.draw(self.compyEyes, 125, 55)
+      love.graphics.draw(self.compyMouthD, 125, 115)
+    else
+      draw:print({
+          text = "Uh oh, something is wrong, and\nthe program had an error!",
+          x = 30,
+          y = 30,
+          color = Color.BLACK,
+        })
+      draw:print({
+          text = "Read the message and see if you\ncan fix the problem! Press 'A' to\ncontinue.",
+          x = 30,
+          y = 90,
+          color = Color.BLACK,
+          })
+    end
   end
   
 end

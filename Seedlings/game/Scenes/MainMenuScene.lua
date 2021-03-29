@@ -23,6 +23,7 @@ function MainMenuScene:new()
   self.sceneList:add({name='Melody Maker Intor', ref =  MelodyMakerIntro, lock = 0})
   self.sceneList:add({name='Melody Maker Tut', ref = MelodyMakerTut, lock = 0})
   self.sceneList:add({name='Melody Maker Minigame', ref = MelodyMakerMinigame, lock = 0})
+  self.sceneList:add({name='Melody Maker ChordTut', ref = MelodyMakerChordTut, lock = 0})
   
   self.scenesPerScreen = 3
   self.currentPage = 0
