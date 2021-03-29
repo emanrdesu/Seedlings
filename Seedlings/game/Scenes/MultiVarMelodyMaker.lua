@@ -163,7 +163,7 @@ function MultiVarMelodyMaker:update()
         elseif self.chordCounter == 2 then
           self.chordNote3 = self.notes[self.selectedBot]
           self.commandManager:removeCommand(self.selectedTop)
-          self.commandManager:insertCommand(self.selectedTop, SetChordTo('chordNote1', self.chordNote1, 'chordNote2', self.chordNote2, 'chordNote3', self.chordNote3))
+          self.commandManager:insertCommand(self.selectedTop, SetChordTo3('chordNote1', self.chordNote1, 'chordNote2', self.chordNote2, 'chordNote3', self.chordNote3))
           self.chordCounter = 0
           self.selectingChord = false
           self.selectedBot = 1
