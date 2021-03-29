@@ -29,21 +29,8 @@ function CommandSelector:new(uiRef, commandRef, commandIndex, editorRef)
       width = xwidth,
       height = xheight,
     },
-    drawNormal = function()
-      draw:rectangle({
-        x = buttonX,
-        y = buttonY,
-        width = xwidth,
-        height = xheight,
-        color = Color.GRAY
-      })
-      draw:print({
-        x = buttonX + 10,
-        y = buttonY,
-        font = '18px',
-        text = 'X',
-        color = Color.BLACK,
-      })
+    drawNormal = function()      
+      CommandUIButtons.drawClose()
     end,
     onClick = function()
       self.uiRef.uiStack:pollLast()
@@ -65,20 +52,7 @@ function CommandSelector:new(uiRef, commandRef, commandIndex, editorRef)
           height = confirmH
       },
       drawNormal = function()
-        draw:rectangle({
-          x = confirmX,
-          y = confirmY,
-          width = confirmW,
-          height = confirmH,
-          color = Color.GRAY
-        })
-        draw:print({
-          x = confirmX + 10,
-          y = confirmY,
-          font = '18px',
-          text = 'Y',
-          color = Color.BLACK,
-        })
+        CommandUIButtons.drawConfirm()
       end,
       onClick = function()
         if self.commandRef == nil then
@@ -178,10 +152,21 @@ function CommandSelector:drawBottomScreen()
   
     draw:print({
       x = x + 10,
-      y = y,
+      y = y + 8,
       color = textColor,
       font = '18px',
       text = self.uiRef.availableCommands:get(i).COMMAND_NAME,
     })
+  end
+  
+    -- Draw little arrows to indicate whether scrolling is possible
+  if self.offsetY < 0 then
+    -- We are able to scroll up
+    CommandUIButtons.scrollUp(115)
+  end
+  
+  if self.offsetY > self.minOffsetY then
+    -- We are able to scroll down
+    CommandUIButtons.scrollDown(115)
   end
 end

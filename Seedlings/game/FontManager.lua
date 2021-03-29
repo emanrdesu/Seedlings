@@ -7,6 +7,7 @@ function FontManager:new()
   self.fonts['36px'] = love.graphics.newFont('Assets/Fonts/OpenSans-Regular.ttf', 36)
   self.fonts['18px_bold'] = love.graphics.newFont('Assets/Fonts/OpenSans-Bold.ttf', 18)
   self.fonts['18px_italic'] = love.graphics.newFont('Assets/Fonts/OpenSans-Italic.ttf', 18)
+  self.fonts['consolas_12'] = love.graphics.newFont('Assets/Fonts/Consolas.ttf', 12)
 
   setmetatable(self.fonts, { __index = function() return self.fonts['default'] end })
   
@@ -16,6 +17,7 @@ function FontManager:new()
   self.fontList:add('36px')
   self.fontList:add('18px_bold')
   self.fontList:add('18px_italic')
+  self.fontList:add('consolas_12')
   
   love.graphics.setFont(self.fonts['default'])
   

@@ -2,7 +2,7 @@ VarTut = Scene:extend()
 
 function VarTut:new()
    self.text = {
-      [1] = "Welcome to Variables!\n\nWe want to introduce you to our buddy,\nLuke, and the interesting world he lives in.\n\nHere, normal things like shirts and apples\ncan remember stuff about themselves, and change if you tell them to!",
+      [1] = "Welcome to Variables!\n\nWe want to introduce you to our buddy,\nLuke, and the interesting world he lives in.\n\nHere, normal things like shirts and apples\ncan remember stuff about themselves, and\n change if you tell them to!",
 
       [2] = "Here, take a look at what some things in\nthis world can remember about\nthemselves...",
 

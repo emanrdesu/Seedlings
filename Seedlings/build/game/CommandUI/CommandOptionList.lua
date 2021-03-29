@@ -27,20 +27,7 @@ function CommandOptionList:new(uiRef, editorRef, commandRef, paramTable)
       height = xheight,
     },
     drawNormal = function()
-      draw:rectangle({
-        x = buttonX,
-        y = buttonY,
-        width = xwidth,
-        height = xheight,
-        color = Color.GRAY
-      })
-      draw:print({
-        x = buttonX + 10,
-        y = buttonY,
-        font = '18px',
-        text = 'X',
-        color = Color.BLACK,
-      })
+      CommandUIButtons.drawClose()
     end,
     onClick = function()
       self.uiRef.uiStack:pollLast()
@@ -62,20 +49,7 @@ function CommandOptionList:new(uiRef, editorRef, commandRef, paramTable)
           height = confirmH
       },
       drawNormal = function()
-        draw:rectangle({
-          x = confirmX,
-          y = confirmY,
-          width = confirmW,
-          height = confirmH,
-          color = Color.GRAY
-        })
-        draw:print({
-          x = confirmX + 10,
-          y = confirmY,
-          font = '18px',
-          text = 'Y',
-          color = Color.BLACK,
-        })
+        CommandUIButtons.drawConfirm()
       end,
       onClick = function()
         local paramOption = self.paramTable.optionList:get(self.selectedIndex)
@@ -167,7 +141,7 @@ function CommandOptionList:drawBottomScreen()
   
     draw:print({
       x = x + 10,
-      y = y,
+      y = y + 8,
       color = textColor,
       font = '18px',
       text = self.paramTable.optionList:get(i).userString,

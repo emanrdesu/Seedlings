@@ -33,6 +33,17 @@ function TextBoxList:addText(text)
   }))
 end
 
+function TextBoxList:addTextAlign(text, align)
+  self.textboxList:add(TextBox({
+    x = self.textX, 
+    y = self.textY,
+    width = self.textWidth,
+    align = align,
+    text = text,
+    color = self.textColor,
+  }))
+end
+
 function TextBoxList:reset()
   self.index = 0
 end

@@ -1,6 +1,6 @@
-SetChordTo = Command:extend()
+SetChordTo3 = Command:extend()
 
-function SetChordTo:new(var1, value1, var2, value2, var3, value3)
+function SetChordTo3:new(var1, value1, var2, value2, var3, value3)
   self.var1 = var1
   self.value1 = value1
   
@@ -11,7 +11,7 @@ function SetChordTo:new(var1, value1, var2, value2, var3, value3)
   self.value3 = value3
 end
 
-function SetChordTo:toUserString()
+function SetChordTo3:toUserString()
   local s = tostring(self.var1).. ' = ' ..tostring(self.value1) .. 
             ', ' ..tostring(self.var2).. ' = ' ..tostring(self.value2) ..
             ', ' ..tostring(self.var3).. ' = ' ..tostring(self.value3)
@@ -19,7 +19,7 @@ function SetChordTo:toUserString()
   return s
 end
 
-function SetChordTo:toLuaStringList()
+function SetChordTo3:toLuaStringList()
   local list = ArrayList()
   
   list:add("SM:play('audio_"..tostring(self.value1).."'); ")
