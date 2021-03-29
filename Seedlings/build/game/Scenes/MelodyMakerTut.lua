@@ -58,9 +58,14 @@ function MelodyMakerTut:new()
   
   sandbox = {}
   sandbox['SM'] = sm
+  --[[
   sandbox['SoundA'] = love.audio.newSource("Assets/Audio/Piano/a.wav", "static")
   sandbox['SoundB'] = love.audio.newSource("Assets/Audio/Piano/b.wav", "static")
   sandbox['SoundC'] = love.audio.newSource("Assets/Audio/Piano/c.wav", "static")
+  --]]
+  sandbox['SoundA'] = sm.audio['audio_A']
+  sandbox['SoundB'] = sm.audio['audio_B']
+  sandbox['SoundC'] = sm.audio['audio_C']
   
   self.desiredValue = 'SoundA'
   self.userValue = 'empty'

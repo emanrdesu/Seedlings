@@ -2,26 +2,23 @@ MainMenuScene = Scene:extend()
 
 function MainMenuScene:new()
   self.sceneList = ArrayList()
-  self.sceneList:add({name="TutorialScene", ref=TutorialScene, lock=0})
-  self.sceneList:add({name="TestScene1", ref=TestScene1, lock = 0})
-  self.sceneList:add({name="TestScene2", ref=TestScene2, lock = 0})
-  self.sceneList:add({name="TestScene3", ref=TestScene3, lock = 0})
-  self.sceneList:add({name="Title Screen", ref = TitleScene, lock = 0})
-  self.sceneList:add({name="TestScene4", ref = TestScene4, lock = 0})
-  self.sceneList:add({name='VarTutBackpackScene', ref = VarTutBackpackScene, lock = 0})
-  self.sceneList:add({name="Lock 1", ref = TitleScene, lock = 1})
-  self.sceneList:add({name='VarMinigameIntro', ref = VarMinigameIntro, lock = 0})
-  self.sceneList:add({name='VarMinigameBackpack', ref = VarMinigameBackpack, lock = 0})
-  self.sceneList:add({name='MultiVarMusicIntro', ref = MultiVarMusicIntro, lock = 0})
-  self.sceneList:add({name='MultiVarMelodyMaker', ref = MultiVarMelodyMaker, lock = 0})
-  self.sceneList:add({name='Command Test', ref = CTS, lock = 0})
-  self.sceneList:add({name='If Introduction', ref = IfIntroductionScene, lock = 0})
-  self.sceneList:add({name='Fill the Bowl', ref = FillBowlScene, lock = 0})
-  self.sceneList:add({name='Falling Apple', ref = FallingAppleScene, lock = 0})
-  self.sceneList:add({name='Falling Apple 2', ref = FallingApple2Scene, lock = 0})
-  self.sceneList:add({name='Falling Apple 3', ref = FallingApple3Scene, lock = 0})
-  self.sceneList:add({name='Melody Maker Intor', ref =  MelodyMakerIntro, lock = 0})
+  self.sceneList:add({name="Variables", ref = VarTut, lock = 0})
+  self.sceneList:add({name='Melody Maker', ref = MelodyMakerIntro, lock = 1})
+  self.sceneList:add({name="Code Tutorial", ref = CodeIntroductionScene, lock = 2})
+  self.sceneList:add({name="TutorialScene", ref=TutorialScene, lock=3})
+  self.sceneList:add({name='If Introduction', ref = IfIntroductionScene, lock = 4})
+  self.sceneList:add({name='Fill the Bowl', ref = FillBowlScene, lock = 5})
+  self.sceneList:add({name='Else Introduction', ref = ElseIntroductionScene, lock = 6})
+  self.sceneList:add({name='Falling Apple', ref = FallingAppleScene, lock = 7})
+  self.sceneList:add({name='Falling Apple 2', ref = FallingApple2Scene, lock = 8})
+  self.sceneList:add({name='Falling Apple 3', ref = FallingApple3Scene, lock = 9})
+  
+  --[[
+  self.sceneList:add({name='Melody Maker Intro', ref =  MelodyMakerIntro, lock = 0})
   self.sceneList:add({name='Melody Maker Tut', ref = MelodyMakerTut, lock = 0})
+  self.sceneList:add({name='Melody Maker Minigame', ref = MelodyMakerMinigame, lock = 0})
+  self.sceneList:add({name='Melody Maker ChordTut', ref = MelodyMakerChordTut, lock = 0})
+  --]]
   
   self.scenesPerScreen = 3
   self.currentPage = 0
@@ -155,7 +152,7 @@ function MainMenuScene:drawBottomScreen()
     end
     draw:print({
       text = text,
-      x = recX,
+      x = math.floor(recX),
       y = math.floor(startRecY + dy * i),
       font = 'default',
       color = Color.BLACK,

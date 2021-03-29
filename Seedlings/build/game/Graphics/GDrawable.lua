@@ -55,6 +55,85 @@ function Image:draw()
                       self.margin.x, self.margin.y)
 end
 
+-- GShirt
+
+GShirt = GDrawable:extend()
+
+local shirt = {
+   red = 'Assets/Images/Objects/shirts/shirt_red.png',
+   blue = 'Assets/Images/Objects/shirts/shirt_blue.png',
+   green = 'Assets/Images/Objects/shirts/shirt_green.png',
+   blank = 'Assets/Images/Objects/shirts/shirt_blank.png',
+
+   angled = {
+      red = 'Assets/Images/Objects/shirts_angled/red_atAngle.png',
+      blue = 'Assets/Images/Objects/shirts_angled/blue_atAngle.png',
+      green = 'Assets/Images/Objects/shirts_angled/green_atAngle.png',
+      blank = 'Assets/Images/Objects/shirts_angled/blank_atAngle.png',
+   },
+
+   number = {
+      [0] = 'Assets/Images/Objects/shirts/zero.png',
+      [1] = 'Assets/Images/Objects/shirts/one.png',
+      [2] = 'Assets/Images/Objects/shirts/two.png',
+      [3] = 'Assets/Images/Objects/shirts/three.png',
+      [4] = 'Assets/Images/Objects/shirts/four.png',
+      [5] = 'Assets/Images/Objects/shirts/five.png',
+      [6] = 'Assets/Images/Objects/shirts/six.png',
+      [7] = 'Assets/Images/Objects/shirts/seven.png',
+      [8] = 'Assets/Images/Objects/shirts/eight.png',
+      [9] = 'Assets/Images/Objects/shirts/nine.png',
+
+      angled = {
+         [0] = 'Assets/Images/Objects/shirts_angled/zero_atAngle.png',
+         [1] = 'Assets/Images/Objects/shirts_angled/one_atAngle.png',
+         [2] = 'Assets/Images/Objects/shirts_angled/two_atAngle.png',
+         [3] = 'Assets/Images/Objects/shirts_angled/three_atAngle.png',
+         [4] = 'Assets/Images/Objects/shirts_angled/four_atAngle.png',
+         [5] = 'Assets/Images/Objects/shirts_angled/five_atAngle.png',
+         [6] = 'Assets/Images/Objects/shirts_angled/six_atAngle.png',
+         [7] = 'Assets/Images/Objects/shirts_angled/seven_atAngle.png',
+         [8] = 'Assets/Images/Objects/shirts_angled/eight_atAngle.png',
+         [9] = 'Assets/Images/Objects/shirts_angled/nine_atAngle.png',
+      }
+   }
+}
+
+setmetatable(shirt, { __index = function() return shirt.blank end })
+
+function randomShirt(args)
+   local function randelt(x)
+      return x[math.random(#x)]
+   end
+
+   return GShirt {
+      color = randelt {'red', 'green' , 'blue'}, -- 'blank'
+      number = math.random(3), -- math.random(10) - 1,
+      angled = args.angled,
+      scale = args.scale
+   }
+end
+
+function GShirt:new(args)
+   GShirt.super.new(self, args)
+   self.color = args.color
+   self.number = args.number
+   self.angled = args.angled
+   self.scale = args.scale or self.scale 
+end
+
+function GShirt:draw()
+   local s = self.angled and shirt.angled or shirt
+   local sn = self.angled and shirt.number.angled or shirt.number
+   local snn = sn[self.number]
+
+   Hover {
+      x = self.x, y = self.y,
+      Image{ path = s[self.color], scale = self.scale },
+      snn and Image{path = snn, scale = { x = self.scale.x - 0.15, y = self.scale.y - 0.15 }}
+   }:draw()
+end
+
 -- PulseImage
 
 PulseImage = Image:extend()
@@ -228,8 +307,25 @@ function Lista:new(args)
    Lista.super.new(self, args)
 
    self.font = args.font or 'default'
-   self.color = args.color or { bg = Color.BLACK, fg = Color.WHITE, border = Color.WHITE }
-   self.selectedColor = args.selectedColor or { bg = Color.BLACK, fg = Color.WHITE, border = Color.RED }
+
+   self.color = args.color or  {
+      bg = Color:byte(38, 38, 38),
+      fg = Color:byte(242, 242, 242),
+      border = Color:byte(242, 242, 242)
+   }
+   
+   self.selectedColor = args.selectedColor or {
+      bg = Color:byte(38, 38, 38),
+      fg = Color:byte(242, 242, 242),
+      border = Color:byte(255, 102, 102)
+   }
+
+   self.markColor = args.markColor or {
+      bg = self.color.fg,
+      fg = self.color.bg,
+      border = self.color.border
+   }
+
    self.title = args.title
    self.titleColor = args.titleColor or self.color
    self.titleFont = args.titleFont or '18px_bold'
@@ -239,8 +335,9 @@ function Lista:new(args)
    self.colors = {}
    setmetatable(self.colors, { __index = function() return self.color end })
 
-   self.index = 1
+   self.index = args.index or 1
    self.interact = args.interact or false
+   self.cycle = args.cycle or false
    self.margin = args.margin or { x = 6, y = 6 }
    self.maxHeight = 0
 
@@ -337,12 +434,38 @@ end
 
 function Lista:onButton()
    if inputManager:isPressed('dpup') then
-      self.index = math.max(self.index - 1, 1)
+      if self.cycle then
+         self.index = self.index - 1
+         if self.index == 0 then
+            self.index = #self.strings
+         end
+      else
+         self.index = math.max(self.index - 1, 1)
+      end
    end
    
    if inputManager:isPressed('dpdown') then
-      self.index = math.min(self.index + 1, #self.strings)
+      if self.cycle then
+         self.index = (self.index + 1) % (#self.strings + 1)
+         if self.index == 0 then
+            self.index = 1
+         end
+      else
+         self.index = math.min(self.index + 1, #self.strings)
+      end
    end
+end
+
+function Lista:current()
+   return self.strings[self.index]
+end
+
+function Lista:markIndex(index, color)
+   self.colors[index or self.index] = color or self.markColor
+end
+
+function Lista:unmarkIndex(index)
+   self.colors[index or self.index] = self.color
 end
 
 -- Hover
@@ -379,11 +502,8 @@ Stack = GDrawable:extend()
 function Stack:new(args)
    Stack.super.new(self, args)
    self.orientation = args.orientation
-   self.children = args
-
---   for _,g in ipairs(args) do 
---      table.insert(self.children, g)
---   end
+   self.children = args.children or args
+   self.reverse = args.reverse
 end
 
 function Stack:draw()
@@ -398,6 +518,7 @@ function Stack:draw()
    local spacer = space / (#self.children + 1)
 
    local z = orie == 'vertical' and self.y or self.x
+
    for _,g in ipairs(self.children) do
       z = z + spacer
 
@@ -413,7 +534,15 @@ function Stack:draw()
          z = z + g:getWidth()
       end
 
-      g:draw()
+      if not self.reverse then
+         g:draw()
+      end
+   end
+
+   if self.reverse then
+      for i = #self.children, 1, -1 do
+         self.children[i]:draw()
+      end
    end
 end
 
