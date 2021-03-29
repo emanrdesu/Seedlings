@@ -323,7 +323,7 @@ function VarMiniGame:update()
       if inputManager:isPressed('a') then
 
          if self.checkWin and not self.userLost then
-            return VarMini()
+            return MelodyMakerIntro()
          end
 
          self.pickingShirt = true

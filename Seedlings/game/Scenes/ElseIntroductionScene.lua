@@ -20,6 +20,10 @@ function ElseIntroductionScene:new()
     'left'
   )
   self.textBoxes:addText("The 'else' statement is not always needed, but it can be helpful for situations like this. The next game can be solved with or without it.")
+  
+  local lock = saveManager:getValue('lock') or 0
+  if lock < 6 then lock = 6 end
+  saveManager:setValue('lock', lock)
 end
 
 function ElseIntroductionScene:update()

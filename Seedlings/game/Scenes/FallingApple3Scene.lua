@@ -11,7 +11,7 @@ function FallingApple3Scene:new()
   self.commandUI:addAvailableCommand(AppleCustomMoveLeft)
   self.commandUI:addAvailableCommand(AppleCustomMoveRight)
 
-  self.commandUI.commandManager:setTimePerLine(0.1)
+  self.commandUI.commandManager:setTimePerLine(0.05)
   self.commandUI:setOnRun(
     function() 
       -- Reset game values if game is not running and not in summary stage
@@ -27,7 +27,7 @@ function FallingApple3Scene:new()
   self.columnWidth = Constants.TOP_SCREEN_WIDTH
   self.columnStart = 0
   self.padding = 25
-  self.catchTolerance = 5
+  self.catchTolerance = 20
 
   self.appleImg = love.graphics.newImage('Assets/Images/Objects/apple.png')
   self.basketImg = love.graphics.newImage('Assets/Images/Objects/basket.png')
@@ -80,6 +80,10 @@ function FallingApple3Scene:new()
   self.gameClearTextBoxes:addText("Congratulations! You caught all of the apples. You are ready to move onto the next minigame now.")
   
   self.gameFailTextBoxes = TextBoxList()
+
+  local lock = saveManager:getValue('lock') or 0
+  if lock < 9 then lock = 9 end
+  saveManager:setValue('lock', lock)
 end
 
 function FallingApple3Scene:update()
@@ -205,8 +209,8 @@ function FallingApple3Scene:drawTopScreen()
   draw:img({
     x = x,
     y = self.basketY,
-    sx = 0.7,
-    sy = 0.7,
+    sx = 1.2,
+    sy = 1.2,
     center = true,
     img = self.basketImg,
   })

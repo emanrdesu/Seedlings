@@ -14,6 +14,10 @@ function CodeIntroductionScene:new()
   self.textBoxes:addText("The RUN button will run the code that you have entered onto the screen.")
   self.textBoxes:addText("Depending on the game, your goal will be to have your code do different things. The games will each explain their own goal.")
   self.textBoxes:addText("Now you will be introduced to the first game!")
+  
+  local lock = saveManager:getValue('lock') or 0
+  if lock < 2 then lock = 2 end
+  saveManager:setValue('lock', lock)
 end
 
 function CodeIntroductionScene:update()
