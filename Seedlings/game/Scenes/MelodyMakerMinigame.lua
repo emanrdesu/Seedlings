@@ -282,25 +282,25 @@ function MelodyMakerMinigame:drawTopScreen()
       love.graphics.draw(self.note, 40*7*1.15, 120)
       
       if self.noteTimer <= 7 then
-        love.graphics.draw(self.blueNote, 43*1.15, 195)
+        love.graphics.draw(self.blueNote, 43*1.15, 194)
       end
       if self.noteTimer <= 6 then
-        love.graphics.draw(self.redNote, 85*1.15, 195)
+        love.graphics.draw(self.redNote, 84*1.15, 194)
       end
       if self.noteTimer <= 5 then
-        love.graphics.draw(self.orangeNote, 125*1.15, 175)
+        love.graphics.draw(self.orangeNote, 124*1.15, 174)
       end
       if self.noteTimer <= 4 then
-        love.graphics.draw(self.purpleNote, 165*1.15, 155)
+        love.graphics.draw(self.purpleNote, 164*1.15, 154)
       end
       if self.noteTimer <= 3 then
-        love.graphics.draw(self.greenNote, 205*1.15, 145)
+        love.graphics.draw(self.greenNote, 204*1.15, 144)
       end
       if self.noteTimer <=2 then 
-        love.graphics.draw(self.blueNote, 245*1.15, 145)
+        love.graphics.draw(self.blueNote, 244*1.15, 144)
       end
       if self.noteTimer <=1 then
-        love.graphics.draw(self.redNote, 285*1.15, 155)
+        love.graphics.draw(self.redNote, 284*1.15, 154)
       end
       if self.noteTimer <= 0.1 then
         self.panel12Flag = true
@@ -333,13 +333,13 @@ function MelodyMakerMinigame:drawTopScreen()
     love.graphics.draw(self.note, 40*6*1.15, 110)
     love.graphics.draw(self.note, 40*7*1.15, 120)
       
-    love.graphics.draw(self.blueNote, 43*1.15, 195)
-    love.graphics.draw(self.redNote, 85*1.15, 195)
-    love.graphics.draw(self.orangeNote, 125*1.15, 175)
-    love.graphics.draw(self.purpleNote, 165*1.15, 155)
-    love.graphics.draw(self.greenNote, 205*1.15, 145)
-    love.graphics.draw(self.blueNote, 245*1.15, 145)
-    love.graphics.draw(self.redNote, 285*1.15, 155)
+    love.graphics.draw(self.blueNote, 43*1.15, 194)
+    love.graphics.draw(self.redNote, 84*1.15, 194)
+    love.graphics.draw(self.orangeNote, 124*1.15, 174)
+    love.graphics.draw(self.purpleNote, 164*1.15, 154)
+    love.graphics.draw(self.greenNote, 204*1.15, 144)
+    love.graphics.draw(self.blueNote, 244*1.15, 144)
+    love.graphics.draw(self.redNote, 284*1.15, 154)
 
     if self.sequencesMatch then
       --love.graphics.print("Yay! the sequences match!", 150, 150)
