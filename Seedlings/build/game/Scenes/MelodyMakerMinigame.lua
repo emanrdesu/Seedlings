@@ -207,7 +207,7 @@ function MelodyMakerMinigame:update()
   
   if inputManager:isPressed('x') then
     if self.panel12Flag and self.sequencesMatch then
-      return MelodyMakerChordTut()
+      return MelodyMakerMenu()
     end
   end
   
