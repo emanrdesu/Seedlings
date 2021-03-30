@@ -2,6 +2,7 @@ MainMenuScene = Scene:extend()
 
 function MainMenuScene:new()
   self.sceneList = ArrayList()
+  self.sceneList:add({name="Melody Maker Menu", ref = MelodyMakerMenu, lock = 0})
   self.sceneList:add({name="Variables", ref = VarTut, lock = 0})
   self.sceneList:add({name='Melody Maker', ref = MelodyMakerIntro, lock = 1})
   self.sceneList:add({name="Code Tutorial", ref = CodeIntroductionScene, lock = 2})
