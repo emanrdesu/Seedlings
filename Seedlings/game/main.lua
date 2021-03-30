@@ -7,6 +7,9 @@ function love.load(arg)
   function getTime()
      return love.timer.getTime() - START_TIME
   end
+
+  -- set random seed
+  math.randomseed(os.time())
   
   -- Instantiate Sandbox environment
   sandbox = {}

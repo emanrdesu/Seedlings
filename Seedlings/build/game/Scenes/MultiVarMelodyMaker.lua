@@ -3,7 +3,7 @@ MultiVarMelodyMaker = Scene:extend()
 function MultiVarMelodyMaker:new()
 
   self.topBG = love.graphics.newImage('Assets/Images/Panels/top/woodbackground.png')
-  self.bottomBG = love.graphics.newImage('Assets/Images/Panels/bottom/botbkg1.png')
+  self.bottomBG = love.graphics.newImage('Assets/Images/Panels/bottom/BotBG_peach_apples_tutorialBox.png')
   self.whiteSquare = love.graphics.newImage('Assets/Images/Objects/whiteSquare.png')
   self.yellowSquare = love.graphics.newImage('Assets/Images/Objects/yellowSquare.png')
   self.playButton = love.graphics.newImage('Assets/Images/Objects/GreenPlayButton.png')
@@ -163,7 +163,7 @@ function MultiVarMelodyMaker:update()
         elseif self.chordCounter == 2 then
           self.chordNote3 = self.notes[self.selectedBot]
           self.commandManager:removeCommand(self.selectedTop)
-          self.commandManager:insertCommand(self.selectedTop, SetChordTo('chordNote1', self.chordNote1, 'chordNote2', self.chordNote2, 'chordNote3', self.chordNote3))
+          self.commandManager:insertCommand(self.selectedTop, SetChordTo3('chordNote1', self.chordNote1, 'chordNote2', self.chordNote2, 'chordNote3', self.chordNote3))
           self.chordCounter = 0
           self.selectingChord = false
           self.selectedBot = 1

@@ -81,6 +81,10 @@ function FallingApple2Scene:new()
   self.gameClearTextBoxes:addText("Congratulations! You caught all of the apples. You are ready to move onto the next minigame now.")
   
   self.gameFailTextBoxes = TextBoxList()
+  
+  local lock = saveManager:getValue('lock') or 0
+  if lock < 8 then lock = 8 end
+  saveManager:setValue('lock', lock)
 end
 
 function FallingApple2Scene:update()

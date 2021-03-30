@@ -83,6 +83,9 @@ function FillBowlScene:new()
   self.completed = TextBoxList()
   self.completed:addText("Congratulations! Your machine worked on all of the bowls. You can now continue onto the next section.")
   
+  local lock = saveManager:getValue('lock') or 0
+  if lock < 5 then lock = 5 end
+  saveManager:setValue('lock', lock)
 end
 
 function FillBowlScene:update()
@@ -98,7 +101,7 @@ function FillBowlScene:update()
     -- Go to main menu if completed, reset values if failed
     if self.status == 'completed' then
       local finished = self.completed:update()
-      if finished then return MainMenuScene() end
+      if finished then return ElseIntroductionScene() end
     elseif self.status == 'filledFull' then
       local finished = self.filledFull:update()
       if finished then self:resetValues() end
