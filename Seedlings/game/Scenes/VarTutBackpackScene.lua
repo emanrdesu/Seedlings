@@ -2,11 +2,11 @@ VarTutBackpackScene = Scene:extend()
 
 function VarTutBackpackScene:new()
 
-    self.topBG = love.graphics.newImage('Assets/Images/woodbackground.png')
-    self.bottomBG = love.graphics.newImage('Assets/Images/BotBG_layout_LHeavy_red.png')
-    self.backpackImage = love.graphics.newImage('Assets/Images/backpackScaled.png')
-    self.whiteCircle = love.graphics.newImage('Assets/Images/whiteCircle.png')
-    self.arrow = love.graphics.newImage('Assets/Images/blueArrow.png')
+    self.topBG = love.graphics.newImage('Assets/Images/Panels/top/woodbackground.png')
+    self.bottomBG = love.graphics.newImage('Assets/Images/Panels/bottom/BotBG_layout_LHeavy_red.png')
+    self.backpackImage = love.graphics.newImage('Assets/Images/Objects/backpackScaled.png')
+    self.whiteCircle = love.graphics.newImage('Assets/Images/Objects/white_ellipse.png')
+    self.arrow = love.graphics.newImage('Assets/Images/Objects/blueArrow.png')
 
     self.backpackScaleX = 0.6
     self.backpackScaleY = 0.6

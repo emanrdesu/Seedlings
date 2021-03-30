@@ -7,6 +7,9 @@ function FontManager:new()
   self.fonts['36px'] = love.graphics.newFont('Assets/Fonts/OpenSans-Regular.ttf', 36)
   self.fonts['18px_bold'] = love.graphics.newFont('Assets/Fonts/OpenSans-Bold.ttf', 18)
   self.fonts['18px_italic'] = love.graphics.newFont('Assets/Fonts/OpenSans-Italic.ttf', 18)
+  self.fonts['consolas_12'] = love.graphics.newFont('Assets/Fonts/Consolas.ttf', 12)
+
+  setmetatable(self.fonts, { __index = function() return self.fonts['default'] end })
   
   self.fontList = ArrayList()
   self.fontList:add('default')
@@ -14,6 +17,7 @@ function FontManager:new()
   self.fontList:add('36px')
   self.fontList:add('18px_bold')
   self.fontList:add('18px_italic')
+  self.fontList:add('consolas_12')
   
   love.graphics.setFont(self.fonts['default'])
   
@@ -23,16 +27,16 @@ function FontManager:new()
   
 end
 
-function FontManager:setFont(ft)
-  love.graphics.setFont(self.fonts[ft])
+function FontManager:setFont(font)
+  love.graphics.setFont(self.fonts[font])
 end
 
-function FontManager:getWidth(text)
-  return love.graphics.getFont():getWidth(text)
+function FontManager:getWidth(text, font)
+   return (font and self.fonts[font] or love.graphics.getFont()):getWidth(text)
 end
 
-function FontManager:getHeight()
-  return love.graphics.getFont():getHeight()
+function FontManager:getHeight(text, font)
+   return (font and self.fonts[font] or love.graphics.getFont()):getHeight(text)
 end
 
 function FontManager:update()
@@ -46,7 +50,6 @@ function FontManager:update()
       self.fixIndex = 0
     end
   end
-  
 end
 
 function FontManager:fix()

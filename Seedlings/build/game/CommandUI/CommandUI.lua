@@ -31,6 +31,7 @@ function CommandUI:new()
   self.commandLister = CommandLister(self)
   self.availableCommands = ArrayList()
   self.commandManager = CommandManager()
+  self.commandManager:addCommand(Header())
   self.uiStack = Queue()
   self.uiStack:addLast(self.commandLister)
   self.buttonList = ArrayList()
@@ -46,15 +47,31 @@ function CommandUI:new()
   -- Functions for drawing buttons
   function getDrawNormal(x, y, w, h, text)
     return function()
-      draw:rectangle({x=x, y=y, width=w, height=h, color = Color.LIGHT_GRAY})
-      draw:print({x=x, y=y, text = text, color = Color.BLACK, font = '18px'})
+      local clr = Color.LIGHT_GRAY
+      if (text == "DEL" or text == "EDIT") and not self.commandManager.commandList:get(self.commandLister.selectedIndex):canEdit() then clr = Color:byte(178, 178, 178) end
+      draw:rectangle({x=x, y=y, width=w, height=h, color = clr})
+      
+      fontManager:setFont('18px')
+      local th = fontManager:getHeight()
+      local tw = fontManager:getWidth(text)
+      
+      draw:print({
+          x=math.floor(x + (w - tw) / 2) - 1, 
+          y=math.floor(y + (h - th) / 2) - 3, 
+          text = text, color = Color.BLACK, font = '18px'})
     end
   end
   
   function getDrawHovered(x, y, w, h, text)
     return function()
       draw:rectangle({x=x, y=y, width=w, height=h, color = Color:byte(178, 178, 178)})
-      draw:print({x=x, y=y, text = text, color = Color.BLACK, font = '18px'})
+      fontManager:setFont('18px')
+      local th = fontManager:getHeight()
+      local tw = fontManager:getWidth(text)
+      draw:print({
+          x=math.floor(x + (w - tw) / 2) - 1, 
+          y=math.floor(y + (h - th) / 2) - 3, 
+          text = text, color = Color.BLACK, font = '18px'})
     end
   end
   
@@ -83,7 +100,7 @@ function CommandUI:new()
         -- Add a command editor to the top of the stack for the selected command
         if self.commandManager.commandList:getSize() > 0 then
           local cmd = self.commandManager.commandList:get(self.commandLister.selectedIndex)
-          self.uiStack:addLast(CommandEditor(self, cmd))
+          if cmd:canEdit() then self.uiStack:addLast(CommandEditor(self, cmd)) end
         end
       end
     })
@@ -100,18 +117,20 @@ function CommandUI:new()
         -- If there are commands, delete the selected one
         -- Then update the current selected index
         if self.commandManager.commandList:getSize() > 0 then
-          self.commandManager:removeCommand(self.commandLister.selectedIndex)
-          if self.commandLister.selectedIndex >= self.commandManager.commandList:getSize() then
-            self.commandLister.selectedIndex = self.commandManager.commandList:getSize() - 1
+          local cmd = self.commandManager.commandList:get(self.commandLister.selectedIndex)
+          if cmd:canEdit() then
+            self.commandManager:removeCommand(self.commandLister.selectedIndex)
+            if self.commandLister.selectedIndex >= self.commandManager.commandList:getSize() then
+              self.commandLister.selectedIndex = self.commandManager.commandList:getSize() - 1
+            end
+            if self.commandLister.selectedIndex < 0 then self.commandLister.selectedIndex = 0 end
           end
-          if self.commandLister.selectedIndex < 0 then self.commandLister.selectedIndex = 0 end
         end
       end
     })
   )
   
   -- Run button
-  -- TODO: Implement the run button onClick
   local runHeight = height + 13
   local y4 = y3 + height + deltaHeight
   self.buttonList:add(

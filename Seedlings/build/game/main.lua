@@ -1,19 +1,28 @@
 function love.load(arg)
   -- Import the files
   require 'FileImports'
+
+  local START_TIME = love.timer.getTime()
+
+  function getTime()
+     return love.timer.getTime() - START_TIME
+  end
+
+  -- set random seed
+  math.randomseed(os.time())
   
   -- Instantiate Sandbox environment
   sandbox = {}
+
+  -- Instantiate fontManager object
+  fontManager = FontManager()
   
   -- Instantiate gameManager object
   gameManager = GameManager()
   
   -- Instantiate inputManager object
   inputManager = InputManager()
-  
-  -- Instantiate fontManager object
-  fontManager = FontManager()
-  
+
   -- Instantiate the soundManager object
   sm = SoundManager()
   

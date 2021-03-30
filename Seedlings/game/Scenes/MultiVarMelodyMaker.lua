@@ -2,19 +2,19 @@ MultiVarMelodyMaker = Scene:extend()
 
 function MultiVarMelodyMaker:new()
 
-  self.topBG = love.graphics.newImage('Assets/Images/woodbackground.png')
-  self.bottomBG = love.graphics.newImage('Assets/Images/botbkg1.png')
-  self.whiteSquare = love.graphics.newImage('Assets/Images/whiteSquare.png')
-  self.yellowSquare = love.graphics.newImage('Assets/Images/yellowSquare.png')
-  self.playButton = love.graphics.newImage('Assets/Images/GreenPlayButton.png')
-  self.arrow = love.graphics.newImage('Assets/Images/blueArrow.png')
-  self.ANote = love.graphics.newImage('Assets/Images/A_Note.png')
-  self.BNote = love.graphics.newImage('Assets/Images/B_Note.png')
-  self.CNote = love.graphics.newImage('Assets/Images/C_Note.png')
-  self.DNote = love.graphics.newImage('Assets/Images/D_Note.png')
-  self.ENote = love.graphics.newImage('Assets/Images/E_Note.png')
-  self.FNote = love.graphics.newImage('Assets/Images/F_Note.png')
-  self.GNote = love.graphics.newImage('Assets/Images/G_Note.png')
+  self.topBG = love.graphics.newImage('Assets/Images/Panels/top/woodbackground.png')
+  self.bottomBG = love.graphics.newImage('Assets/Images/Panels/bottom/BotBG_peach_apples_tutorialBox.png')
+  self.whiteSquare = love.graphics.newImage('Assets/Images/Objects/whiteSquare.png')
+  self.yellowSquare = love.graphics.newImage('Assets/Images/Objects/yellowSquare.png')
+  self.playButton = love.graphics.newImage('Assets/Images/Objects/GreenPlayButton.png')
+  self.arrow = love.graphics.newImage('Assets/Images/Objects/blueArrow.png')
+  self.ANote = love.graphics.newImage('Assets/Images/Objects/A_Note.png')
+  self.BNote = love.graphics.newImage('Assets/Images/Objects/B_Note.png')
+  self.CNote = love.graphics.newImage('Assets/Images/Objects/C_Note.png')
+  self.DNote = love.graphics.newImage('Assets/Images/Objects/D_Note.png')
+  self.ENote = love.graphics.newImage('Assets/Images/Objects/E_Note.png')
+  self.FNote = love.graphics.newImage('Assets/Images/Objects/F_Note.png')
+  self.GNote = love.graphics.newImage('Assets/Images/Objects/G_Note.png')
   
   self.noteScaleX = 0.8
   self.noteScaleY =  0.8
@@ -163,7 +163,7 @@ function MultiVarMelodyMaker:update()
         elseif self.chordCounter == 2 then
           self.chordNote3 = self.notes[self.selectedBot]
           self.commandManager:removeCommand(self.selectedTop)
-          self.commandManager:insertCommand(self.selectedTop, SetChordTo('chordNote1', self.chordNote1, 'chordNote2', self.chordNote2, 'chordNote3', self.chordNote3))
+          self.commandManager:insertCommand(self.selectedTop, SetChordTo3('chordNote1', self.chordNote1, 'chordNote2', self.chordNote2, 'chordNote3', self.chordNote3))
           self.chordCounter = 0
           self.selectingChord = false
           self.selectedBot = 1

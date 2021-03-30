@@ -9,6 +9,7 @@ end
 function GameManager:update()    
   -- Debug quitting
   if inputManager:isDown('start') and inputManager:isDown('select') then
+    saveManager:saveData()
     love.event.quit()
   end
 

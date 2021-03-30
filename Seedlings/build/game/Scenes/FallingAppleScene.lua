@@ -4,7 +4,6 @@ function FallingAppleScene:new()
   self.commandUI = CommandUI()
   self.commandUI:addAvailableCommand(AppleMoveLeft)
   self.commandUI:addAvailableCommand(AppleMoveRight)
-  -- self.commandUI:addAvailableCommand(Condition2)
   self.commandUI:addAvailableCommand(AppleCondition)
   self.commandUI:addAvailableCommand(End)
   self.commandUI:addAvailableCommand(Else)
@@ -27,6 +26,7 @@ function FallingAppleScene:new()
   self.leftX = math.floor(self.distFromSide + (self.columnWidth / 2))
   self.rightX = math.floor(Constants.TOP_SCREEN_WIDTH - self.distFromSide - (self.columnWidth / 2))
   self.appleImg = love.graphics.newImage('Assets/Images/Objects/apple.png')
+  self.basketImg = love.graphics.newImage('Assets/Images/Objects/basket.png')
   
   -- Apple info
   self.appleY = 0
@@ -59,6 +59,8 @@ function FallingAppleScene:new()
   sandbox = {
     basket = 'left',
     apple = self.startPosition,
+    left = 'left',
+    right = 'right',
   }
   
   self.intro = true
@@ -79,6 +81,10 @@ function FallingAppleScene:new()
   self.gameClearTextBoxes:addText("Congratulations! You caught all of the apples. You are ready to move onto the next minigame now.")
   
   self.gameFailTextBoxes = TextBoxList()
+  
+  local lock = saveManager:getValue('lock') or 0
+  if lock < 7 then lock = 7 end
+  saveManager:setValue('lock', lock)
 end
 
 function FallingAppleScene:update()
@@ -91,7 +97,7 @@ function FallingAppleScene:update()
       -- Show the winning thing
       -- If finished with the game clear, go to main menu
       if self.gameClearTextBoxes:update() then
-        return MainMenuScene()
+        return FallingApple2Scene()
       end
     else
       -- Show the losing thing
@@ -172,27 +178,8 @@ function FallingAppleScene:drawTopScreen()
   end
   drawColumn(self.leftX, self.columnWidth)
   drawColumn(self.rightX, self.columnWidth)
-  
-  -- Draw the basket
-  local x = 0
-  if sandbox.basket == 'left' then
-    x = self.leftX
-  else
-    x = self.rightX
-  end
-  draw:arc({
-    mode = 'line',
-    arctype = 'open',
-    x = x,
-    y = self.basketY,
-    fromAngle = math.pi/2 + -1.5,
-    toAngle = math.pi/2 + 1.5,
-    color = Color.BLACK,
-    segments = 10,
-    lineWidth = 5,
-    radius = 25,
-  })
-  
+
+    
   --[[local x = 0
   local wid = self.boxWidth
   if sandbox.position == 'left' then
@@ -225,6 +212,35 @@ function FallingAppleScene:drawTopScreen()
     sy = self.appleScale,
     center = true,
     rotateCenter = true,
+  })
+
+
+  -- Draw the basket
+  local x = 0
+  if sandbox.basket == 'left' then
+    x = self.leftX
+  else
+    x = self.rightX
+  end
+  --[[draw:arc({
+    mode = 'line',
+    arctype = 'open',
+    x = x,
+    y = self.basketY,
+    fromAngle = math.pi/2 + -1.5,
+    toAngle = math.pi/2 + 1.5,
+    color = Color.BLACK,
+    segments = 10,
+    lineWidth = 5,
+    radius = 25,
+  })--]]
+  draw:img({
+    x = x,
+    y = self.basketY,
+    sx = 1.1,
+    sy = 1.1,
+    center = true,
+    img = self.basketImg,
   })
   
   -- Draw the information of number of apples caught

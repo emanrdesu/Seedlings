@@ -88,7 +88,23 @@ function Draw:circle(args)
     args.segments or nil,
     args.color or Color(1,1,1),
     args.lineWidth or 0
-    
+  
+  if mode == 'line' then
+    draw:arc({
+      mode = 'line',
+      arcType = 'closed',
+      x = x,
+      y = y,
+      radius = radius,
+      lineWidth = lineWidth,
+      segments = segments, 
+      color = color,
+      fromAngle = 0,
+      toAngle = 1.99 * math.pi,
+    })
+    return
+  end
+  
   love.graphics.setLineWidth(lineWidth)
   love.graphics.setColor(color.r, color.g, color.b, color.alpha)
   if segments == nil then
@@ -99,6 +115,19 @@ function Draw:circle(args)
   self:reset()
 end
 
+function Draw:bcircle(args)
+   local borderColor = args.borderColor or Color(1,1,1)
+   local borderWidth = args.borderWidth or 0
+   local tempColor = args.color
+
+   args.color = borderColor
+   self:circle(args)
+   args.color = tempColor
+   args.radius = args.radius - borderWidth
+   self:circle(args)
+   args.radius = args.radius + borderWidth
+   self:reset()
+end
 
 -- draw:ellipse({mode='line', x=100, y=100, radiusX=50, radiusY = 60, lineWidth=2, segments=15})
 function Draw:ellipse(args)
@@ -177,6 +206,21 @@ function Draw:ellipse(args)
   self:reset()
 end
   
+function Draw:bellipse(args)
+   local borderColor = args.borderColor or Color(1,1,1)
+   local borderWidth = args.borderWidth or 0
+
+   local tempColor = args.color
+   args.color = borderColor
+   self:ellipse(args)
+   args.color = tempColor
+   args.radiusX = args.radiusX - borderWidth
+   args.radiusY = args.radiusY - borderWidth
+   self:ellipse(args)
+   args.radiusX = args.radiusX + borderWidth
+   args.radiusY = args.radiusY + borderWidth
+   self:reset()
+end
 
 -- draw:line({points={40,20,30,40,400, 400}, color=Color(.6,.2,.8), lineWidth=10})
 function Draw:line(args)
