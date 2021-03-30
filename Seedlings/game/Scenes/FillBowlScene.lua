@@ -84,7 +84,7 @@ function FillBowlScene:new()
   self.completed:addText("Congratulations! Your machine worked on all of the bowls. You can now continue onto the next section.")
   
   local lock = saveManager:getValue('lock') or 0
-  if lock < 5 then lock = 5 end
+  if lock < 6 then lock = 6 end
   saveManager:setValue('lock', lock)
 end
 
