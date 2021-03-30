@@ -83,7 +83,7 @@ function FallingAppleScene:new()
   self.gameFailTextBoxes = TextBoxList()
   
   local lock = saveManager:getValue('lock') or 0
-  if lock < 7 then lock = 7 end
+  if lock < 8 then lock = 8 end
   saveManager:setValue('lock', lock)
 end
 

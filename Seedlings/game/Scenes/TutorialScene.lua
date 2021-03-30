@@ -53,7 +53,7 @@ function TutorialScene:new()
   self.gameClearTextBoxes:addText("Congratulations!\n".."You passed this level! Now time to move on to more complex games.")
 
   local lock = saveManager:getValue('lock') or 0
-  if lock < 3 then lock = 3 end
+  if lock < 4 then lock = 4 end
   saveManager:setValue('lock', lock)
 
 end
@@ -70,6 +70,7 @@ function TutorialScene:update()
       return IfIntroductionScene()
     end
   else
+    if inputManager:isPressed('b') then return MainMenuScene() end
     self.commandUI:update()
     
     if self.initiate then

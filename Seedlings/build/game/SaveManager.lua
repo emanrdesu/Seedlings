@@ -46,6 +46,9 @@ function SaveManager:loadData()
         -- Finished building, set the value
         print("Loaded "..value.." into variable "..name)
         self.data[name] = tonumber(value)
+        -- Reset to nil
+        name = "" -- Need to start building name after, so make it not nil
+        value = nil
       end
     else
       -- Append char to current word we're building
