@@ -98,7 +98,7 @@ function MelodyMakerIntro:drawTopScreen()
     love.graphics.setColor(1, 1, 1, 1)
     
     draw:print({
-        text = '\tHello!\nBooting up...',
+        text = '     Hello!\nBooting up...',
         x = 145,
         y = 75,
         color = Color.WHITE,

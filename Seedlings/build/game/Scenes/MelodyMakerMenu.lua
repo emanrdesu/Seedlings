@@ -11,6 +11,10 @@ function MelodyMakerMenu:new()
   
   self.selectedTop = 1
   chordFlag = false
+  
+  local lock = saveManager:getValue('lock') or 0
+  if lock < 2 then lock = 2 end
+  saveManager:setValue('lock', lock)
 end
 
 function MelodyMakerMenu:update()

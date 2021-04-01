@@ -15,7 +15,7 @@ function IfIntroductionScene:new()
   self.textBoxes:addText("Even if the food bowl is full, the machine will still take the picture!")
   
   local lock = saveManager:getValue('lock') or 0
-  if lock < 4 then lock = 4 end
+  if lock < 5 then lock = 5 end
   saveManager:setValue('lock', lock)
 end
 
