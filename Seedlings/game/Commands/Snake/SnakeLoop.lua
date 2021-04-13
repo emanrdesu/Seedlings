@@ -1,10 +1,12 @@
 SnakeLoop = Command:extend()
 SnakeLoop.COMMAND_NAME = 'Loop'
 
-function SnakeLoop:new()
+function SnakeLoop:new(args)
   -- Params is the set of things that the user can modify for this command
+  
+  if args == nil then args = {} end
   self.params = {
-    times = '2'
+    times = args.times or '2'
   }
   
   -- paramList stores a list of params with 2 values: userString is what will appear in the UI when modifying it
