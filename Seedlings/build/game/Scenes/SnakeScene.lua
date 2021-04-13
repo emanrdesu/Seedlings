@@ -9,7 +9,7 @@ function SnakeScene:new()
   self.commandUI:addAvailableCommand(SnakeMoveLeft)
   self.commandUI:addAvailableCommand(SnakeMoveRight)
 
-  self.commandUI.commandManager:setTimePerLine(0.03)
+  self.commandUI.commandManager:setTimePerLine(0.05)
   self.commandUI:setOnRun(
     function() 
       -- Reset game values if game is not running and not in summary stage
@@ -42,7 +42,7 @@ function SnakeScene:new()
     {1, 0, 3, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1},
     {1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1},
     {1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1},
-    {1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1},
+    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1},
     {1, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 1},
     {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
     {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
@@ -53,6 +53,15 @@ function SnakeScene:new()
     self.appleCollected[r] = {}
     for c = 1, self.gridC, 1 do
       self.appleCollected[r][c] = false
+    end
+  end
+  
+  -- Moved info
+  self.beenTo = {}
+  for r = 1, self.gridR, 1 do
+    self.beenTo[r] = {}
+    for c = 1, self.gridC, 1 do
+      self.beenTo[r][c] = false
     end
   end
   
@@ -71,19 +80,25 @@ function SnakeScene:new()
   
   self.intro = true
   self.textBoxes = TextBoxList()
-  self.textBoxes:addText("Snake game intro")
+  self.textBoxes:addText("Welcome to the final minigame of this game. In this game, your goal is to help the little blue snake extend to reach all of the apples.")
+  self.textBoxes:addText("You can use the move commands to move the circle 1 space up, down, left, or right. The circle cannot move through walls.")
+  self.textBoxes:addText("So if the the snake is told to move left when up against a wall on the left, it will not move.")
+  self.textBoxes:addText("The move commands only move the circle 1 space, but loop commands can be used to repeat them.")
+  self.textBoxes:addText("The amount of times to loop can be selected from 1 to 20.")
+  self.textBoxes:addText("If the snake moves into the same space as an apple, it will collect it. You want to collect all of the apples.")
+  self.textBoxes:addText("If the snake does not reach all of the apples within "..tostring(self.timeToMove).." seconds, the game will not be cleared. Good luck!")
 
   -- If summary is true, user is in the stage after all the apples fall that tells them whether they passed or failed
   self.summary = false
   self.summaryWin = false
   self.gameClearTextBoxes = TextBoxList()
-  self.gameClearTextBoxes:addText("Game Success")
+  self.gameClearTextBoxes:addText("Congratulations! You have collected all of the apples. You have clearned the final minigame.")
   
   self.gameFailTextBoxes = TextBoxList()
-  self.gameFailTextBoxes:addText("Game Failed")
+  self.gameFailTextBoxes:addText("It looks like not all of the apples were collected. Try again!")
 
   local lock = saveManager:getValue('lock') or 0
-  if lock < 11 then lock = 11 end
+  if lock < 12 then lock = 12 end
   saveManager:setValue('lock', lock)
 end
 
@@ -117,9 +132,17 @@ function SnakeScene:update()
     local dt = love.timer.getDelta()
     if self.running then
       
+      self.beenTo[sandbox.snakeR][sandbox.snakeC] = true
       self.timeLeft = self.timeLeft - dt;
       
-      if self.timeLeft <= 0 then 
+      local preCheck = true
+      for r = 1, self.gridR, 1 do
+        for c = 1, self.gridC, 1 do
+          if self.grid[r][c] == 3 and self.appleCollected[r][c] == false then preCheck = false end
+        end
+      end
+      
+      if self.timeLeft <= 0 or preCheck then 
         self.timeLeft = 0
         self.running = false
         -- Game is over. Setup the summary
@@ -154,11 +177,16 @@ function SnakeScene:drawTopScreen()
       local color = Color.SAND
       if self.grid[r][c] == 1 then color = Color.BLACK end
       
+      local toAddR = 1
+      local toAddC = 1
+      if r == self.gridR then toAddR = 0 end
+      if c == self.gridC then toAddC = 0 end
+      
       draw:brectangle({
         x = self.gridStartX + self.gridSquareSize * (c-1),
         y = self.gridStartY + self.gridSquareSize * (r-1),
-        width = self.gridSquareSize,
-        height = self.gridSquareSize,
+        width = self.gridSquareSize + toAddC,
+        height = self.gridSquareSize + toAddR,
         color = color,
         borderWidth = 1,
         borderColor = Color.GRAY,
@@ -178,12 +206,46 @@ function SnakeScene:drawTopScreen()
     end
   end
   
+  
+  -- Draw where the snake has been
+  for r = 1, self.gridR, 1 do
+    for c = 1, self.gridC, 1 do
+      if self.beenTo[r][c] == true then
+        local cx = self.gridStartX + self.gridSquareSize * (c - 1) + (self.gridSquareSize / 2)
+        local cy = self.gridStartY + self.gridSquareSize * (r - 1) + (self.gridSquareSize / 2)
+        
+        draw:circle({
+          x = cx,
+          y = cy,
+          radius = 5,
+          color = Color.BLUE,
+        })
+      end
+    end
+  end
+  
   -- Draw where the person is
+  local centerX = self.gridStartX + self.gridSquareSize * (sandbox.snakeC - 1) + (self.gridSquareSize / 2)
+  local centerY = self.gridStartY + self.gridSquareSize * (sandbox.snakeR - 1) + (self.gridSquareSize / 2)
   draw:circle({
-    x = self.gridStartX + self.gridSquareSize * (sandbox.snakeC - 1) + (self.gridSquareSize / 2), 
-    y = self.gridStartY + self.gridSquareSize * (sandbox.snakeR - 1) + (self.gridSquareSize / 2),
+    x = centerX,
+    y = centerY,
     radius = 8,
     color = Color.BLUE,
+  })
+  draw:rectangle({
+    x = centerX - 4,
+    y = centerY - 5,
+    width = 2,
+    height = 6,
+    color = Color.WHITE,
+  })
+  draw:rectangle({
+    x = centerX + 4 - 2,
+    y = centerY - 5,
+    width = 2,
+    height = 6,
+    color = Color.WHITE,
   })
 
   -- Draw timer
@@ -233,6 +295,7 @@ function SnakeScene:reset()
   for r = 1, self.gridR, 1 do
     for c = 1, self.gridC, 1 do
       self.appleCollected[r][c] = false
+      self.beenTo[r][c] = false
     end
   end
   
