@@ -13,6 +13,7 @@ function MainMenuScene:new()
   self.sceneList:add({name='Falling Apple', ref = FallingAppleScene, lock = 8})
   self.sceneList:add({name='Falling Apple 2', ref = FallingApple2Scene, lock = 9})
   self.sceneList:add({name='Falling Apple 3', ref = FallingApple3Scene, lock = 10})
+  self.sceneList:add({name='Snake', ref = SnakeScene, lock = 11})
   
   --[[
   self.sceneList:add({name='Melody Maker Intro', ref =  MelodyMakerIntro, lock = 0})

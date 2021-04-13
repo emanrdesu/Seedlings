@@ -29,3 +29,9 @@ require 'Commands/FallingApple3/AppleCustomMoveRight'
 
 require 'Commands/FillBowl/FillBowl'
 require 'Commands/FillBowl/BowlIf'
+
+require 'Commands/Snake/SnakeMoveUp'
+require 'Commands/Snake/SnakeMoveDown'
+require 'Commands/Snake/SnakeMoveLeft'
+require 'Commands/Snake/SnakeMoveRight'
+require 'Commands/Snake/SnakeLoop'

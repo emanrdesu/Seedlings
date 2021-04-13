@@ -94,9 +94,9 @@ function FallingApple3Scene:update()
   elseif self.summary == true then
     if self.applesCaught == self.totalApples then
       -- Show the winning thing
-      -- If finished with the game clear, go to main menu
+      -- If finished with the game clear, go to Snake game
       if self.gameClearTextBoxes:update() then
-        return MainMenuScene()
+        return SnakeScene()
       end
     else
       -- Show the losing thing
