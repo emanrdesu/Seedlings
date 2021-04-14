@@ -222,14 +222,12 @@ function SnakeScene:drawTopScreen()
       if r == self.gridR then toAddR = 0 end
       if c == self.gridC then toAddC = 0 end
       
-      draw:brectangle({
+      draw:rectangle({
         x = self.gridStartX + self.gridSquareSize * (c-1),
         y = self.gridStartY + self.gridSquareSize * (r-1),
         width = self.gridSquareSize + toAddC,
         height = self.gridSquareSize + toAddR,
         color = color,
-        borderWidth = 1,
-        borderColor = Color.GRAY,
       })
     
       -- Draw apple if needed
@@ -246,6 +244,25 @@ function SnakeScene:drawTopScreen()
     end
   end
   
+  -- Draw the gray lines
+  for c = 1, self.gridC - 1, 1 do
+    draw:rectangle({
+      x = self.gridStartX + self.gridSquareSize * c,
+      y = self.gridStartY + self.gridSquareSize,
+      width = 1,
+      height = Constants.TOP_SCREEN_HEIGHT - 2 * self.gridSquareSize,
+      color = Color.GRAY,
+    })
+  end
+  for r = 1, self.gridR - 1, 1 do
+    draw:rectangle({
+      x = self.gridStartX + self.gridSquareSize,
+      y = self.gridStartY + self.gridSquareSize * r,
+      width = Constants.TOP_SCREEN_WIDTH - 2 * self.gridSquareSize,
+      height = 1,
+      color = Color.GRAY,
+    })
+  end
   
   -- Draw where the snake has been
   for r = 1, self.gridR, 1 do
