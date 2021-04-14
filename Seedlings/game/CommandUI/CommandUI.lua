@@ -205,6 +205,11 @@ function CommandUI:addAvailableCommand(cmd)
 end
 
 function CommandUI:execute()
+  local compiles = self.commandManager:doesItCompile()
+  if compiles == false then
+    -- Add a compile error to the stack
+    self.uiStack:addLast(CompileError(self))
+  end
   self.onRun()
 end
 
