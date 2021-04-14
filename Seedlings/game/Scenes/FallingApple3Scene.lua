@@ -111,6 +111,11 @@ function FallingApple3Scene:update()
     return FallingApple3Scene(true, self)
   end
   if self.backPressed then
+    self.originalRef.running = false
+    self.originalRef.timesFallen = 0 
+    self.originalRef.applesCaught = 0
+    self.originalRef:resetApple()
+    sandbox.basket = self.basketStartPosition
     return self.originalRef
   end
   
@@ -123,7 +128,14 @@ function FallingApple3Scene:update()
       -- Show the winning thing
       -- If finished with the game clear, go to Snake game
       if self.gameClearTextBoxes:update() then
-        if self.isTraining then return self.originalRef end
+        if self.isTraining then 
+          self.originalRef.running = false
+          self.originalRef.timesFallen = 0 
+          self.originalRef.applesCaught = 0
+          self.originalRef:resetApple()
+          sandbox.basket = self.basketStartPosition
+          return self.originalRef 
+        end
         return SnakeScene()
       end
     else
@@ -157,22 +169,7 @@ function FallingApple3Scene:update()
       
       -- Function to reset apple
       function resetApple()
-        self.appleY = - self.appleRadius
-        self.appleR = 0
-        sandbox.apple = self:randomApplePosition()
-        self.hasRun = false
-        self.timesFallen = self.timesFallen + 1
-        if self.timesFallen >= self.totalApples then 
-          self.running = false
-          -- enter the summary stage of the game
-          self.summary = true
-          self.gameClearTextBoxes:reset()
-          -- Update the fail list with how many apples were properly caught
-          self.gameFailTextBoxes = TextBoxList()
-          local appleText = "apples"
-          if self.applesCaught == 1 then appleText = "apple" end
-          self.gameFailTextBoxes:addText("Congratulations! You caught "..tostring(self.applesCaught).." "..appleText..". Try to catch all of the apples to clear the game")
-        end
+        self:resetApple()
       end
       
       -- If the apple hits the user, add to the count of apples caught & create a new apple
@@ -281,6 +278,25 @@ end
 -- Random number between 1 and 100
 function FallingApple3Scene:randomApplePosition()
   return math.ceil(100 * love.math.random())
+end
+
+function FallingApple3Scene:resetApple()
+  self.appleY = - self.appleRadius
+  self.appleR = 0
+  sandbox.apple = self:randomApplePosition()
+  self.hasRun = false
+  self.timesFallen = self.timesFallen + 1
+  if self.timesFallen >= self.totalApples then 
+    self.running = false
+    -- enter the summary stage of the game
+    self.summary = true
+    self.gameClearTextBoxes:reset()
+    -- Update the fail list with how many apples were properly caught
+    self.gameFailTextBoxes = TextBoxList()
+    local appleText = "apples"
+    if self.applesCaught == 1 then appleText = "apple" end
+    self.gameFailTextBoxes:addText("Congratulations! You caught "..tostring(self.applesCaught).." "..appleText..". Try to catch all of the apples to clear the game")
+  end
 end
 
 function FallingApple3Scene:isCaught(basket, apple)
