@@ -26,7 +26,7 @@ CommandSelector ->  (will be passed a reference to this object to reference the 
 
 --]]
 
-function CommandUI:new()
+function CommandUI:new(isTraining)
   -- Initialize stuff. Have the command lister on the top of the stack
   self.commandLister = CommandLister(self)
   self.availableCommands = ArrayList()
@@ -40,7 +40,7 @@ function CommandUI:new()
   
   -- Create buttons
   local width = 62
-  local height = 53
+  local height = 42
   local x = 250;
   local deltaHeight = 3
   
@@ -131,7 +131,7 @@ function CommandUI:new()
   )
   
   -- Run button
-  local runHeight = height + 13
+  local runHeight = height + 8
   local y4 = y3 + height + deltaHeight
   self.buttonList:add(
     Button({
@@ -141,6 +141,28 @@ function CommandUI:new()
       onClick = function() self:execute() end
     })
   )
+  
+  local y5 = y4 + runHeight + deltaHeight
+  local helpButton = Button({
+    hitbox = {shape = 'rectangle', x = x, y = y5, width = width, height = runHeight},
+    drawNormal = getDrawNormal(x, y5, width, runHeight, "HELP"),
+    drawHovered = getDrawHovered(x, y5, width, runHeight, "HELP"),
+    onClick = function() self:help() end
+  })
+
+  local backButton = Button({
+    hitbox = {shape = 'rectangle', x = x, y = y5, width = width, height = runHeight},
+    drawNormal = getDrawNormal(x, y5, width, runHeight, "BACK"),
+    drawHovered = getDrawHovered(x, y5, width, runHeight, "BACK"),
+    onClick = function() self:back() end
+  })
+
+  if isTraining == true then
+    self.buttonList:add(backButton)
+  else
+    self.buttonList:add(helpButton)
+  end
+  
   
 end
 
@@ -186,6 +208,22 @@ function CommandUI:execute()
   self.onRun()
 end
 
+function CommandUI:help()
+  self.onHelp()
+end
+
+function CommandUI:back()
+  self.onBack()
+end
+
 function CommandUI:setOnRun(func)
   self.onRun = func
+end
+
+function CommandUI:setOnHelp(func)
+  self.onHelp = func
+end
+
+function CommandUI:setOnBack(func)
+  self.onBack = func
 end

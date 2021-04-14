@@ -3,10 +3,11 @@ AppleCondition2.COMMAND_NAME = 'If'
 
 function AppleCondition2:new(args)
   -- Params is the set of things that the user can modify for this command
+  if args == nil then args = {} end
   self.params = {
-    left = 'apple',
-    op = '==',
-    right = 'center',
+    left = args.left or 'apple',
+    op = args.op or '==',
+    right = args.right or 'center',
   }
   
   -- paramList stores a list of params with 2 values: userString is what will appear in the UI when modifying it

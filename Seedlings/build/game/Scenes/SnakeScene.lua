@@ -1,7 +1,12 @@
 SnakeScene = Scene:extend()
 
-function SnakeScene:new()
-  self.commandUI = CommandUI()
+function SnakeScene:new(isTraining, originalRef)
+  self.isTraining = isTraining
+  self.originalRef = originalRef
+  self.helpPressed = false
+  self.backPressed = false
+  
+  self.commandUI = CommandUI(isTraining)
   self.commandUI:addAvailableCommand(SnakeLoop)
   self.commandUI:addAvailableCommand(End)
   self.commandUI:addAvailableCommand(SnakeMoveUp)
@@ -21,6 +26,27 @@ function SnakeScene:new()
       end
     end
   )
+  if isTraining == true then
+    self.commandUI:setOnBack(function() self.backPressed = true self.originalRef:reset() self.originalRef.running = false end)
+  else
+    self.commandUI:setOnHelp(function() self.helpPressed = true end)
+  end
+  
+  if isTraining == true then
+    self.commandUI.commandManager:addCommand(SnakeLoop({times='8'}))
+    self.commandUI.commandManager:addCommand(SnakeMoveDown())
+    self.commandUI.commandManager:addCommand(End())
+    self.commandUI.commandManager:addCommand(SnakeLoop({times='8'}))
+    self.commandUI.commandManager:addCommand(SnakeMoveRight())
+    self.commandUI.commandManager:addCommand(SnakeMoveUp())
+    self.commandUI.commandManager:addCommand(End())
+    self.commandUI.commandManager:addCommand(SnakeLoop({times='7'}))
+    self.commandUI.commandManager:addCommand(SnakeMoveRight())
+    self.commandUI.commandManager:addCommand(End())
+    self.commandUI.commandManager:addCommand(SnakeLoop({times='20'}))
+    self.commandUI.commandManager:addCommand(SnakeMoveDown())
+    self.commandUI.commandManager:addCommand(End())
+  end
   
   self.appleImg = love.graphics.newImage('Assets/Images/Objects/apple.png')
   self.appleScale = 0.1
@@ -79,6 +105,7 @@ function SnakeScene:new()
   }
   
   self.intro = true
+  if isTraining then self.intro = false end
   self.textBoxes = TextBoxList()
   self.textBoxes:addText("Welcome to the final minigame of this game. In this game, your goal is to help the little blue snake extend to reach all of the apples.")
   self.textBoxes:addText("You can use the move commands to move the circle 1 space up, down, left, or right. The circle cannot move through walls.")
@@ -103,6 +130,14 @@ function SnakeScene:new()
 end
 
 function SnakeScene:update()
+  if self.helpPressed then
+    self.helpPressed = false
+    return SnakeScene(true, self)
+  end
+  if self.backPressed then
+    return self.originalRef
+  end
+  
   if self.intro == true then
     -- If reading the text, only update that
     local finished = self.textBoxes:update()
@@ -113,6 +148,11 @@ function SnakeScene:update()
 
     if self.summaryWin then
       if self.gameClearTextBoxes:update() then
+        if self.isTraining then 
+          self.originalRef:reset() 
+          self.originalRef.running = false 
+          return self.originalRef 
+        end
         return MainMenuScene()
       end
     else
