@@ -1,7 +1,12 @@
 FallingApple3Scene = Scene:extend()
 
-function FallingApple3Scene:new()
-  self.commandUI = CommandUI()
+function FallingApple3Scene:new(isTraining, originalRef)
+  self.isTraining = isTraining
+  self.originalRef = originalRef
+  self.helpPressed = false
+  self.backPressed = false
+  
+  self.commandUI = CommandUI(isTraining)
   self.commandUI:addAvailableCommand(AppleMoveLeft3)
   self.commandUI:addAvailableCommand(AppleMoveRight3)
   self.commandUI:addAvailableCommand(AppleCondition3)
@@ -22,6 +27,19 @@ function FallingApple3Scene:new()
       end
     end
   )
+  if isTraining == true then
+    self.commandUI:setOnBack(function() self.backPressed = true end)
+  else
+    self.commandUI:setOnHelp(function() self.helpPressed = true end)
+  end
+  
+  if isTraining == true then
+    self.commandUI.commandManager:addCommand(AppleCondition3({left='apple',mathOp='+',value='0',compOp='<=',right='basket'}))
+    self.commandUI.commandManager:addCommand(AppleMoveLeft3({value='10'}))
+    self.commandUI.commandManager:addCommand(Else())
+    self.commandUI.commandManager:addCommand(AppleMoveRight3({value='10'}))
+    self.commandUI.commandManager:addCommand(End())
+  end
   
   -- Column info & apple img
   self.columnWidth = Constants.TOP_SCREEN_WIDTH
@@ -62,6 +80,7 @@ function FallingApple3Scene:new()
   }
   
   self.intro = true
+  if isTraining then self.intro = false end
   self.textBoxes = TextBoxList()
   self.textBoxes:addText("This final falling apple game is very different from the last two. This time there are no columns. The apple will instead have a number value between 1 and 100")
   self.textBoxes:addText("The smaller values like 1 are on the left side of the screen. The larger values like 100 are on the right side of the screen.")
@@ -87,6 +106,14 @@ function FallingApple3Scene:new()
 end
 
 function FallingApple3Scene:update()
+   if self.helpPressed then
+    self.helpPressed = false
+    return FallingApple3Scene(true, self)
+  end
+  if self.backPressed then
+    return self.originalRef
+  end
+  
   if self.intro == true then
     -- If reading the text, only update that
     local finished = self.textBoxes:update()
@@ -96,6 +123,7 @@ function FallingApple3Scene:update()
       -- Show the winning thing
       -- If finished with the game clear, go to Snake game
       if self.gameClearTextBoxes:update() then
+        if self.isTraining then return self.originalRef end
         return SnakeScene()
       end
     else
