@@ -1,13 +1,17 @@
 TutorialScene = Scene:extend()
 
-function TutorialScene:new()
-
+function TutorialScene:new(isTraining, originalRef)
+  self.isTraining = isTraining
+  self.originalRef = originalRef
+  self.helpPressed = false
+  self.backPressed = false
+  
   self.shapes = ArrayList()
   self.shapes:add({shape = 'square', color = Color.WHITE, wanted_color = Color.RED})
   self.shapes:add({shape = 'triangle', color = Color.WHITE, wanted_color = Color.GREEN})
   self.shapes:add({shape = 'circle', color = Color.WHITE, wanted_color = Color.BLUE})
 
-  self.commandUI = CommandUI()
+  self.commandUI = CommandUI(isTraining)
   self.commandUI:addAvailableCommand(SetShapeColor)
 
   self.WAIT_TIME = 0.4
@@ -21,6 +25,23 @@ function TutorialScene:new()
       end
     end
   )
+  if isTraining == true then
+    self.commandUI:setOnBack(function() self.backPressed = true end)
+  else
+    self.commandUI:setOnHelp(function() self.helpPressed = true end)
+  end
+  
+  if isTraining == true then
+    self.commandUI.commandManager:addCommand(
+      SetShapeColor({shape = 'square.color', color = 'red'})
+    )
+    self.commandUI.commandManager:addCommand(
+      SetShapeColor({shape = 'circle.color', color = 'blue'})
+    )
+    self.commandUI.commandManager:addCommand(
+      SetShapeColor({shape = 'triangle.color', color = 'green'})
+    )
+  end
 
   sandbox = {
     square = self.shapes:get(0),
@@ -33,6 +54,7 @@ function TutorialScene:new()
   self.initiate = false
 
   self.intro = true
+  if isTraining then self.intro = false end
   self.textBoxes = TextBoxList()
   self.textBoxes:addText("Welcome to the first code tutorial game.\nYour goal is to assign the shapes their appropriate colors.")
   self.textBoxes:addText("You are able to add a 'Set Color' command to the program. This command can be used to change the color of the shapes.")
@@ -59,6 +81,14 @@ function TutorialScene:new()
 end
 
 function TutorialScene:update()
+  if self.helpPressed then
+    self.helpPressed = false
+    return TutorialScene(true, self)
+  end
+  if self.backPressed then
+    return self.originalRef
+  end
+  
   if self.intro == true then
     local finished = self.textBoxes:update()
     if finished == true then self.intro = false end
@@ -67,6 +97,7 @@ function TutorialScene:update()
       self.waitForSummary = false
     end
     if not self.waitForSummary and self.gameClearTextBoxes:update() then
+      if self.isTraining then return self.originalRef end
       return IfIntroductionScene()
     end
   else

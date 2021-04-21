@@ -1,10 +1,11 @@
 AppleMoveRight3 = Command:extend()
 AppleMoveRight3.COMMAND_NAME = 'Move Right'
 
-function AppleMoveRight3:new()
+function AppleMoveRight3:new(args)
   -- Params is the set of things that the user can modify for this command
+  if args == nil then args = {} end
   self.params = {
-      value = '1'
+      value = args.value or '1'
   }
   
   -- paramList stores a list of params with 2 values: userString is what will appear in the UI when modifying it
