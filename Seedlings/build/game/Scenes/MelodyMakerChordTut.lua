@@ -83,10 +83,14 @@ function MelodyMakerChordTut:new()
   self.timerFlag = false
   self.playTimer = 2
   self.sequencesMatching = false
+  
 end
 
 function MelodyMakerChordTut:update()
-  if self.panel19Flag and self.playTimer <=0 and self.sequencesMatching and inputManager:isPressed('a') then return MainMenuScene() end
+  if self.panel19Flag and self.playTimer <=0 and self.sequencesMatching and inputManager:isPressed('a') then 
+    MelodyMakerMenu.chordFlag = true
+    return MelodyMakerChordMini() 
+  end
 
   self.commandManager:update()
   local dt = love.timer.getDelta()

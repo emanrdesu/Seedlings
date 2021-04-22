@@ -29,7 +29,7 @@ function GameManager:drawTopScreen()
   self.currentScene:drawTopScreen()
   
   fontManager:setFont('default')
-  love.graphics.print("dt = "..tostring(dt), 0, 0)
+  --love.graphics.print("dt = "..tostring(dt), 0, 0)
 end
 
 function GameManager:drawBottomScreen()

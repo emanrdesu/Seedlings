@@ -1,11 +1,10 @@
 MelodyMakerMinigame = Scene:extend()
 
 function MelodyMakerMinigame:new()
-  self.topBG1 = love.graphics.newImage('Assets/Images/Panels/melodymak_panels/mm_1_cmdBox.png')
-  self.topBG2 = love.graphics.newImage('Assets/Images/Panels/melodymak_panels/mm_2_1_playScreen.png')
+  self.topBG1 = love.graphics.newImage('Assets/Images/Panels/melodymak_panels/mm_1_2_tutorialPlay.png')
+  self.topBG2 = love.graphics.newImage('Assets/Images/Panels/melodymak_panels/mm_2_2_playScreen.png')
   self.botBG1 = love.graphics.newImage('Assets/Images/Panels/bottom/BotBG_peach_apples_tutorialBox.png')
-  self.botBG2 = love.graphics.newImage('Assets/Images/Panels/bottom/BotBG_layout_LHeavy_green.png')
-  self.botBG3 = love.graphics.newImage('Assets/Images/Panels/bottom/BotBG_layout_RHeavy_green.png')
+  self.botBG2 = love.graphics.newImage('Assets/Images/Panels/bottom/BotBG_layout_RHeavy_green.png')
   self.compyMouthSmile = love.graphics.newImage('Assets/Images/Objects/cmouth_smile.png')
   self.compyMouthSad = love.graphics.newImage('Assets/Images/Objects/cmouth_sad.png')
   self.compyEyes = love.graphics.newImage('Assets/Images/Objects/ceyes_normal.png')
@@ -20,6 +19,7 @@ function MelodyMakerMinigame:new()
   self.FNote = love.graphics.newImage('Assets/Images/Objects/F_Note.png')
   self.GNote = love.graphics.newImage('Assets/Images/Objects/G_Note.png')
   self.emptyNote = love.graphics.newImage('Assets/Images/Objects/empty_Note.png')
+  self.chordNote = love.graphics.newImage('Assets/Images/Objects/chord_note.png')
   self.blueArrow = love.graphics.newImage('Assets/Images/Objects/blueArrow.png')
   self.note = love.graphics.newImage('Assets/Images/Objects/note_outer.png')
   self.blueNote = love.graphics.newImage('Assets/Images/Objects/note_inner_blue.png')
@@ -207,7 +207,7 @@ function MelodyMakerMinigame:update()
   
   if inputManager:isPressed('x') then
     if self.panel12Flag and self.sequencesMatch then
-      return MelodyMakerChordTut()
+      return MelodyMakerMenu()
     end
   end
   
@@ -394,11 +394,11 @@ function MelodyMakerMinigame:drawBottomScreen()
         })
   --Panel 11
   elseif self.panel11Flag then
-    love.graphics.draw(self.botBG3)
+    love.graphics.draw(self.botBG2)
   
     draw:print({
-        text = "Give this variable a value that matches the song above!",
-        x = 25,
+        text = "Give this variable a value that matches\nthe song above!",
+        x = 20,
         y = 15,
         color = Color.BLACK,
       })
