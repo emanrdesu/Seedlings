@@ -89,7 +89,7 @@ end
 function MelodyMakerChordTut:update()
   if self.panel19Flag and self.playTimer <=0 and self.sequencesMatching and inputManager:isPressed('a') then 
     MelodyMakerMenu.chordFlag = true
-    return MelodyMakerMenu() 
+    return MelodyMakerChordMini() 
   end
 
   self.commandManager:update()
