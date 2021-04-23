@@ -201,7 +201,7 @@ function MelodyMakerChordMini:update()
   
   if inputManager:isPressed('x') then
     if self.panel23Flag and self.sequencesMatching then
-      MelodyMakerMenu.chordFlag = true
+      saveManager:setValue('chordFlag', 1)
       return MelodyMakerMenu()
     end
   end
