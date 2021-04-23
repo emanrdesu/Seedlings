@@ -129,6 +129,7 @@ function InputManager:update()
   while not self.pressQueue:isEmpty() do
     local button = self.pressQueue:poll()
     self.isPressedMap[button] = true
+    sm:playButton(button)
     self.isHeldDownMap[button] = true
   end
   

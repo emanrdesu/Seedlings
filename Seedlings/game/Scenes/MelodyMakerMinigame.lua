@@ -1,6 +1,7 @@
 MelodyMakerMinigame = Scene:extend()
 
 function MelodyMakerMinigame:new()
+  sm.playStart = false
   self.topBG1 = love.graphics.newImage('Assets/Images/Panels/melodymak_panels/mm_1_cmdBox.png')
   self.topBG2 = love.graphics.newImage('Assets/Images/Panels/melodymak_panels/mm_2_1_playScreen.png')
   self.botBG1 = love.graphics.newImage('Assets/Images/Panels/bottom/BotBG_peach_apples_tutorialBox.png')
@@ -207,7 +208,7 @@ function MelodyMakerMinigame:update()
   
   if inputManager:isPressed('x') then
     if self.panel12Flag and self.sequencesMatch then
-      return MelodyMakerMenu()
+       return Trans(MelodyMakerMenu)
     end
   end
   

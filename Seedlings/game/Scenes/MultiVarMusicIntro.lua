@@ -97,7 +97,7 @@ function MultiVarMusicIntro:update()
       self.commandManager:start()
       
       if self.sequencesMatching then
-        return MultiVarMelodyMaker()
+         return Trans(MultiVarMelodyMaker)
       end
     end
     

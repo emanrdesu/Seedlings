@@ -97,7 +97,7 @@ function FallingApple2Scene:update()
       -- Show the winning thing
       -- If finished with the game clear, go to main menu
       if self.gameClearTextBoxes:update() then
-        return FallingApple3Scene()
+         return Trans(FallingApple3Scene)
       end
     else
       -- Show the losing thing
@@ -107,7 +107,7 @@ function FallingApple2Scene:update()
       end
     end
   else
-    if inputManager:isPressed('b') then return MainMenuScene() end
+     if inputManager:isPressed('b') then return Trans(MainMenuScene) end
     
     -- Update UI
     self.commandUI:update()

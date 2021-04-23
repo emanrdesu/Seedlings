@@ -1,6 +1,7 @@
 MelodyMakerTut = Scene:extend()
 
 function MelodyMakerTut:new()
+  sm.playStart = false
   self.topBG = love.graphics.newImage('Assets/Images/Panels/melodymak_panels/mm_1_2_tutorialPlay.png')
   self.botBG1 = love.graphics.newImage('Assets/Images/Panels/bottom/BotBG_peach_apples_tutorialBox.png')
   self.botBG2 = love.graphics.newImage('Assets/Images/Panels/bottom/BotBG_layout_LHeavy_green.png')
@@ -95,7 +96,7 @@ function MelodyMakerTut:update()
   
   if inputManager:isPressed('select') then
     if self.valueSelected and self.pauseFlag and self.valuesMatching and self.panel7Flag then
-      return MelodyMakerMinigame()
+       return Trans(MelodyMakerMinigame)
     end
   end
   

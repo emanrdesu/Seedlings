@@ -524,7 +524,7 @@ end
 
 function VarTutEndH:update()
    if inputManager:isPressed('a') then
-      return self.ti == 6 and VarMini() or self.vte
+      return self.ti == 6 and Trans(VarMini) or self.vte
    end
 
    return self

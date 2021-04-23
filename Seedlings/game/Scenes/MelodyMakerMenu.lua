@@ -1,6 +1,7 @@
 MelodyMakerMenu = Scene:extend()
 
 function MelodyMakerMenu:new()
+  sm.playStart = true
   self.topBG1 = love.graphics.newImage('Assets/Images/Panels/melodymak_panels/mm_1_cmdBox.png')
   self.compyEyes = love.graphics.newImage('Assets/Images/Objects/ceyes_normal.png')
   self.compyMouthSmile = love.graphics.newImage('Assets/Images/Objects/cmouth_smile.png')
@@ -32,16 +33,16 @@ function MelodyMakerMenu:update()
   
   if inputManager:isPressed('a') then
     if self.selectedTop == 1 then
-      return MelodyMakerIntro()
+       return Trans(MelodyMakerIntro)
     elseif self.selectedTop == 2 then
-      return MelodyMakerTut()
+       return Trans(MelodyMakerTut)
     elseif self.selectedTop == 3 then
       self.chordFlag = true
-      return MelodyMakerChordTut()
+      return Trans(MelodyMakerChordTut)
     elseif self.selectedTop == 4 then
-      return MainMenuScene()
+       return Trans(MainMenuScene)
     elseif self.selectedTop == 5 then
-      return CodeIntroductionScene()
+       return Trans(CodeIntroductionScene)
     end
   end
   
