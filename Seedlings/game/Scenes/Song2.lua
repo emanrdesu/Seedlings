@@ -59,7 +59,7 @@ function Song2:new()
   self.notePosTable['E'] = 40
   self.notePosTable['F'] = 30
   self.notePosTable['G'] = 20
-
+  
   self.userNotes = {}
   self.userNotes[1] = self.emptyNote
   self.userNotes[2] = self.emptyNote
@@ -210,6 +210,10 @@ function Song2:update()
     end
   end
   
+  if inputManager:isPressed('y') then
+    return MelodyMakerMenu()
+  end
+
   if inputManager:isPressed('x') then
     if self.panel12Flag and self.sequencesMatch then
       return MelodyMakerMenu()
@@ -312,7 +316,13 @@ function Song2:drawBottomScreen()
   --Panel 11
   if self.panel11Flag then
     love.graphics.draw(self.botBG2)
-  
+
+    draw:print({
+      text = "Press 'Y' to return to the menu.",
+      x = 20,
+      y = 210,
+      color = Color.BLACK,
+    })
     draw:print({
         text = "Give this variable a value that matches\nthe song above!",
         x = 20,
