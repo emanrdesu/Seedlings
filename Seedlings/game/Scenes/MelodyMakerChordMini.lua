@@ -89,10 +89,6 @@ function MelodyMakerChordMini:new()
   self.desiredSequence = {Chord('C', 'E'), Chord('D', 'F'), Chord('E', 'G'), Chord('F', 'A', 'C'), Chord('E', 'G'), Chord('D', 'F', 'A'), Chord('C', 'E', 'G')}
   self.booleanChordMatching = {false, false, false, false, false, false, false}
   self.sequencesMatching = false
-  
-  --DEBUG FLAG AUTOSET, FIX BEFORE PUSHING
-
-  MelodyMakerMenu.chordFlag = true
 
   self.panel21Flag = true
   self.panel22Flag = false
