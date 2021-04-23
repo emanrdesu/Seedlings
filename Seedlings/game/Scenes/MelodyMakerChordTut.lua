@@ -90,7 +90,7 @@ end
 function MelodyMakerChordTut:update()
   if self.panel19Flag and self.playTimer <=0 and self.sequencesMatching and inputManager:isPressed('a') then 
     MelodyMakerMenu.chordFlag = true
-    return Trans(MelodyMakerMenu)
+    return Trans(MelodyMakerChordMini)
   end
 
   self.commandManager:update()
@@ -212,8 +212,8 @@ function MelodyMakerChordTut:drawTopScreen()
     love.graphics.draw(self.compyEyes, 20, 30)
     love.graphics.draw(self.compyMouthSmile, 20, 80)
     
-    love.graphics.draw(self.whiteSquare, 220, 175, 0, self.squareScaleX, self.squareScaleY)
-    love.graphics.draw(self.chordNote, 220, 175, 0, self.noteScaleX, self.noteScaleY)
+    love.graphics.draw(self.whiteSquare, 220, 155, 0, self.squareScaleX, self.squareScaleY)
+    love.graphics.draw(self.chordNote, 220, 155, 0, self.noteScaleX, self.noteScaleY)
     
     draw:print({
         text = "run PlayChord.exe",

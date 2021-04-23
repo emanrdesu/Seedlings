@@ -7,7 +7,7 @@ function MelodyMakerMenu:new()
   self.promptArrow = love.graphics.newImage('Assets/Images/Objects/prompt_carrot.png')
   self.botBG1 = love.graphics.newImage('Assets/Images/Panels/bottom/BotBG_peach_apples_tutorialBox.png')
   
-  options = {"Introduction", "Variable Tutorial", "Chord Tutorial", "Main Menu"}
+  options = {"Song1", "Song2", "Song3", "Chord1", "Chord2", "Chord3", "Variable Tutorial", "Try something new", "Main Menu", "Next Game", "Make your own!"}
   
   self.selectedTop = 1
   chordFlag = false
@@ -19,11 +19,15 @@ end
 
 function MelodyMakerMenu:update()
   if self.chordFlag then
-    options[5] = "Next Game"
+    options[8] = "Chord Tutorial"
   end
   
   if inputManager:isPressed('dpdown') then
-    if self.selectedTop < #options then self.selectedTop = self.selectedTop + 1 end
+    if self.chordFlag then 
+      if self.selectedTop < #options then self.selectedTop = self.selectedTop + 1 end
+    else
+      if self.selectedTop < #options - 2 then self.selectedTop = self.selectedTop + 1 end
+    end
   end
   
   if inputManager:isPressed('dpup') then
@@ -32,16 +36,28 @@ function MelodyMakerMenu:update()
   
   if inputManager:isPressed('a') then
     if self.selectedTop == 1 then
-      return MelodyMakerIntro()
+      return Song1()
     elseif self.selectedTop == 2 then
-      return MelodyMakerTut()
+      return Song2()
     elseif self.selectedTop == 3 then
+      return Song3()
+    elseif self.selectedTop == 4 then
+      return Chord1()
+    elseif self.selectedTop == 5 then
+      return Chord2()
+    elseif self.selectedTop == 6 then
+      return Chord3()
+    elseif self.selectedTop == 7 then
+      return MelodyMakerTut()
+    elseif self.selectedTop == 8 then
       self.chordFlag = true
       return MelodyMakerChordTut()
-    elseif self.selectedTop == 4 then
+    elseif self.selectedTop == 9 then
       return MainMenuScene()
-    elseif self.selectedTop == 5 then
-      return CodeIntroductionScene()
+    elseif self.selectedTop == 10 and self.chordFlag then
+      return CodeIntroductionScene()      
+    elseif self.selectedTop == 11 and self.chordFlag then
+      return MelodyMakerMakeYourOwn()
     end
   end
   
@@ -53,11 +69,40 @@ function MelodyMakerMenu:drawTopScreen()
   love.graphics.draw(self.compyEyes, 20, 30)
   love.graphics.draw(self.compyMouthSmile, 20, 80)
   
+  for i = 1, 3 do 
+    love.graphics.print(options[i], 105, 30 * i)
+  end
+  
+  for i = 4, 6 do 
+    love.graphics.print(options[i], 250, 30 * (i-3))
+  end
+  
+  love.graphics.print(options[7], 105, 120)
+  love.graphics.print(options[8], 240, 120)
+  love.graphics.print(options[9], 105, 150)
+  
+  if self.chordFlag then
+    love.graphics.print(options[10], 240, 150)
+    love.graphics.print(options[11], 105, 180)
+  end
+  
   for i,v in ipairs(options) do
-    love.graphics.print(v, 170, 30 * i)
-    
     if i == self.selectedTop then
-      love.graphics.draw(self.promptArrow, 150, 31 * i)
+      if i > 0 and i <= 3 then
+        love.graphics.draw(self.promptArrow, 90, 30*i)
+      elseif i > 3 and i <= 6 then
+        love.graphics.draw(self.promptArrow, 230, 30 * (i-3))
+      elseif i == 7 then
+        love.graphics.draw(self.promptArrow, 90, 120)
+      elseif i == 8 then
+        love.graphics.draw(self.promptArrow, 225, 120)
+      elseif i == 9 then 
+        love.graphics.draw(self.promptArrow, 90, 150)
+      elseif self.chordFlag and i == 10 then
+        love.graphics.draw(self.promptArrow, 225, 150)
+      elseif self.chordFlag and i == 11 then
+        love.graphics.draw(self.promptArrow, 90, 180)
+      end
     end
   end
 end

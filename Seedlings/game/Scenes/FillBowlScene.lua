@@ -1,8 +1,13 @@
 FillBowlScene = Object:extend()
 
-function FillBowlScene:new()
+function FillBowlScene:new(isTraining, originalRef)
+  self.isTraining = isTraining
+  self.originalRef = originalRef
+  self.helpPressed = false
+  self.backPressed = false
+  
   -- Command manager stuff
-  self.commandUI = CommandUI()
+  self.commandUI = CommandUI(isTraining)
   self.commandUI:addAvailableCommand(BowlIf)
   self.commandUI:addAvailableCommand(End)
   self.commandUI:addAvailableCommand(FillBowl)
@@ -16,7 +21,23 @@ function FillBowlScene:new()
     end
   )
   self.commandUI.commandManager:setTimePerLine(0.0001)
+  if isTraining == true then
+    self.commandUI:setOnBack(function() self.backPressed = true end)
+  else
+    self.commandUI:setOnHelp(function() self.helpPressed = true end)
+  end
   
+  if isTraining == true then
+    self.commandUI.commandManager:addCommand(
+      BowlIf({bowl = 'empty'})
+    )
+    self.commandUI.commandManager:addCommand(
+      FillBowl()
+    )
+    self.commandUI.commandManager:addCommand(
+      End()
+    )
+  end
   
   -- Scene constant variables
   self.bowlBottomWidth = 50
@@ -65,6 +86,7 @@ function FillBowlScene:new()
   
   -- Textboxes down here
   self.intro = true
+  if isTraining then self.intro = false end
   self.textBoxes = TextBoxList()
   self.textBoxes:addText("Now time to try and create a machine like mentioned in the previous introduction.")
   self.textBoxes:addText("Your goal is to create code that will fill a water bowl if the bowl is empty, and do nothing otherwise.")
@@ -83,12 +105,26 @@ function FillBowlScene:new()
   self.completed = TextBoxList()
   self.completed:addText("Congratulations! Your machine worked on all of the bowls. You can now continue onto the next section.")
   
+  if isTraining then 
+    self.completed = TextBoxList()
+    self.completed:addText("Game Complete!\nClear the game while not in help mode to move to the next section")
+  end
+  
   local lock = saveManager:getValue('lock') or 0
   if lock < 6 then lock = 6 end
   saveManager:setValue('lock', lock)
 end
 
 function FillBowlScene:update()
+  if self.helpPressed then
+    self.helpPressed = false
+    return FillBowlScene(true, self)
+  end
+  if self.backPressed then
+    self.originalRef:resetValues()
+    return self.originalRef
+  end
+  
   -- If in the intro
   if self.intro then
     local finished = self.textBoxes:update()
@@ -101,6 +137,7 @@ function FillBowlScene:update()
     -- Go to main menu if completed, reset values if failed
     if self.status == 'completed' then
       local finished = self.completed:update()
+      if finished and self.isTraining then self.originalRef:resetValues() return self.originalRef end
       if finished then return ElseIntroductionScene() end
     elseif self.status == 'filledFull' then
       local finished = self.filledFull:update()

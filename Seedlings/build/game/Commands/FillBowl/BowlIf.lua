@@ -3,8 +3,9 @@ BowlIf.COMMAND_NAME = 'If bowl is'
 
 function BowlIf:new(args)
   -- Params is the set of things that the user can modify for this command
+  if args == nil then args = {} end
   self.params = {
-    bowl = 'full'
+    bowl = args.bowl or 'full'
   }
 end
 

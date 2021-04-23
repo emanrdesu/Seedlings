@@ -102,6 +102,25 @@ function CommandManager:start()
   
 end
 
+function CommandManager:doesItCompile()
+  local codeString = ""
+  for i = 0, self.commandList:getSize() - 1, 1 do
+    local list = self.commandList:get(i):toLuaStringList()
+    for j = 0, list:getSize() - 1, 1 do
+      if list:get(j) == Command.YIELD then
+        codeString = codeString.." __coroutine.yield(); "
+      else
+        codeString = codeString..list:get(j).." "
+      end
+    end
+  end
+    
+  sandbox.__coroutine = coroutine
+  local codeFunction = loadstring(codeString)
+  if codeFunction == nil then return false end
+  return true
+end
+
 function CommandManager:quit()
   self.isRunning = false
 end

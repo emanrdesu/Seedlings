@@ -2,12 +2,11 @@ MultiVarMelodyMaker = Scene:extend()
 
 function MultiVarMelodyMaker:new()
 
-  self.topBG = love.graphics.newImage('Assets/Images/Panels/top/woodbackground.png')
-  self.bottomBG = love.graphics.newImage('Assets/Images/Panels/bottom/BotBG_peach_apples_tutorialBox.png')
-  self.whiteSquare = love.graphics.newImage('Assets/Images/Objects/whiteSquare.png')
-  self.yellowSquare = love.graphics.newImage('Assets/Images/Objects/yellowSquare.png')
-  self.playButton = love.graphics.newImage('Assets/Images/Objects/GreenPlayButton.png')
-  self.arrow = love.graphics.newImage('Assets/Images/Objects/blueArrow.png')
+  self.topBG = love.graphics.newImage('Assets/Images/Panels/melodymak_panels/mm_2_1_playScreen.png')
+  self.bottomBG1 = love.graphics.newImage('Assets/Images/Panels/bottom/BotBG_peach_apples_tutorialBox.png')
+  self.bottomBG2 = love.graphics.newImage('Assets/Images/Panels/bottom/BotBG_layout_RHeavy_green.png')
+  self.promptArrow = love.graphics.newImage('Assets/Images/Objects/prompt_carrot.png')
+  self.whiteSquare = love.graphics.newImage('Assets/Images/Objects/highlight_Note.png')
   self.ANote = love.graphics.newImage('Assets/Images/Objects/A_Note.png')
   self.BNote = love.graphics.newImage('Assets/Images/Objects/B_Note.png')
   self.CNote = love.graphics.newImage('Assets/Images/Objects/C_Note.png')
@@ -15,26 +14,38 @@ function MultiVarMelodyMaker:new()
   self.ENote = love.graphics.newImage('Assets/Images/Objects/E_Note.png')
   self.FNote = love.graphics.newImage('Assets/Images/Objects/F_Note.png')
   self.GNote = love.graphics.newImage('Assets/Images/Objects/G_Note.png')
+  self.emptyNote = love.graphics.newImage('Assets/Images/Objects/empty_Note.png')
+  self.chordNote = love.graphics.newImage('Assets/Images/Objects/chord_note.png')
+  self.blueArrow = love.graphics.newImage('Assets/Images/Objects/blueArrow.png')
+  self.note = love.graphics.newImage('Assets/Images/Objects/note_outer.png')
+  self.blueNote = love.graphics.newImage('Assets/Images/Objects/note_inner_blue.png')
+  self.greenNote = love.graphics.newImage('Assets/Images/Objects/note_inner_green.png')
+  self.orangeNote = love.graphics.newImage('Assets/Images/Objects/note_inner_orange.png')
+  self.purpleNote = love.graphics.newImage('Assets/Images/Objects/note_inner_purple.png')
+  self.redNote = love.graphics.newImage('Assets/Images/Objects/note_inner_red.png')
+  self.errorMessage = love.graphics.newImage('Assets/Images/Objects/error_notif_withText.png')
+  self.successStar1 = love.graphics.newImage('Assets/Images/Objects/success_stars_topFitted_1.png')
+  self.successStar2 = love.graphics.newImage('Assets/Images/Objects/success_stars_topFitted_2.png')
   
-  self.noteScaleX = 0.8
-  self.noteScaleY =  0.8
-  self.squareScaleX = 0.65
-  self.squareScaleY = 0.65
-  self.arrowScaleX = 0.75
-  self.arrowScaleY = 0.75
+  self.noteScaleX = 1
+  self.noteScaleY =  1
+  self.squareScaleX = 1.25
+  self.squareScaleY = 1.25
+  self.arrowScaleX = 0.5
+  self.arrowScaleY = 0.5
   
   sandbox = {}
   sandbox['SM'] = sm
-  sandbox['audio_A'] = love.audio.newSource("Assets/Audio/Piano/a.wav", "static")
-  sandbox['audio_B'] = love.audio.newSource("Assets/Audio/Piano/b.wav", "static")
-  sandbox['audio_C'] = love.audio.newSource("Assets/Audio/Piano/c.wav", "static")
-  sandbox['audio_D'] = love.audio.newSource("Assets/Audio/Piano/d.wav", "static")
-  sandbox['audio_E'] = love.audio.newSource("Assets/Audio/Piano/e_flat.wav", "static")
-  sandbox['audio_F'] = love.audio.newSource("Assets/Audio/Piano/f.wav", "static")
-  sandbox['audio_G'] = love.audio.newSource("Assets/Audio/Piano/g.wav", "static")
+  sandbox['audio_A'] = sm.audio['audio_A']
+  sandbox['audio_B'] = sm.audio['audio_B']
+  sandbox['audio_C'] = sm.audio['audio_C']
+  sandbox['audio_D'] = sm.audio['audio_D']
+  sandbox['audio_E'] = sm.audio['audio_E']
+  sandbox['audio_F'] = sm.audio['audio_F']
+  sandbox['audio_G'] = sm.audio['audio_G']
   
   self.commandManager = CommandManager()
-    
+  self.commandManager:setTimePerLine(1)
   self.commandManager:addCommand(SetNoteTo('Note1', nil))
   self.commandManager:addCommand(SetNoteTo('Note2', nil))
   self.commandManager:addCommand(SetNoteTo('Note3', nil))
@@ -109,9 +120,6 @@ function MultiVarMelodyMaker:update()
   
   if inputManager:isPressed('dpleft') then
     if self.selectedBot > 1 then self.selectedBot = self.selectedBot - 1 end
-    
-    --local command = self.commandManager.commandList:get(self.selectedTop)
-    --command.value = self.prevNote[command.value]
   end
   
   if inputManager:isPressed('dpright') then
@@ -122,9 +130,6 @@ function MultiVarMelodyMaker:update()
     if not self.selectingNote or not self.selectingChord then
       if self.selectedBot < #self.choices then self.selectedBot = self.selectedBot + 1 end
     end
-    
-    --local command = self.commandManager.commandList:get(self.selectedTop)
-    --command.value = self.nextNote[command.value]
   end
   
   if inputManager:isPressed('leftshoulder') then
@@ -205,7 +210,7 @@ function MultiVarMelodyMaker:drawTopScreen()
 end
 
 function MultiVarMelodyMaker:drawBottomScreen()
-  love.graphics.draw(self.bottomBG)
+  love.graphics.draw(self.bottomBG1)
   
   if self.selectingOptions then
     for i = 1, #self.choices do
@@ -253,7 +258,7 @@ function MultiVarMelodyMaker:drawBottomScreen()
       if i == self.selectedBot then
         love.graphics.draw(self.arrow, 25 * i, 130, -1.58, self.arrowScaleX, self.arrowScaleY)
       end
-    
+  
     end
   end
   

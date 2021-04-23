@@ -3,10 +3,11 @@ SetShapeColor.COMMAND_NAME = 'Set Color'
 
 function SetShapeColor:new(args)
   -- Params is the set of things that the user can modify for this command
+  if args == nil then args = {} end
   self.params = {
-    shape = 'square.color',
-    op = '=',
-    color = 'white',
+    shape = args.shape or 'square.color',
+    op = args.op or '=',
+    color = args.color or 'white',
   }
   
   -- paramList stores a list of params with 2 values: userString is what will appear in the UI when modifying it

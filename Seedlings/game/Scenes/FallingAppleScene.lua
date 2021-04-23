@@ -1,7 +1,12 @@
 FallingAppleScene = Scene:extend()
 
-function FallingAppleScene:new()
-  self.commandUI = CommandUI()
+function FallingAppleScene:new(isTraining, originalRef)
+  self.isTraining = isTraining
+  self.originalRef = originalRef
+  self.helpPressed = false
+  self.backPressed = false
+  
+  self.commandUI = CommandUI(isTraining)
   self.commandUI:addAvailableCommand(AppleMoveLeft)
   self.commandUI:addAvailableCommand(AppleMoveRight)
   self.commandUI:addAvailableCommand(AppleCondition)
@@ -18,6 +23,29 @@ function FallingAppleScene:new()
       end
     end
   )
+  if isTraining == true then
+    self.commandUI:setOnBack(function() self.backPressed = true end)
+  else
+    self.commandUI:setOnHelp(function() self.helpPressed = true end)
+  end
+  
+  if isTraining == true then
+    self.commandUI.commandManager:addCommand(
+      AppleCondition({left = 'apple', op = '==', right = 'left'})
+    )
+    self.commandUI.commandManager:addCommand(
+      AppleMoveLeft()
+    )
+    self.commandUI.commandManager:addCommand(
+      Else()
+    )
+    self.commandUI.commandManager:addCommand(
+      AppleMoveRight()
+    )
+    self.commandUI.commandManager:addCommand(
+      End()
+    )
+  end
   
   -- Column info & apple img
   self.columnWidth = 60
@@ -64,6 +92,7 @@ function FallingAppleScene:new()
   }
   
   self.intro = true
+  if isTraining then self.intro = false end
   self.textBoxes = TextBoxList()
   self.textBoxes:addText("Welcome to the falling apple game.\nIn this game your goal is to catch apples as they fall with a basket.")
   self.textBoxes:addText("There are two different columns that the apple can fall in. A 'left' column and a 'right' column.")
@@ -80,6 +109,11 @@ function FallingAppleScene:new()
   self.gameClearTextBoxes = TextBoxList()
   self.gameClearTextBoxes:addText("Congratulations! You caught all of the apples. You are ready to move onto the next minigame now.")
   
+  if isTraining then 
+    self.gameClearTextBoxes = TextBoxList()
+    self.gameClearTextBoxes:addText("Game Complete!\nClear the game while not in help mode to move to the next section")
+  end
+  
   self.gameFailTextBoxes = TextBoxList()
   
   local lock = saveManager:getValue('lock') or 0
@@ -88,6 +122,19 @@ function FallingAppleScene:new()
 end
 
 function FallingAppleScene:update()
+  if self.helpPressed then
+    self.helpPressed = false
+    return FallingAppleScene(true, self)
+  end
+  if self.backPressed then
+    self.originalRef.running = false  
+    self.originalRef.timesFallen = 0 
+    self.originalRef.applesCaught = 0
+    self.originalRef:resetApple()
+    sandbox.basket = 'left'
+    return self.originalRef
+  end
+  
   if self.intro == true then
     -- If reading the text, only update that
     local finished = self.textBoxes:update()
@@ -97,7 +144,15 @@ function FallingAppleScene:update()
       -- Show the winning thing
       -- If finished with the game clear, go to main menu
       if self.gameClearTextBoxes:update() then
-         return Trans(FallingApple2Scene)
+        if self.isTraining then 
+          self.originalRef.running = false  
+          self.originalRef.timesFallen = 0 
+          self.originalRef.applesCaught = 0
+          self.originalRef:resetApple()
+          sandbox.basket = 'left'
+          return self.originalRef 
+        end
+        return Trans(FallingApple2Scene)
       end
     else
       -- Show the losing thing
@@ -130,22 +185,7 @@ function FallingAppleScene:update()
       
       -- Function to reset apple
       function resetApple()
-        self.appleY = - self.appleRadius
-        self.appleR = 0
-        if love.math.random() < 0.5 then sandbox.apple = 'left' else sandbox.apple = 'right' end
-        self.hasRun = false
-        self.timesFallen = self.timesFallen + 1
-        if self.timesFallen >= self.totalApples then 
-          self.running = false
-          -- enter the summary stage of the game
-          self.summary = true
-          self.gameClearTextBoxes:reset()
-          -- Update the fail list with how many apples were properly caught
-          self.gameFailTextBoxes = TextBoxList()
-          local appleText = "apples"
-          if self.applesCaught == 1 then appleText = "apple" end
-          self.gameFailTextBoxes:addText("Congratulations! You caught "..tostring(self.applesCaught).." "..appleText..". Try to catch all of the apples to clear the game")
-        end
+        self:resetApple()
       end
       
       -- If the apple hits the user, add to the count of apples caught & create a new apple
@@ -277,3 +317,23 @@ function FallingAppleScene:drawBottomScreen()
     end
   end
 end
+
+function FallingAppleScene:resetApple()
+  self.appleY = - self.appleRadius
+  self.appleR = 0
+  if love.math.random() < 0.5 then sandbox.apple = 'left' else sandbox.apple = 'right' end
+  self.hasRun = false
+  self.timesFallen = self.timesFallen + 1
+  if self.timesFallen >= self.totalApples then 
+    self.running = false
+    -- enter the summary stage of the game
+    self.summary = true
+    self.gameClearTextBoxes:reset()
+    -- Update the fail list with how many apples were properly caught
+    self.gameFailTextBoxes = TextBoxList()
+    local appleText = "apples"
+    if self.applesCaught == 1 then appleText = "apple" end
+    self.gameFailTextBoxes:addText("Congratulations! You caught "..tostring(self.applesCaught).." "..appleText..". Try to catch all of the apples to clear the game")
+  end
+end
+
