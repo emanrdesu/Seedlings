@@ -1,7 +1,6 @@
 MelodyMakerIntro = Scene:extend()
 
 function MelodyMakerIntro:new()
-  sm.playStart = false
   self.topBGblueScreen = love.graphics.newImage('Assets/Images/Panels/melodymak_panels/mm_0_blueScreen.png')
   self.topBGcmdBox = love.graphics.newImage('Assets/Images/Panels/melodymak_panels/mm_1_cmdBox.png')
   self.botBG1 = love.graphics.newImage('Assets/Images/Panels/bottom/BotBG_peach_apples_tutorialBox.png')

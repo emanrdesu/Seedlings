@@ -1,7 +1,6 @@
 Song1 = Scene:extend()
 
 function Song1:new()
-  sm.playStart = false
   self.topBG1 = love.graphics.newImage('Assets/Images/Panels/melodymak_panels/mm_1_2_tutorialPlay.png')
   self.topBG2 = love.graphics.newImage('Assets/Images/Panels/melodymak_panels/mm_2_2_playScreen.png')
   self.botBG1 = love.graphics.newImage('Assets/Images/Panels/bottom/BotBG_peach_apples_tutorialBox.png')
@@ -212,12 +211,12 @@ function Song1:update()
   end
 
   if inputManager:isPressed('y') then
-     return Trans(MelodyMakerMenu)
+    return MelodyMakerMenu()
   end
   
   if inputManager:isPressed('x') then
     if self.panel12Flag and self.sequencesMatch then
-       return Trans(MelodyMakerMenu)
+      return MelodyMakerMenu()
     end
   end
   
