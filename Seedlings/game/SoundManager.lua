@@ -3,13 +3,13 @@ SoundManager = Object:extend()
 function SoundManager:new()
   self.playStart = true
   self.path = {
-     audio_A = "Assets/Audio/Piano/a.wav",
-     audio_B = "Assets/Audio/Piano/b.wav",
-     audio_C = "Assets/Audio/Piano/c.wav",
-     audio_D = "Assets/Audio/Piano/d.wav",
-     audio_E = "Assets/Audio/Piano/e_flat.wav",
-     audio_F = "Assets/Audio/Piano/f.wav",
-     audio_G = "Assets/Audio/Piano/g.wav"
+     audio_A = "Assets/Audio/Piano/g.wav",
+     audio_B = "Assets/Audio/Piano/a.wav",
+     audio_C = "Assets/Audio/Piano/b_flat.wav",
+     audio_D = "Assets/Audio/Piano/c.wav",
+     audio_E = "Assets/Audio/Piano/d.wav",
+     audio_F = "Assets/Audio/Piano/e_flat.wav",
+     audio_G = "Assets/Audio/Piano/f.wav"
   }
 
   self.audio = {}
@@ -37,20 +37,6 @@ function SoundManager:new()
 end
 
 function SoundManager:play(sourceName)
-  --[[local src = nil
-  if self.audio[sourceName]:isPlaying() then
-    src = self.audio[sourceName]:clone()
-  else
-    src = self.audio[sourceName]
-  end
-  
-  local counter = 0
-  while((not src:isPlaying()) and counter < 50) do 
-    src:play() 
-    counter = counter + 1
-  end
-  --]]
-  
   local src = nil
   if self.audio[sourceName]:isPlaying() then
     src = love.audio.newSource(self.path[sourceName], "static")
