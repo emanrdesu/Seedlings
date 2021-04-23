@@ -22,7 +22,6 @@ function SoundManager:new()
   self.path.button = {
      a = "Assets/Audio/Button/a.wav",
      b = "Assets/Audio/Button/b.wav",
-     start = "Assets/Audio/Button/start.wav",
      dpleft = "Assets/Audio/Button/dpad.wav",
      dpright = "Assets/Audio/Button/dpad.wav",
      dpdown = "Assets/Audio/Button/dpad.wav",
