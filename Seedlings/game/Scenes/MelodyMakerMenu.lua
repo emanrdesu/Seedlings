@@ -41,6 +41,12 @@ function MelodyMakerMenu:update()
       return Song2()
     elseif self.selectedTop == 3 then
       return Song3()
+    elseif self.selectedTop == 4 then
+      return Chord1()
+    elseif self.selectedTop == 5 then
+      return Chord2()
+    elseif self.selectedTop == 6 then
+      return Chord3()
     elseif self.selectedTop == 7 then
       return MelodyMakerTut()
     elseif self.selectedTop == 8 then

@@ -1,6 +1,6 @@
-MelodyMakerChordMini = Scene:extend()
+Chord2 = Scene:extend()
 
-function MelodyMakerChordMini:new()
+function Chord2:new()
   self.topBG1 = love.graphics.newImage('Assets/Images/Panels/melodymak_panels/mm_2_1_playScreen.png')
   self.botBG1 = love.graphics.newImage('Assets/Images/Panels/bottom/BotBG_peach_apples_tutorialBox.png')
   self.botBG2 = love.graphics.newImage('Assets/Images/Panels/bottom/BotBG_layout_RHeavy_green.png')
@@ -63,7 +63,7 @@ function MelodyMakerChordMini:new()
   self.commandManager:addCommand(SetNoteTo('Note8', nil))
   
   self.noteTable = {'A', 'B', 'C', 'D', 'E', 'F', 'G'}
-  self.chordChoices = {'2', '3'}
+  self.chordChoices = {'1', '2', '3'}
   
   self.noteImageTable =  {}
   self.noteImageTable['A'] = self.ANote
@@ -77,12 +77,11 @@ function MelodyMakerChordMini:new()
   self.userNoteImages = {self.emptyNote, self.emptyNote, self.emptyNote, self.emptyNote, self.emptyNote, self.emptyNote, self.emptyNote}
   self.userInput = {'empty', 'empty', 'empty', 'empty', 'empty', 'empty', 'empty'}
   
-  self.desiredSequence = {Chord('A', 'B', 'C'), Chord('D', 'C', 'E'), Chord('B', 'F'), Chord('A', 'B', 'C'), Chord('D', 'G'), Chord('E', 'F', 'G'), Chord('C', 'A')}
+  self.desiredSequence = {Chord('C'), Chord('C', 'E'), Chord('E', 'G'), Chord('C', 'E', 'G'), Chord('F', 'A'), Chord('F', 'A'), Chord('C', 'E', 'G')}
   self.booleanChordMatching = {false, false, false, false, false, false, false}
   self.sequencesMatching = false
   
-  self.panel21Flag = true
-  self.panel22Flag = false
+  self.panel22Flag = true
   self.panel23Flag = false
   
   self.selectedTop = 1
@@ -95,6 +94,7 @@ function MelodyMakerChordMini:new()
   
   self.selectingOptions = false
   self.selectingNotes = false
+  self.chord1Note = false
   self.chord2Notes = false
   self.chord3Notes = false
   
@@ -103,7 +103,7 @@ function MelodyMakerChordMini:new()
   self.currentFrame = 1
 end
 
-function MelodyMakerChordMini:update()
+function Chord2:update()
   self.commandManager:update()
   local dt = love.timer.getDelta()
   
@@ -131,8 +131,14 @@ function MelodyMakerChordMini:update()
           else
             self.booleanChordMatching[i] = false
           end
-        else 
+        elseif self.userInput[i]:getSize() == 2 then 
           if self.userInput[i].note1 == self.desiredSequence[i].note1 and self.userInput[i].note2 == self.desiredSequence[i].note2 then
+            self.booleanChordMatching[i] = true
+          else
+            self.booleanChordMatching[i] = false
+          end
+        elseif self.userInput[i]:getSize() == 1 then
+          if self.userInput[i].note1 == self.desiredSequence[i].note1 then
             self.booleanChordMatching[i] = true
           else
             self.booleanChordMatching[i] = false
@@ -188,7 +194,6 @@ function MelodyMakerChordMini:update()
   
   if inputManager:isPressed('x') then
     if self.panel23Flag and self.sequencesMatching then
-      MelodyMakerMenu.chordFlag = true
       return MelodyMakerMenu()
     end
   end
@@ -234,44 +239,49 @@ function MelodyMakerChordMini:update()
         self.selectingNotes = false
         self.selectedBot = 1
       end
+    elseif self.chord1Note then
+        self.chordNote1 = self.noteTable[self.selectedBot]
+        self.commandManager:removeCommand(self.selectedTop - 1)
+        self.commandManager:insertCommand(self.selectedTop -1, SetChordTo2('Note1', self.chordNote1, 'Note2', self.chordNote1))
+        self.userInput[self.selectedTop] = Chord(self.chordNote1)
+        self.userNoteImages[self.selectedTop] = self.chordNote
+        self.chord1Note = false
+        self.selectingNotes = false
+        self.selectedBot = 1
     elseif self.selectingOptions then
       self.selectingOptions = false
       if self.selectedBot == 1 then
-        self.chord2Notes = true
+        self.chord1Note = true
         self.selectingNotes = true
       elseif self.selectedBot == 2 then
+        self.chord2Notes = true
+        self.selectingNotes = true
+      elseif self.selectedBot == 3 then
         self.chord3Notes = true
         self.selectingNotes = true
       end
     elseif self.panel22Flag then
       self.selectingOptions = true
-    elseif self.panel21Flag then
-      self.panel22Flag = true
-      self.panel21Flag = false
     end
   end
   
   return self
 end
 
-function MelodyMakerChordMini:drawTopScreen()
+function Chord2:drawTopScreen()
   love.graphics.draw(self.topBG1)
   
-  if self.panel21Flag then
-    for i = 1, 7 do
-      love.graphics.draw(self.chordNote, 40*i*1.15, 40, 0, self.noteScaleX, self.noteScaleY)
-    end
-    
-    for i,v in ipairs(self.userNoteImages) do
-      love.graphics.draw(self.userNoteImages[i], 40*i*1.15, 140, 0, self.noteScaleX, self.noteScaleY)
-    end
-  --Panel 22
-  elseif self.panel22Flag then
+  if self.panel22Flag then
     
     for i = 1, 7 do
       if i == self.selectedTop then
         love.graphics.draw(self.noteImageTable[self.desiredSequence[i].note1], 40*i*1.15, 20, 0, 0.75, 0.75)
-        love.graphics.draw(self.noteImageTable[self.desiredSequence[i].note2], 40*i*1.15, 40, 0, 0.75, 0.75)
+        if self.desiredSequence[i].note2 ==  "" then
+          
+        else
+          love.graphics.draw(self.noteImageTable[self.desiredSequence[i].note2], 40*i*1.15, 40, 0, 0.75, 0.75)
+        end
+        
         if self.desiredSequence[i].note3 == "" then
           
         else
@@ -360,25 +370,8 @@ function MelodyMakerChordMini:drawTopScreen()
   end
 end
 
-function MelodyMakerChordMini:drawBottomScreen()
-  if self.panel21Flag then
-    love.graphics.draw(self.botBG1)
-    
-    draw:print({
-        text = "Go through each variable with the\nD-pad, and set it equal to the same\nvalues that the chords show you!",
-        x = 30,
-        y = 25,
-        color = Color.BLACK,
-      })
-    
-    draw:print({
-        text = "Press 'A' to continue",
-        x = 75,
-        y = 90,
-        color = Color.BLACK,
-        })
-  --Panel 22
-  elseif self.panel22Flag then
+function Chord2:drawBottomScreen()
+  if self.panel22Flag then
     love.graphics.draw(self.botBG2)
     
     if self.userInput[self.selectedTop] == 'empty' then
@@ -435,16 +428,23 @@ function MelodyMakerChordMini:drawBottomScreen()
         draw:print({
             text = v,
             x = 190, 
-            y = 80 * i,
+            y = 50 + (40*i),
             color = Color.BLACK,
             })
         
        if i == self.selectedBot then
-         love.graphics.draw(self.blueArrow, 150, 80 * i, 0, self.arrowScaleX, self.arrowScaleY)
+         love.graphics.draw(self.blueArrow, 150, 50 + (40*i), 0, self.arrowScaleX, self.arrowScaleY)
        end
       end
     elseif self.selectingNotes then
-      if self.chord2Notes then
+      if self.chord1Note then
+        draw:print({
+            text = "Select a note!",
+            x = 30, 
+            y = 25,
+            color = Color.BLACK,
+            })
+      elseif self.chord2Notes then
         if self.chordCounter == 0 then
           draw:print({
             text = "Select 2 notes! Select note 1!",

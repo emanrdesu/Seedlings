@@ -98,9 +98,6 @@ function MelodyMakerChordMini:new()
   self.chord2Notes = false
   self.chord3Notes = false
   
-  self.chord1 = Chord('A', 'B')
-  self.chord2 = Chord('A', 'B', 'C')
-  
   self.playingNotes = false
   self.noteTimer = 8
   self.currentFrame = 1
