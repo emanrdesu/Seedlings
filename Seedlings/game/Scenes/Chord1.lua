@@ -274,6 +274,7 @@ function Chord1:drawTopScreen()
         
         else
           love.graphics.draw(self.noteImageTable[self.desiredSequence[i].note2], 40*i*1.15, self.notePosTable[self.desiredSequence[i].note1] + 20, 0, 0.75, 0.75)
+        end
         if self.desiredSequence[i].note3 == "" then
           
         else
@@ -304,6 +305,7 @@ function Chord1:drawTopScreen()
         
         else
           love.graphics.draw(self.noteImageTable[self.desiredSequence[i].note2], 40*i*1.15, self.notePosTable[self.desiredSequence[i].note1] + 20, 0, 0.75, 0.75)
+        end
         if self.desiredSequence[i].note3 == "" then
           
         else
@@ -318,6 +320,7 @@ function Chord1:drawTopScreen()
         
         else
           love.graphics.draw(self.noteImageTable[self.desiredSequence[i].note2], 40*i*1.15, self.notePosTable[self.desiredSequence[i].note1] + 20, 0, 0.75, 0.75)
+        end
         if self.desiredSequence[i].note3 == "" then
           
         else
@@ -332,6 +335,7 @@ function Chord1:drawTopScreen()
         
         else
           love.graphics.draw(self.noteImageTable[self.desiredSequence[i].note2], 40*i*1.15, self.notePosTable[self.desiredSequence[i].note1] + 20, 0, 0.75, 0.75)
+        end
         if self.desiredSequence[i].note3 == "" then
           
         else
@@ -346,6 +350,7 @@ function Chord1:drawTopScreen()
         
         else
           love.graphics.draw(self.noteImageTable[self.desiredSequence[i].note2], 40*i*1.15, self.notePosTable[self.desiredSequence[i].note1] + 20, 0, 0.75, 0.75)
+        end
         if self.desiredSequence[i].note3 == "" then
           
         else
@@ -360,6 +365,7 @@ function Chord1:drawTopScreen()
         
         else
           love.graphics.draw(self.noteImageTable[self.desiredSequence[i].note2], 40*i*1.15, self.notePosTable[self.desiredSequence[i].note1] + 20, 0, 0.75, 0.75)
+        end
         if self.desiredSequence[i].note3 == "" then
           
         else
@@ -374,6 +380,7 @@ function Chord1:drawTopScreen()
         
         else
           love.graphics.draw(self.noteImageTable[self.desiredSequence[i].note2], 40*i*1.15, self.notePosTable[self.desiredSequence[i].note1] + 20, 0, 0.75, 0.75)
+        end
         if self.desiredSequence[i].note3 == "" then
           
         else
@@ -388,6 +395,7 @@ function Chord1:drawTopScreen()
         
         else
           love.graphics.draw(self.noteImageTable[self.desiredSequence[i].note2], 40*i*1.15, self.notePosTable[self.desiredSequence[i].note1] + 20, 0, 0.75, 0.75)
+        end
         if self.desiredSequence[i].note3 == "" then
           
         else
@@ -444,15 +452,16 @@ end
 function Chord1:drawBottomScreen()
   if self.panel22Flag then
     love.graphics.draw(self.botBG2)
+
+    draw:print({
+      text = "Press 'Y' to return to the menu.",
+      x = 20,
+      y = 210,
+      color = Color.BLACK,
+    })
     
     if self.userInput[self.selectedTop] == 'empty' then
     else
-      draw:print({
-        text = "Press 'Y' to return to the menu.",
-        x = 20,
-        y = 210,
-        color = Color.BLACK,
-      })
       draw:print({
           text = "Sound"..self.userInput[self.selectedTop].note1,
           x = 50,

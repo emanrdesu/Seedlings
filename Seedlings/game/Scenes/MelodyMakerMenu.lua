@@ -10,8 +10,7 @@ function MelodyMakerMenu:new()
   options = {"Song1", "Song2", "Song3", "Chord1", "Chord2", "Chord3", "Variable Tutorial", "Try something new", "Main Menu", "Next Game", "Make your own!"}
   
   self.selectedTop = 1
-  -- FLAG SET TRUE FOR DEBUGGING, CHANGE
-  chordFlag = true
+  chordFlag = false
   
   local lock = saveManager:getValue('lock') or 0
   if lock < 2 then lock = 2 end
