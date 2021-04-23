@@ -1,6 +1,6 @@
-MelodyMakerMinigame = Scene:extend()
+Song2 = Scene:extend()
 
-function MelodyMakerMinigame:new()
+function Song2:new()
   self.topBG1 = love.graphics.newImage('Assets/Images/Panels/melodymak_panels/mm_1_2_tutorialPlay.png')
   self.topBG2 = love.graphics.newImage('Assets/Images/Panels/melodymak_panels/mm_2_2_playScreen.png')
   self.botBG1 = love.graphics.newImage('Assets/Images/Panels/bottom/BotBG_peach_apples_tutorialBox.png')
@@ -43,6 +43,22 @@ function MelodyMakerMinigame:new()
   self.noteImageTable[5] = self.ENote
   self.noteImageTable[6] = self.FNote
   self.noteImageTable[7] = self.GNote
+  self.noteImageTable['A'] = self.ANote
+  self.noteImageTable['B'] = self.BNote
+  self.noteImageTable['C'] = self.CNote
+  self.noteImageTable['D'] = self.DNote
+  self.noteImageTable['E'] = self.ENote
+  self.noteImageTable['F'] = self.FNote
+  self.noteImageTable['G'] = self.GNote
+  
+  self.notePosTable = {}
+  self.notePosTable['A'] = 10
+  self.notePosTable['B'] = 70
+  self.notePosTable['C'] = 60
+  self.notePosTable['D'] = 50
+  self.notePosTable['E'] = 40
+  self.notePosTable['F'] = 30
+  self.notePosTable['G'] = 20
   
   self.userNotes = {}
   self.userNotes[1] = self.emptyNote
@@ -71,7 +87,7 @@ function MelodyMakerMinigame:new()
   self.userInput[6] = 'empty'
   self.userInput[7] = 'empty'
   
-  self.desiredSequence = {'A', 'B', 'C', 'D', 'E', 'F', 'G'}
+  self.desiredSequence = {'C', 'C', 'G', 'G', 'A', 'A', 'G'}
   self.correctChoices = {false, false, false, false, false, false, false}
   
   sandbox = {}
@@ -101,9 +117,7 @@ function MelodyMakerMinigame:new()
   self.arrowScaleX = 0.5
   self.arrowScaleY = 0.5
   
-  self.panel9Flag = true
-  self.panel10Flag = false
-  self.panel11Flag = false
+  self.panel11Flag = true
   self.panel12Flag = false
   
   self.aCounter = 0
@@ -118,7 +132,7 @@ function MelodyMakerMinigame:new()
   self.currentFrame = 1
 end
 
-function MelodyMakerMinigame:update()
+function Song2:update()
   self.commandManager:update()
   local dt = love.timer.getDelta()
   
@@ -193,18 +207,13 @@ function MelodyMakerMinigame:update()
       self.selectingValue = false
     elseif self.panel11Flag then
       self.selectingValue = true
-    elseif self.panel10Flag then
-      self.panel11Flag = true
-      self.panel10Flag = false
-    elseif self.panel9Flag and self.aCounter == 1 then
-      self.panel10Flag = true
-      self.panel9Flag = false
-      self.aCounter = 0
-    elseif self.panel9Flag then
-      self.aCounter = 1
     end
   end
   
+  if inputManager:isPressed('y') then
+    return MelodyMakerMenu()
+  end
+
   if inputManager:isPressed('x') then
     if self.panel12Flag and self.sequencesMatch then
       return MelodyMakerMenu()
@@ -214,61 +223,13 @@ function MelodyMakerMinigame:update()
   return self
 end
 
-function MelodyMakerMinigame:drawTopScreen()
-  --Panel 9
-  if self.panel9Flag and self.aCounter == 0 then
-    love.graphics.draw(self.topBG1)
-    love.graphics.draw(self.promptArrow, 105, 20)
-    love.graphics.draw(self.compyEyes, 20, 30)
-    love.graphics.draw(self.compyMouthSmile, 20, 80)
-    
-    draw:print({
-        text = "Okay! Let's make a song!",
-        x = 120,
-        y = 15,
-        color = Color.WHITE,
-      })
-    draw:print({
-        text = "My program has 7 note variables\nthat all need values. You know what\nto do!",
-        x = 120,
-        y = 45,
-        color = Color.WHITE,
-      })
-    draw:print({
-        text = "Follow the pattern at the top and\ngive those notes all the right values,\nyou know what to do!",
-        x = 120,
-        y = 135,
-        color = Color.WHITE,
-        })
-  elseif self.panel9Flag and self.aCounter == 1 then
-    love.graphics.draw(self.topBG1)
-    love.graphics.draw(self.promptArrow, 105, 20)
-    love.graphics.draw(self.compyEyes, 20, 30)
-    love.graphics.draw(self.compyMouthD, 20, 80)
-    
-    draw:print({
-        text = "run MakeASong.exe",
-        x = 120, 
-        y = 15,
-        color = Color.WHITE,
-        })
-  --Panel 10
-  elseif self.panel10Flag then
-    love.graphics.draw(self.topBG2)
-    
-    for i,v in ipairs(self.noteImageTable) do
-      love.graphics.draw(self.noteImageTable[i], 40*i*1.15, 10*i, 0, self.noteScaleX, self.noteScaleY)
-    end
-    
-    for i,v in ipairs(self.userNotes) do
-      love.graphics.draw(self.userNotes[i], 40*i*1.15, 140, 0, self.noteScaleX, self.noteScaleY)
-    end
+function Song2:drawTopScreen()
   --Panel 11
-  elseif self.panel11Flag then
+  if self.panel11Flag then
     love.graphics.draw(self.topBG2)
     
     for i,v in ipairs(self.noteImageTable) do
-      love.graphics.draw(self.noteImageTable[i], 40*i*1.15, 10*i, 0, self.noteScaleX, self.noteScaleY)
+      love.graphics.draw(self.noteImageTable[self.desiredSequence[i]], 40*i*1.15, self.notePosTable[self.desiredSequence[i]], 0, self.noteScaleX, self.noteScaleY)
     end
     
     if self.commandManager:codeIsRunning() then
@@ -322,7 +283,7 @@ function MelodyMakerMinigame:drawTopScreen()
     love.graphics.draw(self.topBG2)
     
     for i,v in ipairs(self.noteImageTable) do
-      love.graphics.draw(self.noteImageTable[i], 40*i*1.15, 10*i, 0, self.noteScaleX, self.noteScaleY)
+      love.graphics.draw(self.noteImageTable[self.desiredSequence[i]], 40*i*1.15, self.notePosTable[self.desiredSequence[i]], 0, self.noteScaleX, self.noteScaleY)
     end
     
     love.graphics.draw(self.note, 40*1.15, 160)
@@ -351,51 +312,17 @@ function MelodyMakerMinigame:drawTopScreen()
   end
 end
 
-function MelodyMakerMinigame:drawBottomScreen()
-  --Panel 9
-  if self.panel9Flag and self.aCounter == 0 then
-    love.graphics.draw(self.botBG1)
-  elseif self.panel9Flag and self.aCounter == 1 then
-    love.graphics.draw(self.botBG1)
-    
-    draw:print({
-        text = "Compy's running a program that\nwill let us fix all the variables in his\nprogram, let's get to it!",
-        x = 30,
-        y = 25,
-        color = Color.BLACK,
-      })
-    draw:print({
-        text = "Press 'A' to continue",
-        x = 80,
-        y = 120,
-        color = Color.BLACK,
-        })
-  
-  elseif self.panel10Flag then
-    love.graphics.draw(self.botBG1)
-    
-    draw:print({
-        text = "To help Compy play music, we\nneed to give all those note\nvariables on the second row some\ncorrect sounds!",
-        x = 30,
-        y = 25,
-        color = Color.BLACK,
-      })
-    draw:print({
-        text = "Take a look at how to do that.",
-        x = 47,
-        y = 127,
-        color = Color.BLACK,
-        })
-    draw:print({
-        text = "Press'A' to continue.",
-        x = 80,
-        y = 160,
-        color = Color.BLACK,
-        })
+function Song2:drawBottomScreen()
   --Panel 11
-  elseif self.panel11Flag then
+  if self.panel11Flag then
     love.graphics.draw(self.botBG2)
-  
+
+    draw:print({
+      text = "Press 'Y' to return to the menu.",
+      x = 20,
+      y = 210,
+      color = Color.BLACK,
+    })
     draw:print({
         text = "Give this variable a value that matches\nthe song above!",
         x = 20,
@@ -488,5 +415,4 @@ function MelodyMakerMinigame:drawBottomScreen()
           })
     end
   end
-  
 end

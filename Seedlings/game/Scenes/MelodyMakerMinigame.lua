@@ -1,11 +1,10 @@
 MelodyMakerMinigame = Scene:extend()
 
 function MelodyMakerMinigame:new()
-  self.topBG1 = love.graphics.newImage('Assets/Images/Panels/melodymak_panels/mm_1_cmdBox.png')
-  self.topBG2 = love.graphics.newImage('Assets/Images/Panels/melodymak_panels/mm_2_1_playScreen.png')
+  self.topBG1 = love.graphics.newImage('Assets/Images/Panels/melodymak_panels/mm_1_2_tutorialPlay.png')
+  self.topBG2 = love.graphics.newImage('Assets/Images/Panels/melodymak_panels/mm_2_2_playScreen.png')
   self.botBG1 = love.graphics.newImage('Assets/Images/Panels/bottom/BotBG_peach_apples_tutorialBox.png')
-  self.botBG2 = love.graphics.newImage('Assets/Images/Panels/bottom/BotBG_layout_LHeavy_green.png')
-  self.botBG3 = love.graphics.newImage('Assets/Images/Panels/bottom/BotBG_layout_RHeavy_green.png')
+  self.botBG2 = love.graphics.newImage('Assets/Images/Panels/bottom/BotBG_layout_RHeavy_green.png')
   self.compyMouthSmile = love.graphics.newImage('Assets/Images/Objects/cmouth_smile.png')
   self.compyMouthSad = love.graphics.newImage('Assets/Images/Objects/cmouth_sad.png')
   self.compyEyes = love.graphics.newImage('Assets/Images/Objects/ceyes_normal.png')
@@ -20,6 +19,7 @@ function MelodyMakerMinigame:new()
   self.FNote = love.graphics.newImage('Assets/Images/Objects/F_Note.png')
   self.GNote = love.graphics.newImage('Assets/Images/Objects/G_Note.png')
   self.emptyNote = love.graphics.newImage('Assets/Images/Objects/empty_Note.png')
+  self.chordNote = love.graphics.newImage('Assets/Images/Objects/chord_note.png')
   self.blueArrow = love.graphics.newImage('Assets/Images/Objects/blueArrow.png')
   self.note = love.graphics.newImage('Assets/Images/Objects/note_outer.png')
   self.blueNote = love.graphics.newImage('Assets/Images/Objects/note_inner_blue.png')
@@ -43,6 +43,22 @@ function MelodyMakerMinigame:new()
   self.noteImageTable[5] = self.ENote
   self.noteImageTable[6] = self.FNote
   self.noteImageTable[7] = self.GNote
+  self.noteImageTable['A'] = self.ANote
+  self.noteImageTable['B'] = self.BNote
+  self.noteImageTable['C'] = self.CNote
+  self.noteImageTable['D'] = self.DNote
+  self.noteImageTable['E'] = self.ENote
+  self.noteImageTable['F'] = self.FNote
+  self.noteImageTable['G'] = self.GNote
+
+  self.notePosTable = {}
+  self.notePosTable['A'] = 10
+  self.notePosTable['B'] = 70
+  self.notePosTable['C'] = 60
+  self.notePosTable['D'] = 50
+  self.notePosTable['E'] = 40
+  self.notePosTable['F'] = 30
+  self.notePosTable['G'] = 20
   
   self.userNotes = {}
   self.userNotes[1] = self.emptyNote
@@ -71,7 +87,7 @@ function MelodyMakerMinigame:new()
   self.userInput[6] = 'empty'
   self.userInput[7] = 'empty'
   
-  self.desiredSequence = {'A', 'B', 'C', 'D', 'E', 'F', 'G'}
+  self.desiredSequence = {'C', 'D', 'E', 'F', 'E', 'D', 'C'}
   self.correctChoices = {false, false, false, false, false, false, false}
   
   sandbox = {}
@@ -257,7 +273,7 @@ function MelodyMakerMinigame:drawTopScreen()
     love.graphics.draw(self.topBG2)
     
     for i,v in ipairs(self.noteImageTable) do
-      love.graphics.draw(self.noteImageTable[i], 40*i*1.15, 10*i, 0, self.noteScaleX, self.noteScaleY)
+      love.graphics.draw(self.noteImageTable[self.desiredSequence[i]], 40*i*1.15, self.notePosTable[self.desiredSequence[i]], 0, self.noteScaleX, self.noteScaleY)
     end
     
     for i,v in ipairs(self.userNotes) do
@@ -268,7 +284,7 @@ function MelodyMakerMinigame:drawTopScreen()
     love.graphics.draw(self.topBG2)
     
     for i,v in ipairs(self.noteImageTable) do
-      love.graphics.draw(self.noteImageTable[i], 40*i*1.15, 10*i, 0, self.noteScaleX, self.noteScaleY)
+      love.graphics.draw(self.noteImageTable[self.desiredSequence[i]], 40*i*1.15, self.notePosTable[self.desiredSequence[i]], 0, self.noteScaleX, self.noteScaleY)
     end
     
     if self.commandManager:codeIsRunning() then
@@ -322,7 +338,7 @@ function MelodyMakerMinigame:drawTopScreen()
     love.graphics.draw(self.topBG2)
     
     for i,v in ipairs(self.noteImageTable) do
-      love.graphics.draw(self.noteImageTable[i], 40*i*1.15, 10*i, 0, self.noteScaleX, self.noteScaleY)
+      love.graphics.draw(self.noteImageTable[self.desiredSequence[i]], 40*i*1.15, self.notePosTable[self.desiredSequence[i]], 0, self.noteScaleX, self.noteScaleY)
     end
     
     love.graphics.draw(self.note, 40*1.15, 160)
@@ -394,11 +410,11 @@ function MelodyMakerMinigame:drawBottomScreen()
         })
   --Panel 11
   elseif self.panel11Flag then
-    love.graphics.draw(self.botBG3)
+    love.graphics.draw(self.botBG2)
   
     draw:print({
-        text = "Give this variable a value that matches the song above!",
-        x = 25,
+        text = "Give this variable a value that matches\nthe song above!",
+        x = 20,
         y = 15,
         color = Color.BLACK,
       })
