@@ -1,6 +1,7 @@
 Song1 = Scene:extend()
 
 function Song1:new()
+  self.topBG1 = love.graphics.newImage('Assets/Images/Panels/melodymak_panels/mm_1_2_tutorialPlay.png')
   self.topBG2 = love.graphics.newImage('Assets/Images/Panels/melodymak_panels/mm_2_2_playScreen.png')
   self.botBG1 = love.graphics.newImage('Assets/Images/Panels/bottom/BotBG_peach_apples_tutorialBox.png')
   self.botBG2 = love.graphics.newImage('Assets/Images/Panels/bottom/BotBG_layout_RHeavy_green.png')
@@ -49,7 +50,15 @@ function Song1:new()
   self.noteImageTable['E'] = self.ENote
   self.noteImageTable['F'] = self.FNote
   self.noteImageTable['G'] = self.GNote
-  
+
+  self.notePosTable = {}
+  self.notePosTable['A'] = 10
+  self.notePosTable['B'] = 70
+  self.notePosTable['C'] = 60
+  self.notePosTable['D'] = 50
+  self.notePosTable['E'] = 40
+  self.notePosTable['F'] = 30
+  self.notePosTable['G'] = 20
   
   self.userNotes = {}
   self.userNotes[1] = self.emptyNote
@@ -200,6 +209,10 @@ function Song1:update()
       self.selectingValue = true
     end
   end
+
+  if inputManager:isPressed('y') then
+    return MelodyMakerMenu()
+  end
   
   if inputManager:isPressed('x') then
     if self.panel12Flag and self.sequencesMatch then
@@ -216,7 +229,7 @@ function Song1:drawTopScreen()
     love.graphics.draw(self.topBG2)
     
     for i,v in ipairs(self.noteImageTable) do
-      love.graphics.draw(self.noteImageTable[self.desiredSequence[i]], 40*i*1.15, 10*i, 0, self.noteScaleX, self.noteScaleY)
+      love.graphics.draw(self.noteImageTable[self.desiredSequence[i]], 40*i*1.15, self.notePosTable[self.desiredSequence[i]], 0, self.noteScaleX, self.noteScaleY)
     end
     
     if self.commandManager:codeIsRunning() then
@@ -270,7 +283,7 @@ function Song1:drawTopScreen()
     love.graphics.draw(self.topBG2)
     
     for i,v in ipairs(self.noteImageTable) do
-      love.graphics.draw(self.noteImageTable[self.desiredSequence[i]], 40*i*1.15, 10*i, 0, self.noteScaleX, self.noteScaleY)
+      love.graphics.draw(self.noteImageTable[self.desiredSequence[i]], 40*i*1.15, self.notePosTable[self.desiredSequence[i]], 0, self.noteScaleX, self.noteScaleY)
     end
     
     love.graphics.draw(self.note, 40*1.15, 160)
@@ -304,6 +317,12 @@ function Song1:drawBottomScreen()
   if self.panel11Flag then
     love.graphics.draw(self.botBG2)
   
+    draw:print({
+      text = "Press 'Y' to return to the menu.",
+      x = 20,
+      y = 210,
+      color = Color.BLACK,
+    })
     draw:print({
         text = "Give this variable a value that matches\nthe song above!",
         x = 20,

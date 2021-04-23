@@ -49,7 +49,15 @@ function Song1:new()
   self.noteImageTable['E'] = self.ENote
   self.noteImageTable['F'] = self.FNote
   self.noteImageTable['G'] = self.GNote
-  
+
+  self.notePosTable = {}
+  self.notePosTable['A'] = 10
+  self.notePosTable['B'] = 20
+  self.notePosTable['C'] = 30
+  self.notePosTable['D'] = 40
+  self.notePosTable['E'] = 50
+  self.notePosTable['F'] = 60
+  self.notePosTable['G'] = 70
   
   self.userNotes = {}
   self.userNotes[1] = self.emptyNote
@@ -216,7 +224,7 @@ function Song1:drawTopScreen()
     love.graphics.draw(self.topBG2)
     
     for i,v in ipairs(self.noteImageTable) do
-      love.graphics.draw(self.noteImageTable[self.desiredSequence[i]], 40*i*1.15, 10*i, 0, self.noteScaleX, self.noteScaleY)
+      love.graphics.draw(self.noteImageTable[self.desiredSequence[i]], 40*i*1.15, self.notePosTable[self.desiredSequence[i]], 0, self.noteScaleX, self.noteScaleY)
     end
     
     if self.commandManager:codeIsRunning() then
