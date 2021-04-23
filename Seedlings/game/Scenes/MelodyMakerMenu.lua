@@ -38,19 +38,19 @@ function MelodyMakerMenu:update()
   
   if inputManager:isPressed('a') then
     if self.selectedTop == 1 then
-      return Song1()
+       return Trans(Song1)
     elseif self.selectedTop == 2 then
-      return Song2()
+       return Trans(Song2)
     elseif self.selectedTop == 3 then
-      return Song3()
+       return Trans(Song3)
     elseif self.selectedTop == 4 and saveManager:getValue('chordFlag') == 1 then
-      return Chord1()
+       return Trans(Chord1)
     elseif self.selectedTop == 5 and saveManager:getValue('chordFlag') == 1 then
-      return Chord2()
+       return Trans(Chord2)
     elseif self.selectedTop == 6 and saveManager:getValue('chordFlag') == 1 then
-      return Chord3()
+       return Trans(Chord3)
     elseif self.selectedTop == 7 then
-      return MelodyMakerTut()
+       return Trans(MelodyMakerTut)
     elseif self.selectedTop == 8 then
       self.chordFlag = true
       return Trans(MelodyMakerChordTut)

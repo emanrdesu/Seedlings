@@ -1,6 +1,7 @@
 MelodyMakerChordMini = Scene:extend()
 
 function MelodyMakerChordMini:new()
+   sm.playStart = false
   self.topBG1 = love.graphics.newImage('Assets/Images/Panels/melodymak_panels/mm_2_1_playScreen.png')
   self.botBG1 = love.graphics.newImage('Assets/Images/Panels/bottom/BotBG_peach_apples_tutorialBox.png')
   self.botBG2 = love.graphics.newImage('Assets/Images/Panels/bottom/BotBG_layout_RHeavy_green.png')
@@ -202,7 +203,7 @@ function MelodyMakerChordMini:update()
   if inputManager:isPressed('x') then
     if self.panel23Flag and self.sequencesMatching then
       saveManager:setValue('chordFlag', 1)
-      return MelodyMakerMenu()
+      return Trans(MelodyMakerMenu)
     end
   end
   
