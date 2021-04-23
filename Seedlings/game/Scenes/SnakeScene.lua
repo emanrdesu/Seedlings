@@ -121,6 +121,11 @@ function SnakeScene:new(isTraining, originalRef)
   self.gameClearTextBoxes = TextBoxList()
   self.gameClearTextBoxes:addText("Congratulations! You have collected all of the apples. You have clearned the final minigame.")
   
+  if isTraining then 
+    self.gameClearTextBoxes = TextBoxList()
+    self.gameClearTextBoxes:addText("Game Complete!\nClear the game while not in help mode to move to the next section")
+  end
+  
   self.gameFailTextBoxes = TextBoxList()
   self.gameFailTextBoxes:addText("It looks like not all of the apples were collected. Try again!")
 
