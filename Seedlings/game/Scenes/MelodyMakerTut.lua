@@ -96,7 +96,7 @@ function MelodyMakerTut:update()
   
   if inputManager:isPressed('select') then
     if self.valueSelected and self.pauseFlag and self.valuesMatching and self.panel7Flag then
-       return Trans(MelodyMakerMinigame)
+      return MelodyMakerMinigame()
     end
   end
   

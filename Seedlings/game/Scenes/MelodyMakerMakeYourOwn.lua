@@ -1,7 +1,7 @@
 MelodyMakerMakeYourOwn = Scene:extend()
 
 function MelodyMakerMakeYourOwn:new()
-  sm.playStart = false;
+  sm.playStart = false
   self.topBG = love.graphics.newImage('Assets/Images/Panels/melodymak_panels/mm_2_1_playScreen.png')
   self.bottomBG1 = love.graphics.newImage('Assets/Images/Panels/bottom/BotBG_peach_apples_tutorialBox.png')
   self.bottomBG2 = love.graphics.newImage('Assets/Images/Panels/bottom/BotBG_layout_RHeavy_green.png')

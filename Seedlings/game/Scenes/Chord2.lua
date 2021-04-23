@@ -1,6 +1,7 @@
 Chord2 = Scene:extend()
 
 function Chord2:new()
+  sm.playStart = false
   self.topBG1 = love.graphics.newImage('Assets/Images/Panels/melodymak_panels/mm_2_1_playScreen.png')
   self.botBG1 = love.graphics.newImage('Assets/Images/Panels/bottom/BotBG_peach_apples_tutorialBox.png')
   self.botBG2 = love.graphics.newImage('Assets/Images/Panels/bottom/BotBG_layout_RHeavy_green.png')
@@ -182,7 +183,7 @@ function Chord2:update()
   end
   
   if inputManager:isPressed('y') then
-    return MelodyMakerMenu()
+     return Trans(MelodyMakerMenu)
   end
 
   if inputManager:isPressed('dpdown') then
@@ -207,7 +208,7 @@ function Chord2:update()
   
   if inputManager:isPressed('x') then
     if self.panel23Flag and self.sequencesMatching then
-      return MelodyMakerMenu()
+       return Trans(MelodyMakerMenu)
     end
   end
   

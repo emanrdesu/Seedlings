@@ -1,6 +1,7 @@
 CodeIntroductionScene = Object:extend()
 
 function CodeIntroductionScene:new()
+  sm.playStart = true
   self.commandUI = CommandUI()
   self.textBoxes = TextBoxList()
   self.textBoxes:addText("Welcome to the code introduction. In the following games, you will be entering code through the bottom screen to create a program.")

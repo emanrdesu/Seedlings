@@ -1,7 +1,7 @@
 MelodyMakerMenu = Scene:extend()
 
 function MelodyMakerMenu:new()
-  sm.playStart = true
+  sm.playStart = false
   self.topBG1 = love.graphics.newImage('Assets/Images/Panels/melodymak_panels/mm_1_cmdBox.png')
   self.compyEyes = love.graphics.newImage('Assets/Images/Objects/ceyes_normal.png')
   self.compyMouthSmile = love.graphics.newImage('Assets/Images/Objects/cmouth_smile.png')
