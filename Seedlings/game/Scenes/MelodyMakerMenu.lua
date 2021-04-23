@@ -7,7 +7,7 @@ function MelodyMakerMenu:new()
   self.promptArrow = love.graphics.newImage('Assets/Images/Objects/prompt_carrot.png')
   self.botBG1 = love.graphics.newImage('Assets/Images/Panels/bottom/BotBG_peach_apples_tutorialBox.png')
   
-  options = {"Introduction", "Variable Tutorial", "Chord Tutorial", "Main Menu"}
+  options = {"Introduction", "Variable Tutorial", "Try something new", "Main Menu"}
   
   self.selectedTop = 1
   chordFlag = false
@@ -19,6 +19,7 @@ end
 
 function MelodyMakerMenu:update()
   if self.chordFlag then
+    options[3] = "Chord Tutorial"
     options[5] = "Next Game"
   end
   
