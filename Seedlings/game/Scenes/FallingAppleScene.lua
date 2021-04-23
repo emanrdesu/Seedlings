@@ -152,7 +152,7 @@ function FallingAppleScene:update()
           sandbox.basket = 'left'
           return self.originalRef 
         end
-        return FallingApple2Scene()
+        return Trans(FallingApple2Scene)
       end
     else
       -- Show the losing thing
@@ -162,7 +162,7 @@ function FallingAppleScene:update()
       end
     end
   else
-    if inputManager:isPressed('b') then return MainMenuScene() end
+     if inputManager:isPressed('b') then return Trans(MainMenuScene) end
     
     -- Update UI
     self.commandUI:update()
@@ -336,3 +336,4 @@ function FallingAppleScene:resetApple()
     self.gameFailTextBoxes:addText("Congratulations! You caught "..tostring(self.applesCaught).." "..appleText..". Try to catch all of the apples to clear the game")
   end
 end
+

@@ -146,7 +146,8 @@ function FallingApple2Scene:update()
           sandbox.basket = 'left'
           return self.originalRef 
         end
-        return FallingApple3Scene()
+
+        return Trans(FallingApple3Scene)
       end
     else
       -- Show the losing thing
@@ -156,7 +157,7 @@ function FallingApple2Scene:update()
       end
     end
   else
-    if inputManager:isPressed('b') then return MainMenuScene() end
+     if inputManager:isPressed('b') then return Trans(MainMenuScene) end
     
     -- Update UI
     self.commandUI:update()

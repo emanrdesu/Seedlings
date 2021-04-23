@@ -1,6 +1,7 @@
 MelodyMakerMenu = Scene:extend()
 
 function MelodyMakerMenu:new()
+  sm.playStart = false
   self.topBG1 = love.graphics.newImage('Assets/Images/Panels/melodymak_panels/mm_1_cmdBox.png')
   self.compyEyes = love.graphics.newImage('Assets/Images/Objects/ceyes_normal.png')
   self.compyMouthSmile = love.graphics.newImage('Assets/Images/Objects/cmouth_smile.png')
@@ -37,28 +38,28 @@ function MelodyMakerMenu:update()
   
   if inputManager:isPressed('a') then
     if self.selectedTop == 1 then
-      return Song1()
+       return Trans(Song1)
     elseif self.selectedTop == 2 then
-      return Song2()
+       return Trans(Song2)
     elseif self.selectedTop == 3 then
-      return Song3()
+       return Trans(Song3)
     elseif self.selectedTop == 4 and saveManager:getValue('chordFlag') == 1 then
-      return Chord1()
+       return Trans(Chord1)
     elseif self.selectedTop == 5 and saveManager:getValue('chordFlag') == 1 then
-      return Chord2()
+       return Trans(Chord2)
     elseif self.selectedTop == 6 and saveManager:getValue('chordFlag') == 1 then
-      return Chord3()
+       return Trans(Chord3)
     elseif self.selectedTop == 7 then
-      return MelodyMakerTut()
+       return Trans(MelodyMakerTut)
     elseif self.selectedTop == 8 then
       self.chordFlag = true
-      return MelodyMakerChordTut()
+      return Trans(MelodyMakerChordTut)
     elseif self.selectedTop == 9 then
-      return MainMenuScene()
+       return Trans(MainMenuScene)
     elseif self.selectedTop == 10 and saveManager:getValue('chordFlag') == 1 then
-      return CodeIntroductionScene()      
+       return Trans(CodeIntroductionScene)
     elseif self.selectedTop == 11 and saveManager:getValue('chordFlag') == 1 then
-      return MelodyMakerMakeYourOwn()
+       return Trans(MelodyMakerMakeYourOwn)
     end
   end
   

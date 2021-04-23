@@ -63,6 +63,8 @@ function MainMenuScene:new()
 end
 
 function MainMenuScene:update()
+  sm.playStart = true
+
   if inputManager:isPressed('dpup') then
     self.currentIndex = math.max(0, self.currentIndex - 1)
   end
@@ -83,7 +85,7 @@ function MainMenuScene:update()
   
   if inputManager:isPressed('a') then
     local scene = self.sceneList:get(self.scenesPerScreen * self.currentPage + self.currentIndex)
-    if scene.lock <= self.currentProgress then return scene.ref() end
+    if scene.lock <= self.currentProgress then return Trans(scene.ref) end
   end
   
   self.helpButton:update()

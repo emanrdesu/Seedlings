@@ -224,7 +224,7 @@ function FillBowlScene:update()
   
   end
   
-  if inputManager:isPressed('b') then return MainMenuScene() end
+  if inputManager:isPressed('b') then return Trans(MainMenuScene) end
   
   return self
 end
