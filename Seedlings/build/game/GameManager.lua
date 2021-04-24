@@ -8,14 +8,14 @@ end
 
 function GameManager:update()    
   -- Debug quitting
-  if inputManager:isDown('start') and inputManager:isDown('select') then
+  --[[if inputManager:isDown('start') and inputManager:isDown('select') then
     saveManager:saveData()
     love.event.quit()
-  end
+  end--]]
 
-  if inputManager:isDown('dpup') and inputManager:isDown('select') then
+  --[[if inputManager:isDown('dpup') and inputManager:isDown('select') then
     saveManager:clearData()
-  end
+  end--]]
   
   -- If playing on the PC and getting input, don't update the scene
   if not(__PLAYING_ON_PC and inputManager:isReadingInput()) then

@@ -1,6 +1,7 @@
 MultiVarMusicIntro = Scene:extend()
 
 function MultiVarMusicIntro:new()
+    sm.playStart = false
     self.topBG = love.graphics.newImage('Assets/Images/Panels/top/woodbackground.png')
     self.bottomBG = love.graphics.newImage('Assets/Images/Panels/bottom/BotBG_peach_apples_tutorialBox.png')
     self.whiteCircle = love.graphics.newImage('Assets/Images/Objects/white_ellipse.png')
@@ -97,7 +98,7 @@ function MultiVarMusicIntro:update()
       self.commandManager:start()
       
       if self.sequencesMatching then
-        return MultiVarMelodyMaker()
+         return Trans(MultiVarMelodyMaker)
       end
     end
     

@@ -74,6 +74,11 @@ function TutorialScene:new(isTraining, originalRef)
   self.gameClearTextBoxes = TextBoxList()
   self.gameClearTextBoxes:addText("Congratulations!\n".."You passed this level! Now time to move on to more complex games.")
 
+  if isTraining then 
+    self.gameClearTextBoxes = TextBoxList()
+    self.gameClearTextBoxes:addText("Game Complete!\nClear the game while not in help mode to move to the next section")
+  end
+
   local lock = saveManager:getValue('lock') or 0
   if lock < 4 then lock = 4 end
   saveManager:setValue('lock', lock)
@@ -88,6 +93,11 @@ function TutorialScene:update()
   if self.backPressed then
     return self.originalRef
   end
+  
+  -- Update the sandbox again
+  sandbox.square = self.shapes:get(0)
+  sandbox.triangle = self.shapes:get(1)
+  sandbox.circle = self.shapes:get(2)
   
   if self.intro == true then
     local finished = self.textBoxes:update()

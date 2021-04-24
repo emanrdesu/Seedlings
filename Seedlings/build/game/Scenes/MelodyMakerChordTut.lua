@@ -1,6 +1,7 @@
 MelodyMakerChordTut = Scene:extend()
 
 function MelodyMakerChordTut:new()
+  sm.playStart = false
   self.topBG1 = love.graphics.newImage('Assets/Images/Panels/melodymak_panels/mm_1_cmdBox.png')
   self.topBG2 = love.graphics.newImage('Assets/Images/Panels/melodymak_panels/mm_2_1_playScreen.png')
   self.topBG3 = love.graphics.newImage('Assets/Images/Panels/melodymak_panels/mm_1_2_tutorialPlay.png')
@@ -211,8 +212,8 @@ function MelodyMakerChordTut:drawTopScreen()
     love.graphics.draw(self.compyEyes, 20, 30)
     love.graphics.draw(self.compyMouthSmile, 20, 80)
     
-    love.graphics.draw(self.whiteSquare, 220, 175, 0, self.squareScaleX, self.squareScaleY)
-    love.graphics.draw(self.chordNote, 220, 175, 0, self.noteScaleX, self.noteScaleY)
+    love.graphics.draw(self.whiteSquare, 220, 155, 0, self.squareScaleX, self.squareScaleY)
+    love.graphics.draw(self.chordNote, 220, 155, 0, self.noteScaleX, self.noteScaleY)
     
     draw:print({
         text = "run PlayChord.exe",

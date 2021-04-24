@@ -109,6 +109,11 @@ function FallingAppleScene:new(isTraining, originalRef)
   self.gameClearTextBoxes = TextBoxList()
   self.gameClearTextBoxes:addText("Congratulations! You caught all of the apples. You are ready to move onto the next minigame now.")
   
+  if isTraining then 
+    self.gameClearTextBoxes = TextBoxList()
+    self.gameClearTextBoxes:addText("Game Complete!\nClear the game while not in help mode to move to the next section")
+  end
+  
   self.gameFailTextBoxes = TextBoxList()
   
   local lock = saveManager:getValue('lock') or 0
@@ -147,7 +152,7 @@ function FallingAppleScene:update()
           sandbox.basket = 'left'
           return self.originalRef 
         end
-        return FallingApple2Scene()
+        return Trans(FallingApple2Scene)
       end
     else
       -- Show the losing thing
@@ -157,7 +162,7 @@ function FallingAppleScene:update()
       end
     end
   else
-    if inputManager:isPressed('b') then return MainMenuScene() end
+     if inputManager:isPressed('b') then return Trans(MainMenuScene) end
     
     -- Update UI
     self.commandUI:update()
@@ -331,3 +336,4 @@ function FallingAppleScene:resetApple()
     self.gameFailTextBoxes:addText("Congratulations! You caught "..tostring(self.applesCaught).." "..appleText..". Try to catch all of the apples to clear the game")
   end
 end
+

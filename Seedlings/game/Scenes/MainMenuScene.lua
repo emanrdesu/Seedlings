@@ -60,6 +60,24 @@ function MainMenuScene:new()
       self.resetMenu = true
     end
   })
+
+  local qx = 285
+  local qy = 35
+  local qr = 17
+  self.quitMenu = false
+  self.quitButton = Button({
+    hitbox = {shape = 'circle', x = qx, y = qy, r = qr},
+    drawNormal = function()
+      draw:circle({x=qx, y=qy, radius=qr+3, color = Color.BLACK, mode = 'fill'})
+      draw:circle({x=qx, y=qy, radius=qr, color = Color.SAND, mode = 'fill'})
+      draw:print({text='Q', color = Color.BLACK, x = qx - 7, y = qy - 14, font = '18px_bold'})
+    end,
+    onClick = function()
+      self.quitMenu = true
+    end
+  })
+
+  
 end
 
 function MainMenuScene:update()
@@ -92,6 +110,8 @@ function MainMenuScene:update()
   if self.helpMenu == true then return IntroductionScene() end
   self.resetButton:update()
   if self.resetMenu == true then return ClearDataScene() end
+  self.quitButton:update()
+  if self.quitMenu == true then return QuitGameScene() end
   
   return self
 end
@@ -166,4 +186,5 @@ function MainMenuScene:drawBottomScreen()
 
   self.helpButton:draw()
   self.resetButton:draw()
+  self.quitButton:draw()
 end

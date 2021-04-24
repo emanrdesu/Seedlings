@@ -6,7 +6,7 @@ function MainMenuScene:new()
   self.sceneList:add({name='Melody Maker', ref = MelodyMakerIntro, lock = 1})
   self.sceneList:add({name="Melody Maker Menu", ref = MelodyMakerMenu, lock = 2})
   self.sceneList:add({name="Code Tutorial", ref = CodeIntroductionScene, lock = 3})
-  self.sceneList:add({name="TutorialScene", ref=TutorialScene, lock=4})
+  self.sceneList:add({name="Change the Color", ref=TutorialScene, lock=4})
   self.sceneList:add({name='If Introduction', ref = IfIntroductionScene, lock = 5})
   self.sceneList:add({name='Fill the Bowl', ref = FillBowlScene, lock = 6})
   self.sceneList:add({name='Else Introduction', ref = ElseIntroductionScene, lock = 7})
@@ -60,9 +60,29 @@ function MainMenuScene:new()
       self.resetMenu = true
     end
   })
+
+  local qx = 285
+  local qy = 35
+  local qr = 17
+  self.quitMenu = false
+  self.quitButton = Button({
+    hitbox = {shape = 'circle', x = qx, y = qy, r = qr},
+    drawNormal = function()
+      draw:circle({x=qx, y=qy, radius=qr+3, color = Color.BLACK, mode = 'fill'})
+      draw:circle({x=qx, y=qy, radius=qr, color = Color.SAND, mode = 'fill'})
+      draw:print({text='Q', color = Color.BLACK, x = qx - 7, y = qy - 14, font = '18px_bold'})
+    end,
+    onClick = function()
+      self.quitMenu = true
+    end
+  })
+
+  
 end
 
 function MainMenuScene:update()
+  sm.playStart = true
+
   if inputManager:isPressed('dpup') then
     self.currentIndex = math.max(0, self.currentIndex - 1)
   end
@@ -83,13 +103,15 @@ function MainMenuScene:update()
   
   if inputManager:isPressed('a') then
     local scene = self.sceneList:get(self.scenesPerScreen * self.currentPage + self.currentIndex)
-    if scene.lock <= self.currentProgress then return scene.ref() end
+    if scene.lock <= self.currentProgress then return Trans(scene.ref) end
   end
   
   self.helpButton:update()
   if self.helpMenu == true then return IntroductionScene() end
   self.resetButton:update()
   if self.resetMenu == true then return ClearDataScene() end
+  self.quitButton:update()
+  if self.quitMenu == true then return QuitGameScene() end
   
   return self
 end
@@ -164,4 +186,5 @@ function MainMenuScene:drawBottomScreen()
 
   self.helpButton:draw()
   self.resetButton:draw()
+  self.quitButton:draw()
 end
