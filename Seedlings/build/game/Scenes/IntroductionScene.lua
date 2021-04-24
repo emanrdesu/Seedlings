@@ -63,6 +63,15 @@ function IntroductionScene:new()
     text = "You can also clear your save data from the main menu with the 'R' button",
     color = Color.BLACK
   }))
+
+  self.textboxList:add(TextBox({
+    x = self.x, 
+    y = self.y,
+    width = self.width,
+    align = 'center',
+    text = "You can quit the game by tapping on the 'Q' button from the main menu",
+    color = Color.BLACK
+  }))
   
   self.index = 0
 end
