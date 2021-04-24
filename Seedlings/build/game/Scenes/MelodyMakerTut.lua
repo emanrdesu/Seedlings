@@ -1,6 +1,7 @@
 MelodyMakerTut = Scene:extend()
 
 function MelodyMakerTut:new()
+  sm.playStart = false
   self.topBG = love.graphics.newImage('Assets/Images/Panels/melodymak_panels/mm_1_2_tutorialPlay.png')
   self.botBG1 = love.graphics.newImage('Assets/Images/Panels/bottom/BotBG_peach_apples_tutorialBox.png')
   self.botBG2 = love.graphics.newImage('Assets/Images/Panels/bottom/BotBG_layout_LHeavy_green.png')

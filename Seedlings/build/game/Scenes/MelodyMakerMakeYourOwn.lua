@@ -1,6 +1,7 @@
 MelodyMakerMakeYourOwn = Scene:extend()
 
 function MelodyMakerMakeYourOwn:new()
+  sm.playStart = false
   self.topBG = love.graphics.newImage('Assets/Images/Panels/melodymak_panels/mm_2_1_playScreen.png')
   self.bottomBG1 = love.graphics.newImage('Assets/Images/Panels/bottom/BotBG_peach_apples_tutorialBox.png')
   self.bottomBG2 = love.graphics.newImage('Assets/Images/Panels/bottom/BotBG_layout_RHeavy_green.png')
@@ -69,6 +70,15 @@ function MelodyMakerMakeYourOwn:new()
   self.noteImageTable['E'] = self.ENote
   self.noteImageTable['F'] = self.FNote
   self.noteImageTable['G'] = self.GNote
+
+  self.notePosTable = {}
+  self.notePosTable['A'] = 10
+  self.notePosTable['B'] = 70
+  self.notePosTable['C'] = 60
+  self.notePosTable['D'] = 50
+  self.notePosTable['E'] = 40
+  self.notePosTable['F'] = 30
+  self.notePosTable['G'] = 20
   
   self.userNoteImages = {self.emptyNote, self.emptyNote, self.emptyNote, self.emptyNote, self.emptyNote, self.emptyNote, self.emptyNote}
   self.userInput = {'empty', 'empty', 'empty', 'empty', 'empty', 'empty', 'empty'}
@@ -206,7 +216,7 @@ function MelodyMakerMakeYourOwn:update()
   end
   
   if inputManager:isPressed('x') then
-    return MelodyMakerMenu()
+     return Trans(MelodyMakerMenu)
   end
   
   return self
@@ -222,18 +232,18 @@ function MelodyMakerMakeYourOwn:drawTopScreen()
       else
         if self.userInput[i].note1 == "" then
         else
-          love.graphics.draw(self.noteImageTable[self.userInput[i].note1], 40*i*1.15, 20, 0, 0.75, 0.75)
+          love.graphics.draw(self.noteImageTable[self.userInput[i].note1], 40*i*1.15, self.notePosTable[self.userInput[i].note1], 0, 0.75, 0.75)
         end
         
         if self.userInput[i].note2 == "" then
         else
-          love.graphics.draw(self.noteImageTable[self.userInput[i].note2], 40*i*1.15, 40, 0, 0.75, 0.75)
+          love.graphics.draw(self.noteImageTable[self.userInput[i].note2], 40*i*1.15, self.notePosTable[self.userInput[i].note1] + 20, 0, 0.75, 0.75)
         end
       
         if self.userInput[i].note3 == "" then
         
         else
-          love.graphics.draw(self.noteImageTable[self.userInput[i].note3], 40*i*1.15, 60, 0, 0.75, 0.75)
+          love.graphics.draw(self.noteImageTable[self.userInput[i].note3], 40*i*1.15, self.notePosTable[self.userInput[i].note1] + 40, 0, 0.75, 0.75)
         end
       end
       
@@ -243,35 +253,81 @@ function MelodyMakerMakeYourOwn:drawTopScreen()
     end
   end
   
-  love.graphics.draw(self.note, 40*1.15, 160)
-  love.graphics.draw(self.note, 40*2*1.15, 160)
-  love.graphics.draw(self.note, 40*3*1.15, 140)
-  love.graphics.draw(self.note, 40*4*1.15, 120)
-  love.graphics.draw(self.note, 40*5*1.15, 110)
-  love.graphics.draw(self.note, 40*6*1.15, 110)
-  love.graphics.draw(self.note, 40*7*1.15, 120)
-  
   if self.commandManager:codeIsRunning() then
+
+    love.graphics.draw(self.topBG)
+
+    love.graphics.draw(self.note, 40*1.15, 160)
+    love.graphics.draw(self.note, 40*2*1.15, 160)
+    love.graphics.draw(self.note, 40*3*1.15, 140)
+    love.graphics.draw(self.note, 40*4*1.15, 120)
+    love.graphics.draw(self.note, 40*5*1.15, 110)
+    love.graphics.draw(self.note, 40*6*1.15, 110)
+    love.graphics.draw(self.note, 40*7*1.15, 120)
+
     if self.noteTimer <= 7 then
+      i = 1
       love.graphics.draw(self.blueNote, 43*1.15, 194)
+
+      if self.userInput[i] == 'empty' then
+
+      else
+        love.graphics.draw(self.chordNote, 40*i*1.15, self.notePosTable[self.userInput[i].note1], 0, self.noteScaleX, self.noteScaleY)
+      end
     end
     if self.noteTimer <= 6 then
+      i = 2
       love.graphics.draw(self.redNote, 84*1.15, 194)
+      if self.userInput[i] == 'empty' then
+
+        else
+          love.graphics.draw(self.chordNote, 40*i*1.15, self.notePosTable[self.userInput[i].note1], 0, self.noteScaleX, self.noteScaleY)
+      end
     end
     if self.noteTimer <= 5 then
+      i = 3
       love.graphics.draw(self.orangeNote, 124*1.15, 174)
+      if self.userInput[i] == 'empty' then
+
+      else
+        love.graphics.draw(self.chordNote, 40*i*1.15, self.notePosTable[self.userInput[i].note1], 0, self.noteScaleX, self.noteScaleY)
+      end
     end
     if self.noteTimer <= 4 then
+      i = 4
       love.graphics.draw(self.purpleNote, 164*1.15, 154)
+      if self.userInput[i] == 'empty' then
+
+      else
+        love.graphics.draw(self.chordNote, 40*i*1.15, self.notePosTable[self.userInput[i].note1], 0, self.noteScaleX, self.noteScaleY)
+      end
     end
     if self.noteTimer <= 3 then
+      i = 5
       love.graphics.draw(self.greenNote, 204*1.15, 144)
+      if self.userInput[i] == 'empty' then
+
+      else
+        love.graphics.draw(self.chordNote, 40*i*1.15, self.notePosTable[self.userInput[i].note1], 0, self.noteScaleX, self.noteScaleY)
+      end
     end
     if self.noteTimer <=2 then 
+      i = 6
       love.graphics.draw(self.blueNote, 244*1.15, 144)
+      if self.userInput[i] == 'empty' then
+
+      else
+        love.graphics.draw(self.chordNote, 40*i*1.15, self.notePosTable[self.userInput[i].note1], 0, self.noteScaleX, self.noteScaleY)
+      end
     end
     if self.noteTimer <=1 then
+      i = 7
       love.graphics.draw(self.redNote, 284*1.15, 154)
+      if self.userInput[i] == 'empty' then
+
+      else
+        love.graphics.draw(self.chordNote, 40*i*1.15, self.notePosTable[self.userInput[i].note1], 0, self.noteScaleX, self.noteScaleY)
+      end
     end
   end
 end

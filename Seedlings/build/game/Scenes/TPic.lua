@@ -88,3 +88,35 @@ function TSlide(args)
 
    return tpic
 end
+
+
+function Trans(scene)
+   local lpic = {
+      'Assets/Images/Panels/top/grassB1L1.png',
+      'Assets/Images/Panels/top/grassB1L2.png',
+      'Assets/Images/Panels/top/grassB1L3.png',
+      'Assets/Images/Panels/top/grassB1L4.png'
+   }
+
+   local function foo(n)
+      return n < 5 or math.random(100) > (n * 5)
+   end
+
+   local qux, i = {}, 0
+
+   while foo(i) do
+      table.insert(qux, Image{lpic[i % 4 + 1]})
+      i = i + 1
+   end
+
+   for i = 1, 0 + math.random(2) do
+      qux[#qux + 1] = qux[#qux]
+   end
+
+   return TSlide {
+      parent = scene(),
+      time = 0.2,
+      top = qux,
+      bot = replicate(#qux, Image{'Assets/Images/Panels/bottom/grassB2.png'})
+   }
+end

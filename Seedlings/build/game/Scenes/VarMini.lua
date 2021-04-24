@@ -1,7 +1,6 @@
 VarMini = Scene:extend()
 
 function VarMini:new()
-
    self.text = {
       [1] = "Luke is getting ready for school. Let's help him make decisions about some variables this morning!",
 
@@ -323,7 +322,7 @@ function VarMiniGame:update()
       if inputManager:isPressed('a') then
 
          if self.checkWin and not self.userLost then
-            return MelodyMakerIntro()
+            return Trans(MelodyMakerIntro)
          end
 
          self.pickingShirt = true

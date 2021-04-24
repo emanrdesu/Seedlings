@@ -105,6 +105,11 @@ function FillBowlScene:new(isTraining, originalRef)
   self.completed = TextBoxList()
   self.completed:addText("Congratulations! Your machine worked on all of the bowls. You can now continue onto the next section.")
   
+  if isTraining then 
+    self.completed = TextBoxList()
+    self.completed:addText("Game Complete!\nClear the game while not in help mode to move to the next section")
+  end
+  
   local lock = saveManager:getValue('lock') or 0
   if lock < 6 then lock = 6 end
   saveManager:setValue('lock', lock)
@@ -219,7 +224,7 @@ function FillBowlScene:update()
   
   end
   
-  if inputManager:isPressed('b') then return MainMenuScene() end
+  if inputManager:isPressed('b') then return Trans(MainMenuScene) end
   
   return self
 end

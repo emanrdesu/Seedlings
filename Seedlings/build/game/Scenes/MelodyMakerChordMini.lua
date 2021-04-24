@@ -1,6 +1,7 @@
 MelodyMakerChordMini = Scene:extend()
 
 function MelodyMakerChordMini:new()
+  sm.playStart = false
   self.topBG1 = love.graphics.newImage('Assets/Images/Panels/melodymak_panels/mm_2_1_playScreen.png')
   self.botBG1 = love.graphics.newImage('Assets/Images/Panels/bottom/BotBG_peach_apples_tutorialBox.png')
   self.botBG2 = love.graphics.newImage('Assets/Images/Panels/bottom/BotBG_layout_RHeavy_green.png')
@@ -73,16 +74,26 @@ function MelodyMakerChordMini:new()
   self.noteImageTable['E'] = self.ENote
   self.noteImageTable['F'] = self.FNote
   self.noteImageTable['G'] = self.GNote
+
+  self.notePosTable = {}
+  self.notePosTable['A'] = 10
+  self.notePosTable['B'] = 70
+  self.notePosTable['C'] = 60
+  self.notePosTable['D'] = 50
+  self.notePosTable['E'] = 40
+  self.notePosTable['F'] = 30
+  self.notePosTable['G'] = 20
   
   self.userNoteImages = {self.emptyNote, self.emptyNote, self.emptyNote, self.emptyNote, self.emptyNote, self.emptyNote, self.emptyNote}
   self.userInput = {'empty', 'empty', 'empty', 'empty', 'empty', 'empty', 'empty'}
   
-  self.desiredSequence = {Chord('A', 'B', 'C'), Chord('D', 'C', 'E'), Chord('B', 'F'), Chord('A', 'B', 'C'), Chord('D', 'G'), Chord('E', 'F', 'G'), Chord('C', 'A')}
+  self.desiredSequence = {Chord('C', 'E'), Chord('D', 'F'), Chord('E', 'G'), Chord('F', 'A', 'C'), Chord('E', 'G'), Chord('D', 'F', 'A'), Chord('C', 'E', 'G')}
   self.booleanChordMatching = {false, false, false, false, false, false, false}
   self.sequencesMatching = false
-  
+
   self.panel21Flag = true
   self.panel22Flag = false
+  self.panel22_1Flag = false
   self.panel23Flag = false
   
   self.selectedTop = 1
@@ -97,6 +108,9 @@ function MelodyMakerChordMini:new()
   self.selectingNotes = false
   self.chord2Notes = false
   self.chord3Notes = false
+  
+  self.chord1 = Chord('A', 'B')
+  self.chord2 = Chord('A', 'B', 'C')
   
   self.playingNotes = false
   self.noteTimer = 8
@@ -188,8 +202,8 @@ function MelodyMakerChordMini:update()
   
   if inputManager:isPressed('x') then
     if self.panel23Flag and self.sequencesMatching then
-      MelodyMakerMenu.chordFlag = true
-      return MelodyMakerMenu()
+      saveManager:setValue('chordFlag', 1)
+      return Trans(MelodyMakerMenu)
     end
   end
   
@@ -259,7 +273,7 @@ function MelodyMakerChordMini:drawTopScreen()
   
   if self.panel21Flag then
     for i = 1, 7 do
-      love.graphics.draw(self.chordNote, 40*i*1.15, 40, 0, self.noteScaleX, self.noteScaleY)
+      love.graphics.draw(self.chordNote, 40*i*1.15, self.notePosTable[self.desiredSequence[i].note1], 0, self.noteScaleX, self.noteScaleY)
     end
     
     for i,v in ipairs(self.userNoteImages) do
@@ -270,19 +284,21 @@ function MelodyMakerChordMini:drawTopScreen()
     
     for i = 1, 7 do
       if i == self.selectedTop then
-        love.graphics.draw(self.noteImageTable[self.desiredSequence[i].note1], 40*i*1.15, 20, 0, 0.75, 0.75)
-        love.graphics.draw(self.noteImageTable[self.desiredSequence[i].note2], 40*i*1.15, 40, 0, 0.75, 0.75)
+        love.graphics.draw(self.noteImageTable[self.desiredSequence[i].note1], 40*i*1.15, self.notePosTable[self.desiredSequence[i].note1], 0, 0.75, 0.75)
+        love.graphics.draw(self.noteImageTable[self.desiredSequence[i].note2], 40*i*1.15, self.notePosTable[self.desiredSequence[i].note1] + 20, 0, 0.75, 0.75)
         if self.desiredSequence[i].note3 == "" then
           
         else
-          love.graphics.draw(self.noteImageTable[self.desiredSequence[i].note3], 40*i*1.15, 60, 0, 0.75, 0.75)
+          love.graphics.draw(self.noteImageTable[self.desiredSequence[i].note3], 40*i*1.15, self.notePosTable[self.desiredSequence[i].note1] + 40, 0, 0.75, 0.75)
         end
       else
-        love.graphics.draw(self.chordNote, 40*i*1.15, 40, 0, self.noteScaleX, self.noteScaleY)
+        love.graphics.draw(self.chordNote, 40*i*1.15, self.notePosTable[self.desiredSequence[i].note1], 0, self.noteScaleX, self.noteScaleY)
       end
     end
     
     if self.commandManager:codeIsRunning() then
+
+      love.graphics.draw(self.topBG1)
       
       love.graphics.draw(self.note, 40*1.15, 160)
       love.graphics.draw(self.note, 40*2*1.15, 160)
@@ -294,24 +310,73 @@ function MelodyMakerChordMini:drawTopScreen()
       
       if self.noteTimer <= 7 then
         love.graphics.draw(self.blueNote, 43*1.15, 194)
+        love.graphics.draw(self.noteImageTable[self.desiredSequence[1].note1], 40*1*1.15, self.notePosTable[self.desiredSequence[1].note1], 0, 0.75, 0.75)
+        love.graphics.draw(self.noteImageTable[self.desiredSequence[1].note2], 40*1*1.15, self.notePosTable[self.desiredSequence[1].note1] + 20, 0, 0.75, 0.75)
+        if self.desiredSequence[1].note3 == "" then
+          
+        else
+          love.graphics.draw(self.noteImageTable[self.desiredSequence[1].note3], 40*1*1.15, self.notePosTable[self.desiredSequence[1].note1] + 40, 0, 0.75, 0.75)
+        end
       end
       if self.noteTimer <= 6 then
         love.graphics.draw(self.redNote, 84*1.15, 194)
+        love.graphics.draw(self.noteImageTable[self.desiredSequence[2].note1], 40*2*1.15, self.notePosTable[self.desiredSequence[2].note1], 0, 0.75, 0.75)
+        love.graphics.draw(self.noteImageTable[self.desiredSequence[2].note2], 40*2*1.15, self.notePosTable[self.desiredSequence[2].note1] + 20, 0, 0.75, 0.75)
+        if self.desiredSequence[2].note3 == "" then
+          
+        else
+          love.graphics.draw(self.noteImageTable[self.desiredSequence[2].note3], 40*2*1.15, self.notePosTable[self.desiredSequence[2].note1] + 40, 0, 0.75, 0.75)
+        end
       end
       if self.noteTimer <= 5 then
         love.graphics.draw(self.orangeNote, 124*1.15, 174)
+        love.graphics.draw(self.noteImageTable[self.desiredSequence[3].note1], 40*3*1.15, self.notePosTable[self.desiredSequence[3].note1], 0, 0.75, 0.75)
+        love.graphics.draw(self.noteImageTable[self.desiredSequence[3].note2], 40*3*1.15, self.notePosTable[self.desiredSequence[3].note1] + 20, 0, 0.75, 0.75)
+        if self.desiredSequence[1].note3 == "" then
+          
+        else
+          love.graphics.draw(self.noteImageTable[self.desiredSequence[3].note3], 40*3*1.15, self.notePosTable[self.desiredSequence[3].note1] + 40, 0, 0.75, 0.75)
+        end
       end
       if self.noteTimer <= 4 then
         love.graphics.draw(self.purpleNote, 164*1.15, 154)
+        love.graphics.draw(self.noteImageTable[self.desiredSequence[4].note1], 40*4*1.15, self.notePosTable[self.desiredSequence[4].note1], 0, 0.75, 0.75)
+        love.graphics.draw(self.noteImageTable[self.desiredSequence[4].note2], 40*4*1.15, self.notePosTable[self.desiredSequence[4].note1] + 20, 0, 0.75, 0.75)
+        if self.desiredSequence[4].note3 == "" then
+          
+        else
+          love.graphics.draw(self.noteImageTable[self.desiredSequence[4].note3], 40*4*1.15, self.notePosTable[self.desiredSequence[4].note1] + 40, 0, 0.75, 0.75)
+        end
       end
       if self.noteTimer <= 3 then
         love.graphics.draw(self.greenNote, 204*1.15, 144)
+        love.graphics.draw(self.noteImageTable[self.desiredSequence[5].note1], 40*5*1.15, self.notePosTable[self.desiredSequence[5].note1], 0, 0.75, 0.75)
+        love.graphics.draw(self.noteImageTable[self.desiredSequence[5].note2], 40*5*1.15, self.notePosTable[self.desiredSequence[5].note1] + 20, 0, 0.75, 0.75)
+        if self.desiredSequence[5].note3 == "" then
+          
+        else
+          love.graphics.draw(self.noteImageTable[self.desiredSequence[5].note3], 40*5*1.15, self.notePosTable[self.desiredSequence[5].note1] + 40, 0, 0.75, 0.75)
+        end
       end
       if self.noteTimer <=2 then 
         love.graphics.draw(self.blueNote, 244*1.15, 144)
+        love.graphics.draw(self.noteImageTable[self.desiredSequence[6].note1], 40*6*1.15, self.notePosTable[self.desiredSequence[6].note1], 0, 0.75, 0.75)
+        love.graphics.draw(self.noteImageTable[self.desiredSequence[6].note2], 40*6*1.15, self.notePosTable[self.desiredSequence[6].note1] + 20, 0, 0.75, 0.75)
+        if self.desiredSequence[6].note3 == "" then
+          
+        else
+          love.graphics.draw(self.noteImageTable[self.desiredSequence[6].note3], 40*6*1.15, self.notePosTable[self.desiredSequence[6].note1] + 40, 0, 0.75, 0.75)
+        end
       end
       if self.noteTimer <=1 then
         love.graphics.draw(self.redNote, 284*1.15, 154)
+        love.graphics.draw(self.noteImageTable[self.desiredSequence[7].note1], 40*7*1.15, self.notePosTable[self.desiredSequence[7].note1], 0, 0.75, 0.75)
+        love.graphics.draw(self.noteImageTable[self.desiredSequence[7].note2], 40*7*1.15, self.notePosTable[self.desiredSequence[7].note1] + 20, 0, 0.75, 0.75)
+        if self.desiredSequence[7].note3 == "" then
+          
+        else
+          love.graphics.draw(self.noteImageTable[self.desiredSequence[7].note3], 40*7*1.15, self.notePosTable[self.desiredSequence[7].note1] + 40, 0, 0.75, 0.75)
+        end
       end
       if self.noteTimer <= 0.1 then
         self.panel23Flag = true
@@ -331,7 +396,7 @@ function MelodyMakerChordMini:drawTopScreen()
     love.graphics.draw(self.topBG1)
     
     for i,v in ipairs(self.noteImageTable) do
-      love.graphics.draw(self.noteImageTable[i], 40*i*1.15, 10*i, 0, self.noteScaleX, self.noteScaleY)
+      love.graphics.draw(self.chordNote, 40*i*1.15, self.notePosTable[self.desiredSequence[i].note1], 0, self.noteScaleX, self.noteScaleY)
     end
     
     love.graphics.draw(self.note, 40*1.15, 160)
