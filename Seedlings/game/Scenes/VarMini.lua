@@ -58,13 +58,37 @@ VarMiniIntro = VarMini:extend()
 function VarMiniIntro:new()
    VarMiniIntro.super.new(self)
 
-   self.shirt = {}
+   self.shirt = {
+      GShirt {
+         color = 'red',
+         number = 2,
+         angled = true,
+         scale = { x = 0.9, y = 0.9 }
+      },
+
+      GShirt {
+         color = 'green',
+         number = 3,
+         angled = true,
+         scale = { x = 0.9, y = 0.9 }
+      },
+
+      GShirt {
+         color = 'blue',
+         number = 1,
+         angled = true,
+         scale = { x = 0.9, y = 0.9 }
+      }
+   }
+
+   --[[
    for i = 1, 3 do
       self.shirt[i] = randomShirt {
          scale = { x = 0.9, y = 0.9 },
          angled = true
       }
    end
+   --]]
 
    self.pa = PulseImage {
       path = 'Assets/Images/Objects/a_button.png',
