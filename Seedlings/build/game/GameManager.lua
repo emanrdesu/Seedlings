@@ -29,7 +29,8 @@ function GameManager:drawTopScreen()
   self.currentScene:drawTopScreen()
   
   fontManager:setFont('default')
-  --love.graphics.print("dt = "..tostring(dt), 0, 0)
+  --local fps = love.timer.getFPS()
+  --love.graphics.print("fps = "..tostring(fps), 0, 0)
 end
 
 function GameManager:drawBottomScreen()

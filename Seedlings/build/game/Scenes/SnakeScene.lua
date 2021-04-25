@@ -217,23 +217,41 @@ end
 
 function SnakeScene:drawTopScreen()
   -- Draw the grid
-  for r = 1, self.gridR, 1 do
-    for c = 1, self.gridC, 1 do
-      local color = Color.SAND
-      if self.grid[r][c] == 1 then color = Color.BLACK end
-      
-      local toAddR = 1
-      local toAddC = 1
-      if r == self.gridR then toAddR = 0 end
-      if c == self.gridC then toAddC = 0 end
-      
-      draw:rectangle({
-        x = self.gridStartX + self.gridSquareSize * (c-1),
-        y = self.gridStartY + self.gridSquareSize * (r-1),
-        width = self.gridSquareSize + toAddC,
-        height = self.gridSquareSize + toAddR,
-        color = color,
-      })
+  -- Draw black bg first
+  draw:rectangle({
+    x = 0,
+    y = 0,
+    width = Constants.TOP_SCREEN_WIDTH,
+    height = Constants.TOP_SCREEN_HEIGHT,
+    color = Color.BLACK,
+  })
+  -- To save time, draw the entire background as pale first
+  draw:rectangle({
+    x = self.gridSquareSize,
+    y = self.gridSquareSize,
+    width = Constants.TOP_SCREEN_WIDTH - 2 * self.gridSquareSize,
+    height = Constants.TOP_SCREEN_HEIGHT - 2 * self.gridSquareSize,
+    color = Color.SAND,
+  })
+  
+  
+  for r = 2, self.gridR - 1, 1 do
+    for c = 2, self.gridC - 1, 1 do
+      local color = Color.BLACK
+      if self.grid[r][c] == 1 then 
+        local toAddR = 1
+        local toAddC = 1
+        if r == self.gridR then toAddR = 0 end
+        if c == self.gridC then toAddC = 0 end
+        
+        draw:rectangle({
+          x = self.gridStartX + self.gridSquareSize * (c-1),
+          y = self.gridStartY + self.gridSquareSize * (r-1),
+          width = self.gridSquareSize + toAddC,
+          height = self.gridSquareSize + toAddR,
+          color = Color.BLACK,
+        })
+      end
     
       -- Draw apple if needed
       if self.grid[r][c] == 3 and self.appleCollected[r][c] == false then
