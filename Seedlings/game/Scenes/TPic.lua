@@ -91,6 +91,8 @@ end
 
 
 function Trans(scene)
+  return scene()
+  --[[
    local lpic = {
       'Assets/Images/Panels/top/grassB1L1.png',
       'Assets/Images/Panels/top/grassB1L2.png',
@@ -119,4 +121,5 @@ function Trans(scene)
       top = qux,
       bot = replicate(#qux, Image{'Assets/Images/Panels/bottom/grassB2.png'})
    }
+   --]]
 end

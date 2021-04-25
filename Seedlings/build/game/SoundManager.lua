@@ -18,7 +18,7 @@ function SoundManager:new()
      self.audio[k] = love.audio.newSource(v, "static")
   end
 
-
+  --[[
   self.path.button = {
      a = "Assets/Audio/Button/a.wav",
      b = "Assets/Audio/Button/b.wav",
@@ -34,6 +34,7 @@ function SoundManager:new()
   for k,v in pairs(self.path.button) do
      self.audio.button[k] = love.audio.newSource(v, "static")
   end
+  --]]
 end
 
 function SoundManager:play(sourceName)
@@ -53,6 +54,7 @@ end
 
 
 function SoundManager:playButton(button)
+  --[[
    if button == 'start' and not self.playStart then
       return
    end
@@ -71,4 +73,5 @@ function SoundManager:playButton(button)
          counter = counter + 1
       end
    end
+   --]]
 end
