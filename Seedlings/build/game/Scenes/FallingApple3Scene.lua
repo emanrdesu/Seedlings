@@ -141,7 +141,7 @@ function FallingApple3Scene:update()
           sandbox.basket = self.basketStartPosition
           return self.originalRef 
         end
-        return Trans(SnakeScene)
+        return Trans(LoopIntroductionScene)
       end
     else
       -- Show the losing thing
